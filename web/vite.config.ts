@@ -5,4 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: { proxy: { '/api': 'http://127.0.0.1:8010' } },
+  // Without this the minifier writes media queries as `(width<=760px)`, which iOS 15 and older
+  // Android browsers ignore entirely - those phones would get the desktop layout.
+  build: { cssTarget: ['safari14', 'chrome87', 'firefox78'] },
 })
