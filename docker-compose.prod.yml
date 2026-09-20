@@ -56,6 +56,7 @@ services:
     image: shepherd
     restart: unless-stopped
     command: worker
+    healthcheck: { disable: true }   # the image's check is for the API port
     env_file: ${ENV_FILE:-.env}
     environment:
       DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/shepherd
@@ -82,8 +83,9 @@ services:
 
   # nightly pg_dump into the shared backups volume, 14 days kept (see DEPLOY.md to restore)
   backup:
-    image: shepherd
+    image: pgvector/pgvector:pg16   # same major version as the server, so pg_dump matches
     restart: unless-stopped
+    healthcheck: { disable: true }
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |

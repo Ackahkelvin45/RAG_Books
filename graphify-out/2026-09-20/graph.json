@@ -4,19 +4,6 @@
   "graph": {},
   "nodes": [
     {
-      "id": "worker_parsers_init_parsedbook",
-      "label": "ParsedBook",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "parsedbook",
-      "source_file": "worker/parsers/__init__.py",
-      "source_location": "L16"
-    },
-    {
       "id": "worker_parsers_init_section",
       "label": "Section",
       "_callable": true,
@@ -36,7 +23,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "chunk",
       "source_file": "shared/shepherd/chunking.py",
@@ -48,25 +35,12 @@
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
-      "community": 1,
-      "community_name": "chunk_text",
+      "community": 18,
+      "community_name": "ingest.py",
       "file_type": "code",
       "norm_label": "embedder",
       "source_file": "shared/shepherd/embed.py",
       "source_location": "L13"
-    },
-    {
-      "id": "shared_shepherd_embed_fakeembedder",
-      "label": "FakeEmbedder",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "fakeembedder",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L20"
     },
     {
       "id": "worker_ingest_unsupportedformat",
@@ -80,6 +54,19 @@
       "norm_label": "unsupportedformat",
       "source_file": "worker/ingest.py",
       "source_location": "L61"
+    },
+    {
+      "id": "worker_parsers_init_parsedbook",
+      "label": "ParsedBook",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "code",
+      "norm_label": "parsedbook",
+      "source_file": "worker/parsers/__init__.py",
+      "source_location": "L16"
     },
     {
       "id": "web_src_api_apierror",
@@ -394,32 +381,6 @@
       "source_location": "L91"
     },
     {
-      "id": "shared_shepherd_embed_bgem3embedder",
-      "label": "BgeM3Embedder",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "bgem3embedder",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L38"
-    },
-    {
-      "id": "shared_shepherd_classify_verdict",
-      "label": "Verdict",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 29,
-      "community_name": "classify.py",
-      "file_type": "code",
-      "norm_label": "verdict",
-      "source_file": "shared/shepherd/classify.py",
-      "source_location": "L53"
-    },
-    {
       "id": "tests_test_answer_fakellm",
       "label": "FakeLLM",
       "_callable": true,
@@ -446,13 +407,39 @@
       "source_location": "L32"
     },
     {
+      "id": "shared_shepherd_embed_fakeembedder",
+      "label": "FakeEmbedder",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "test_process_source_leaves_nothing_on_failure",
+      "file_type": "code",
+      "norm_label": "fakeembedder",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L20"
+    },
+    {
+      "id": "shared_shepherd_embed_bgem3embedder",
+      "label": "BgeM3Embedder",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "code",
+      "norm_label": "bgem3embedder",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L38"
+    },
+    {
       "id": "shared_shepherd_rerank_bgereranker",
       "label": "BgeReranker",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "code",
       "norm_label": "bgereranker",
       "source_file": "shared/shepherd/rerank.py",
@@ -465,7 +452,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "code",
       "norm_label": "fakereranker",
       "source_file": "shared/shepherd/rerank.py",
@@ -478,7 +465,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "code",
       "norm_label": "reranker",
       "source_file": "shared/shepherd/rerank.py",
@@ -511,6 +498,19 @@
       "source_location": "L15"
     },
     {
+      "id": "shared_shepherd_classify_verdict",
+      "label": "Verdict",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "code",
+      "norm_label": "verdict",
+      "source_file": "shared/shepherd/classify.py",
+      "source_location": "L53"
+    },
+    {
       "id": "shared_shepherd_retrieve_passage",
       "label": "Passage",
       "_callable": true,
@@ -521,91 +521,7 @@
       "file_type": "code",
       "norm_label": "passage",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L41"
-    },
-    {
-      "id": "shared_shepherd_storage_bucket",
-      "label": "bucket()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "bucket()",
-      "source_file": "shared/shepherd/storage.py",
-      "source_location": "L21"
-    },
-    {
-      "id": "shared_shepherd_storage_client",
-      "label": "_client()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "_client()",
-      "source_file": "shared/shepherd/storage.py",
-      "source_location": "L11"
-    },
-    {
-      "id": "shared_shepherd_storage_delete",
-      "label": "delete()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "delete()",
-      "source_file": "shared/shepherd/storage.py",
-      "source_location": "L54"
-    },
-    {
-      "id": "shared_shepherd_storage_download",
-      "label": "download()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "download()",
-      "source_file": "shared/shepherd/storage.py",
-      "source_location": "L39"
-    },
-    {
-      "id": "shared_shepherd_storage_ensure_bucket",
-      "label": "ensure_bucket()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "ensure_bucket()",
-      "source_file": "shared/shepherd/storage.py",
-      "source_location": "L25"
-    },
-    {
-      "id": "shared_shepherd_storage_open_book",
-      "label": "open_book()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "open_book()",
-      "source_file": "shared/shepherd/storage.py",
-      "source_location": "L47"
-    },
-    {
-      "id": "shared_shepherd_storage_upload_book",
-      "label": "upload_book()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "upload_book()",
-      "source_file": "shared/shepherd/storage.py",
-      "source_location": "L33"
+      "source_location": "L42"
     },
     {
       "id": "tests_test_ingest_test_front_matter_is_skipped_and_chapters_come_from_text",
@@ -685,7 +601,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "chunk_text()",
       "source_file": "shared/shepherd/chunking.py",
@@ -697,7 +613,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "flush()",
       "source_file": "shared/shepherd/chunking.py",
@@ -709,7 +625,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "_units()",
       "source_file": "shared/shepherd/chunking.py",
@@ -721,58 +637,10 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "whitespace_tokens()",
       "source_file": "shared/shepherd/chunking.py",
-      "source_location": "L27"
-    },
-    {
-      "id": "shared_shepherd_embed_embedder_count_tokens",
-      "label": ".count_tokens()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "chunk_text",
-      "file_type": "code",
-      "norm_label": ".count_tokens()",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L17"
-    },
-    {
-      "id": "shared_shepherd_embed_embedder_embed",
-      "label": ".embed()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "chunk_text",
-      "file_type": "code",
-      "norm_label": ".embed()",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L16"
-    },
-    {
-      "id": "shared_shepherd_enrich_context_header",
-      "label": "context_header()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "chunk_text",
-      "file_type": "code",
-      "norm_label": "context_header()",
-      "source_file": "shared/shepherd/enrich.py",
-      "source_location": "L5"
-    },
-    {
-      "id": "shared_shepherd_enrich_enrich",
-      "label": "enrich()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "chunk_text",
-      "file_type": "code",
-      "norm_label": "enrich()",
-      "source_file": "shared/shepherd/enrich.py",
       "source_location": "L27"
     },
     {
@@ -781,7 +649,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "test_overlap_repeats_tail_of_previous_chunk()",
       "source_file": "tests/test_chunking.py",
@@ -793,7 +661,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "test_oversized_paragraph_is_split_by_sentence()",
       "source_file": "tests/test_chunking.py",
@@ -805,7 +673,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "test_packs_paragraphs_to_target_and_never_exceeds_max()",
       "source_file": "tests/test_chunking.py",
@@ -817,47 +685,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "test_short_text_is_one_chunk()",
       "source_file": "tests/test_chunking.py",
       "source_location": "L31"
-    },
-    {
-      "id": "worker_ingest_build_chunks",
-      "label": "build_chunks()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "chunk_text",
-      "file_type": "code",
-      "norm_label": "build_chunks()",
-      "source_file": "worker/ingest.py",
-      "source_location": "L72"
-    },
-    {
-      "id": "shared_shepherd_embed_fakeembedder_count_tokens",
-      "label": ".count_tokens()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": ".count_tokens()",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L34"
-    },
-    {
-      "id": "shared_shepherd_embed_fakeembedder_embed",
-      "label": ".embed()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": ".embed()",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L25"
     },
     {
       "id": "tests_test_ingest_add_source",
@@ -944,30 +776,6 @@
       "source_location": "L43"
     },
     {
-      "id": "tests_test_ingest_test_process_source_leaves_nothing_on_failure",
-      "label": "test_process_source_leaves_nothing_on_failure()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "test_process_source_leaves_nothing_on_failure()",
-      "source_file": "tests/test_ingest.py",
-      "source_location": "L138"
-    },
-    {
-      "id": "tests_test_ingest_test_process_source_leaves_nothing_on_failure_embed",
-      "label": "embed()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "embed()",
-      "source_file": "tests/test_ingest.py",
-      "source_location": "L143"
-    },
-    {
       "id": "tests_test_ingest_test_progress_is_visible_during_ingest",
       "label": "test_progress_is_visible_during_ingest()",
       "_callable": true,
@@ -1016,18 +824,6 @@
       "source_location": "L109"
     },
     {
-      "id": "tests_test_ingest_test_stale_processing_source_is_requeued",
-      "label": "test_stale_processing_source_is_requeued()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "test_stale_processing_source_is_requeued()",
-      "source_file": "tests/test_ingest.py",
-      "source_location": "L151"
-    },
-    {
       "id": "tests_test_ingest_test_unsupported_extension_fails_cleanly",
       "label": "test_unsupported_extension_fails_cleanly()",
       "_callable": true,
@@ -1038,30 +834,6 @@
       "norm_label": "test_unsupported_extension_fails_cleanly()",
       "source_file": "tests/test_ingest.py",
       "source_location": "L100"
-    },
-    {
-      "id": "tests_test_rls_test_auth_lookup_works",
-      "label": "test_auth_lookup_works()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "test_auth_lookup_works()",
-      "source_file": "tests/test_rls.py",
-      "source_location": "L12"
-    },
-    {
-      "id": "tests_test_rls_test_chunks_cascade_on_source_delete",
-      "label": "test_chunks_cascade_on_source_delete()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "test_chunks_cascade_on_source_delete()",
-      "source_file": "tests/test_rls.py",
-      "source_location": "L5"
     },
     {
       "id": "worker_ingest_enqueue_reingest",
@@ -1076,90 +848,6 @@
       "source_location": "L163"
     },
     {
-      "id": "worker_ingest_fingerprint",
-      "label": "fingerprint()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "fingerprint()",
-      "source_file": "worker/ingest.py",
-      "source_location": "L35"
-    },
-    {
-      "id": "worker_ingest_mark_failed",
-      "label": "mark_failed()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "mark_failed()",
-      "source_file": "worker/ingest.py",
-      "source_location": "L154"
-    },
-    {
-      "id": "worker_ingest_process_source",
-      "label": "process_source()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "process_source()",
-      "source_file": "worker/ingest.py",
-      "source_location": "L94"
-    },
-    {
-      "id": "worker_ingest_reusable",
-      "label": "reusable()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "reusable()",
-      "source_file": "worker/ingest.py",
-      "source_location": "L51"
-    },
-    {
-      "id": "worker_main_claim",
-      "label": "claim()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "claim()",
-      "source_file": "worker/main.py",
-      "source_location": "L22"
-    },
-    {
-      "id": "worker_main_main",
-      "label": "main()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "main()",
-      "source_file": "worker/main.py",
-      "source_location": "L66"
-    },
-    {
-      "id": "worker_main_requeue_stale",
-      "label": "requeue_stale()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "requeue_stale()",
-      "source_file": "worker/main.py",
-      "source_location": "L28"
-    },
-    {
       "id": "worker_main_run_one",
       "label": "run_one()",
       "_callable": true,
@@ -1170,18 +858,6 @@
       "norm_label": "run_one()",
       "source_file": "worker/main.py",
       "source_location": "L38"
-    },
-    {
-      "id": "shared_shepherd_retrieve_main",
-      "label": "_main()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "scripture.py",
-      "file_type": "code",
-      "norm_label": "_main()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L268"
     },
     {
       "id": "shared_shepherd_scripture_book_range",
@@ -1218,18 +894,6 @@
       "norm_label": "extract_verse_ids()",
       "source_file": "shared/shepherd/scripture.py",
       "source_location": "L11"
-    },
-    {
-      "id": "shared_shepherd_scripture_format_reference",
-      "label": "format_reference()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "scripture.py",
-      "file_type": "code",
-      "norm_label": "format_reference()",
-      "source_file": "shared/shepherd/scripture.py",
-      "source_location": "L52"
     },
     {
       "id": "shared_shepherd_scripture_safe_references",
@@ -1352,6 +1016,18 @@
       "source_location": "L40"
     },
     {
+      "id": "api_chat_ask_endpoint_events",
+      "label": "events()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "connect",
+      "file_type": "code",
+      "norm_label": "events()",
+      "source_file": "api/chat.py",
+      "source_location": "L528"
+    },
+    {
       "id": "api_chat_db",
       "label": "db()",
       "_callable": true,
@@ -1460,6 +1136,78 @@
       "source_location": "L184"
     },
     {
+      "id": "shared_shepherd_embed_embedder_count_tokens",
+      "label": ".count_tokens()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "code",
+      "norm_label": ".count_tokens()",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L17"
+    },
+    {
+      "id": "shared_shepherd_embed_embedder_embed",
+      "label": ".embed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "code",
+      "norm_label": ".embed()",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L16"
+    },
+    {
+      "id": "shared_shepherd_enrich_context_header",
+      "label": "context_header()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "code",
+      "norm_label": "context_header()",
+      "source_file": "shared/shepherd/enrich.py",
+      "source_location": "L5"
+    },
+    {
+      "id": "shared_shepherd_enrich_enrich",
+      "label": "enrich()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "code",
+      "norm_label": "enrich()",
+      "source_file": "shared/shepherd/enrich.py",
+      "source_location": "L27"
+    },
+    {
+      "id": "worker_ingest_build_chunks",
+      "label": "build_chunks()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "code",
+      "norm_label": "build_chunks()",
+      "source_file": "worker/ingest.py",
+      "source_location": "L72"
+    },
+    {
+      "id": "worker_ingest_fingerprint",
+      "label": "fingerprint()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "code",
+      "norm_label": "fingerprint()",
+      "source_file": "worker/ingest.py",
+      "source_location": "L35"
+    },
+    {
       "id": "worker_ingest_parse_file",
       "label": "parse_file()",
       "_callable": true,
@@ -1472,6 +1220,18 @@
       "source_location": "L65"
     },
     {
+      "id": "worker_ingest_process_source",
+      "label": "process_source()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "code",
+      "norm_label": "process_source()",
+      "source_file": "worker/ingest.py",
+      "source_location": "L94"
+    },
+    {
       "id": "worker_ingest_report",
       "label": "report()",
       "_callable": true,
@@ -1482,6 +1242,18 @@
       "norm_label": "report()",
       "source_file": "worker/ingest.py",
       "source_location": "L40"
+    },
+    {
+      "id": "worker_ingest_reusable",
+      "label": "reusable()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "code",
+      "norm_label": "reusable()",
+      "source_file": "worker/ingest.py",
+      "source_location": "L51"
     },
     {
       "id": "web_src_answer_answertext",
@@ -2228,54 +2000,6 @@
       "source_location": "L55"
     },
     {
-      "id": "shared_shepherd_embed_bgem3embedder_count_tokens",
-      "label": ".count_tokens()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": ".count_tokens()",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L57"
-    },
-    {
-      "id": "shared_shepherd_embed_bgem3embedder_embed",
-      "label": ".embed()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": ".embed()",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L51"
-    },
-    {
-      "id": "shared_shepherd_embed_bgem3embedder_init",
-      "label": ".__init__()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": ".__init__()",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L41"
-    },
-    {
-      "id": "shared_shepherd_embed_get_embedder",
-      "label": "get_embedder()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "get_embedder()",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L62"
-    },
-    {
       "id": "shared_shepherd_retrieve_join",
       "label": "_join()",
       "_callable": true,
@@ -2285,19 +2009,7 @@
       "file_type": "code",
       "norm_label": "_join()",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L226"
-    },
-    {
-      "id": "shared_shepherd_retrieve_keyword_candidates",
-      "label": "keyword_candidates()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "keyword_candidates()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L104"
+      "source_location": "L227"
     },
     {
       "id": "shared_shepherd_retrieve_merge_neighbours",
@@ -2309,43 +2021,7 @@
       "file_type": "code",
       "norm_label": "merge_neighbours()",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L235"
-    },
-    {
-      "id": "shared_shepherd_retrieve_named_books",
-      "label": "named_books()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "named_books()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L157"
-    },
-    {
-      "id": "shared_shepherd_retrieve_names_title",
-      "label": "names_title()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "names_title()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L144"
-    },
-    {
-      "id": "shared_shepherd_retrieve_question_candidates",
-      "label": "question_candidates()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "question_candidates()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L87"
+      "source_location": "L236"
     },
     {
       "id": "shared_shepherd_retrieve_retrieve",
@@ -2357,19 +2033,7 @@
       "file_type": "code",
       "norm_label": "retrieve()",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L183"
-    },
-    {
-      "id": "shared_shepherd_retrieve_retrieve_gather",
-      "label": "gather()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "gather()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L201"
+      "source_location": "L184"
     },
     {
       "id": "shared_shepherd_retrieve_rrf",
@@ -2381,127 +2045,7 @@
       "file_type": "code",
       "norm_label": "rrf()",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L164"
-    },
-    {
-      "id": "shared_shepherd_retrieve_scripture_candidates",
-      "label": "scripture_candidates()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "scripture_candidates()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L114"
-    },
-    {
-      "id": "shared_shepherd_retrieve_title_forms",
-      "label": "title_forms()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "title_forms()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L131"
-    },
-    {
-      "id": "shared_shepherd_retrieve_vector_candidates",
-      "label": "vector_candidates()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "vector_candidates()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L82"
-    },
-    {
-      "id": "shared_shepherd_retrieve_visibility_clause",
-      "label": "visibility_clause()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "visibility_clause()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L58"
-    },
-    {
-      "id": "shared_shepherd_retrieve_where",
-      "label": "_where()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "_where()",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L71"
-    },
-    {
-      "id": "tests_test_questions_test_question_list_respects_visibility",
-      "label": "test_question_list_respects_visibility()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "test_question_list_respects_visibility()",
-      "source_file": "tests/test_questions.py",
-      "source_location": "L43"
-    },
-    {
-      "id": "tests_test_retrieve_corpus",
-      "label": "corpus()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "corpus()",
-      "source_file": "tests/test_retrieve.py",
-      "source_location": "L23"
-    },
-    {
-      "id": "tests_test_retrieve_corpus_add_chunk",
-      "label": "add_chunk()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "add_chunk()",
-      "source_file": "tests/test_retrieve.py",
-      "source_location": "L34"
-    },
-    {
-      "id": "tests_test_retrieve_corpus_add_source",
-      "label": "add_source()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "add_source()",
-      "source_file": "tests/test_retrieve.py",
-      "source_location": "L28"
-    },
-    {
-      "id": "tests_test_retrieve_ids_of",
-      "label": "ids_of()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "ids_of()",
-      "source_file": "tests/test_retrieve.py",
-      "source_location": "L55"
+      "source_location": "L165"
     },
     {
       "id": "tests_test_retrieve_named",
@@ -2574,54 +2118,6 @@
       "norm_label": "test_join_drops_the_carried_overlap()",
       "source_file": "tests/test_retrieve.py",
       "source_location": "L207"
-    },
-    {
-      "id": "tests_test_retrieve_test_keyword_path_does_not_require_every_word",
-      "label": "test_keyword_path_does_not_require_every_word()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "test_keyword_path_does_not_require_every_word()",
-      "source_file": "tests/test_retrieve.py",
-      "source_location": "L135"
-    },
-    {
-      "id": "tests_test_retrieve_test_keyword_path_finds_exact_words",
-      "label": "test_keyword_path_finds_exact_words()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "test_keyword_path_finds_exact_words()",
-      "source_file": "tests/test_retrieve.py",
-      "source_location": "L93"
-    },
-    {
-      "id": "tests_test_retrieve_test_keyword_ranking_rewards_more_matches",
-      "label": "test_keyword_ranking_rewards_more_matches()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "test_keyword_ranking_rewards_more_matches()",
-      "source_file": "tests/test_retrieve.py",
-      "source_location": "L143"
-    },
-    {
-      "id": "tests_test_retrieve_test_member_never_sees_leader_chunks_on_any_path",
-      "label": "test_member_never_sees_leader_chunks_on_any_path()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "test_member_never_sees_leader_chunks_on_any_path()",
-      "source_file": "tests/test_retrieve.py",
-      "source_location": "L65"
     },
     {
       "id": "tests_test_retrieve_test_merge_respects_chapter_and_cap",
@@ -2720,52 +2216,136 @@
       "source_location": "L101"
     },
     {
-      "id": "tests_test_retrieve_test_visibility_clause_fails_closed_for_unknown_role",
-      "label": "test_visibility_clause_fails_closed_for_unknown_role()",
+      "id": "shared_shepherd_retrieve_keyword_candidates",
+      "label": "keyword_candidates()",
       "_callable": true,
       "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
       "file_type": "code",
-      "norm_label": "test_visibility_clause_fails_closed_for_unknown_role()",
+      "norm_label": "keyword_candidates()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L105"
+    },
+    {
+      "id": "shared_shepherd_retrieve_question_candidates",
+      "label": "question_candidates()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
+      "file_type": "code",
+      "norm_label": "question_candidates()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L88"
+    },
+    {
+      "id": "shared_shepherd_retrieve_retrieve_gather",
+      "label": "gather()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
+      "file_type": "code",
+      "norm_label": "gather()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L202"
+    },
+    {
+      "id": "shared_shepherd_retrieve_scripture_candidates",
+      "label": "scripture_candidates()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
+      "file_type": "code",
+      "norm_label": "scripture_candidates()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L115"
+    },
+    {
+      "id": "shared_shepherd_retrieve_vector_candidates",
+      "label": "vector_candidates()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
+      "file_type": "code",
+      "norm_label": "vector_candidates()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L83"
+    },
+    {
+      "id": "shared_shepherd_retrieve_where",
+      "label": "_where()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
+      "file_type": "code",
+      "norm_label": "_where()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L72"
+    },
+    {
+      "id": "tests_test_retrieve_ids_of",
+      "label": "ids_of()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
+      "file_type": "code",
+      "norm_label": "ids_of()",
       "source_file": "tests/test_retrieve.py",
-      "source_location": "L59"
+      "source_location": "L55"
     },
     {
-      "id": "shared_shepherd_classify_classify",
-      "label": "classify()",
+      "id": "tests_test_retrieve_test_keyword_path_does_not_require_every_word",
+      "label": "test_keyword_path_does_not_require_every_word()",
       "_callable": true,
       "_origin": "ast",
       "community": 29,
-      "community_name": "classify.py",
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
       "file_type": "code",
-      "norm_label": "classify()",
-      "source_file": "shared/shepherd/classify.py",
-      "source_location": "L66"
+      "norm_label": "test_keyword_path_does_not_require_every_word()",
+      "source_file": "tests/test_retrieve.py",
+      "source_location": "L135"
     },
     {
-      "id": "shared_shepherd_classify_lexicon_hit",
-      "label": "lexicon_hit()",
+      "id": "tests_test_retrieve_test_keyword_path_finds_exact_words",
+      "label": "test_keyword_path_finds_exact_words()",
       "_callable": true,
       "_origin": "ast",
       "community": 29,
-      "community_name": "classify.py",
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
       "file_type": "code",
-      "norm_label": "lexicon_hit()",
-      "source_file": "shared/shepherd/classify.py",
-      "source_location": "L61"
+      "norm_label": "test_keyword_path_finds_exact_words()",
+      "source_file": "tests/test_retrieve.py",
+      "source_location": "L93"
     },
     {
-      "id": "shared_shepherd_llm_client",
-      "label": "client()",
+      "id": "tests_test_retrieve_test_keyword_ranking_rewards_more_matches",
+      "label": "test_keyword_ranking_rewards_more_matches()",
       "_callable": true,
       "_origin": "ast",
       "community": 29,
-      "community_name": "classify.py",
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
       "file_type": "code",
-      "norm_label": "client()",
-      "source_file": "shared/shepherd/llm.py",
-      "source_location": "L12"
+      "norm_label": "test_keyword_ranking_rewards_more_matches()",
+      "source_file": "tests/test_retrieve.py",
+      "source_location": "L143"
+    },
+    {
+      "id": "tests_test_retrieve_test_member_never_sees_leader_chunks_on_any_path",
+      "label": "test_member_never_sees_leader_chunks_on_any_path()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
+      "file_type": "code",
+      "norm_label": "test_member_never_sees_leader_chunks_on_any_path()",
+      "source_file": "tests/test_retrieve.py",
+      "source_location": "L65"
     },
     {
       "id": "eval_run_ask_item",
@@ -3356,6 +2936,318 @@
       "source_location": "L21"
     },
     {
+      "id": "shared_shepherd_storage_bucket",
+      "label": "bucket()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "code",
+      "norm_label": "bucket()",
+      "source_file": "shared/shepherd/storage.py",
+      "source_location": "L21"
+    },
+    {
+      "id": "shared_shepherd_storage_client",
+      "label": "_client()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "code",
+      "norm_label": "_client()",
+      "source_file": "shared/shepherd/storage.py",
+      "source_location": "L11"
+    },
+    {
+      "id": "shared_shepherd_storage_delete",
+      "label": "delete()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "code",
+      "norm_label": "delete()",
+      "source_file": "shared/shepherd/storage.py",
+      "source_location": "L54"
+    },
+    {
+      "id": "shared_shepherd_storage_download",
+      "label": "download()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "code",
+      "norm_label": "download()",
+      "source_file": "shared/shepherd/storage.py",
+      "source_location": "L39"
+    },
+    {
+      "id": "shared_shepherd_storage_ensure_bucket",
+      "label": "ensure_bucket()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "code",
+      "norm_label": "ensure_bucket()",
+      "source_file": "shared/shepherd/storage.py",
+      "source_location": "L25"
+    },
+    {
+      "id": "shared_shepherd_storage_open_book",
+      "label": "open_book()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "code",
+      "norm_label": "open_book()",
+      "source_file": "shared/shepherd/storage.py",
+      "source_location": "L47"
+    },
+    {
+      "id": "shared_shepherd_storage_upload_book",
+      "label": "upload_book()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "code",
+      "norm_label": "upload_book()",
+      "source_file": "shared/shepherd/storage.py",
+      "source_location": "L33"
+    },
+    {
+      "id": "shared_shepherd_retrieve_main",
+      "label": "_main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "code",
+      "norm_label": "_main()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L269"
+    },
+    {
+      "id": "shared_shepherd_retrieve_named_books",
+      "label": "named_books()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "code",
+      "norm_label": "named_books()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L158"
+    },
+    {
+      "id": "shared_shepherd_retrieve_names_title",
+      "label": "names_title()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "code",
+      "norm_label": "names_title()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L145"
+    },
+    {
+      "id": "shared_shepherd_retrieve_title_forms",
+      "label": "title_forms()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "code",
+      "norm_label": "title_forms()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L132"
+    },
+    {
+      "id": "shared_shepherd_retrieve_visibility_clause",
+      "label": "visibility_clause()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "code",
+      "norm_label": "visibility_clause()",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L59"
+    },
+    {
+      "id": "shared_shepherd_scripture_format_reference",
+      "label": "format_reference()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "code",
+      "norm_label": "format_reference()",
+      "source_file": "shared/shepherd/scripture.py",
+      "source_location": "L52"
+    },
+    {
+      "id": "tests_test_retrieve_test_visibility_clause_fails_closed_for_unknown_role",
+      "label": "test_visibility_clause_fails_closed_for_unknown_role()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "code",
+      "norm_label": "test_visibility_clause_fails_closed_for_unknown_role()",
+      "source_file": "tests/test_retrieve.py",
+      "source_location": "L59"
+    },
+    {
+      "id": "tests_test_ingest_test_stale_processing_source_is_requeued",
+      "label": "test_stale_processing_source_is_requeued()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "file_type": "code",
+      "norm_label": "test_stale_processing_source_is_requeued()",
+      "source_file": "tests/test_ingest.py",
+      "source_location": "L151"
+    },
+    {
+      "id": "worker_ingest_mark_failed",
+      "label": "mark_failed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "file_type": "code",
+      "norm_label": "mark_failed()",
+      "source_file": "worker/ingest.py",
+      "source_location": "L154"
+    },
+    {
+      "id": "worker_main_claim",
+      "label": "claim()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "file_type": "code",
+      "norm_label": "claim()",
+      "source_file": "worker/main.py",
+      "source_location": "L22"
+    },
+    {
+      "id": "worker_main_fill_questions",
+      "label": "fill_questions()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "file_type": "code",
+      "norm_label": "fill_questions()",
+      "source_file": "worker/main.py",
+      "source_location": "L54"
+    },
+    {
+      "id": "worker_main_main",
+      "label": "main()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "file_type": "code",
+      "norm_label": "main()",
+      "source_file": "worker/main.py",
+      "source_location": "L66"
+    },
+    {
+      "id": "worker_main_requeue_stale",
+      "label": "requeue_stale()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "file_type": "code",
+      "norm_label": "requeue_stale()",
+      "source_file": "worker/main.py",
+      "source_location": "L28"
+    },
+    {
+      "id": "shared_shepherd_embed_fakeembedder_count_tokens",
+      "label": ".count_tokens()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "test_process_source_leaves_nothing_on_failure",
+      "file_type": "code",
+      "norm_label": ".count_tokens()",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L34"
+    },
+    {
+      "id": "shared_shepherd_embed_fakeembedder_embed",
+      "label": ".embed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "test_process_source_leaves_nothing_on_failure",
+      "file_type": "code",
+      "norm_label": ".embed()",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L25"
+    },
+    {
+      "id": "tests_test_ingest_test_process_source_leaves_nothing_on_failure",
+      "label": "test_process_source_leaves_nothing_on_failure()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "test_process_source_leaves_nothing_on_failure",
+      "file_type": "code",
+      "norm_label": "test_process_source_leaves_nothing_on_failure()",
+      "source_file": "tests/test_ingest.py",
+      "source_location": "L138"
+    },
+    {
+      "id": "tests_test_ingest_test_process_source_leaves_nothing_on_failure_embed",
+      "label": "embed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "test_process_source_leaves_nothing_on_failure",
+      "file_type": "code",
+      "norm_label": "embed()",
+      "source_file": "tests/test_ingest.py",
+      "source_location": "L143"
+    },
+    {
+      "id": "tests_test_rls_test_auth_lookup_works",
+      "label": "test_auth_lookup_works()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "test_rls.py",
+      "file_type": "code",
+      "norm_label": "test_auth_lookup_works()",
+      "source_file": "tests/test_rls.py",
+      "source_location": "L12"
+    },
+    {
+      "id": "tests_test_rls_test_chunks_cascade_on_source_delete",
+      "label": "test_chunks_cascade_on_source_delete()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "test_rls.py",
+      "file_type": "code",
+      "norm_label": "test_chunks_cascade_on_source_delete()",
+      "source_file": "tests/test_rls.py",
+      "source_location": "L5"
+    },
+    {
       "id": "shared_shepherd_emails_app_url",
       "label": "_app_url()",
       "_callable": true,
@@ -3404,12 +3296,72 @@
       "source_location": "L64"
     },
     {
+      "id": "shared_shepherd_config_device",
+      "label": "device()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "code",
+      "norm_label": "device()",
+      "source_file": "shared/shepherd/config.py",
+      "source_location": "L18"
+    },
+    {
+      "id": "shared_shepherd_embed_bgem3embedder_count_tokens",
+      "label": ".count_tokens()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "code",
+      "norm_label": ".count_tokens()",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L57"
+    },
+    {
+      "id": "shared_shepherd_embed_bgem3embedder_embed",
+      "label": ".embed()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "code",
+      "norm_label": ".embed()",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L51"
+    },
+    {
+      "id": "shared_shepherd_embed_bgem3embedder_init",
+      "label": ".__init__()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "code",
+      "norm_label": ".__init__()",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L41"
+    },
+    {
+      "id": "shared_shepherd_embed_get_embedder",
+      "label": "get_embedder()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "code",
+      "norm_label": "get_embedder()",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L62"
+    },
+    {
       "id": "shared_shepherd_questions_fill_batch",
       "label": "fill_batch()",
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "questions.py",
+      "community_name": "os",
       "file_type": "code",
       "norm_label": "fill_batch()",
       "source_file": "shared/shepherd/questions.py",
@@ -3421,7 +3373,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "questions.py",
+      "community_name": "os",
       "file_type": "code",
       "norm_label": "_main()",
       "source_file": "shared/shepherd/questions.py",
@@ -3433,23 +3385,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 4,
-      "community_name": "questions.py",
+      "community_name": "os",
       "file_type": "code",
       "norm_label": "write_questions()",
       "source_file": "shared/shepherd/questions.py",
       "source_location": "L32"
     },
     {
-      "id": "worker_main_fill_questions",
-      "label": "fill_questions()",
+      "id": "api_main_warm_models_lifespan",
+      "label": "lifespan()",
       "_callable": true,
       "_origin": "ast",
-      "community": 4,
-      "community_name": "questions.py",
+      "community": 40,
+      "community_name": "rerank.py",
       "file_type": "code",
-      "norm_label": "fill_questions()",
-      "source_file": "worker/main.py",
-      "source_location": "L54"
+      "norm_label": "lifespan()",
+      "source_file": "api/main.py",
+      "source_location": "L61"
     },
     {
       "id": "shared_shepherd_rerank_bgereranker_init",
@@ -3457,7 +3409,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "code",
       "norm_label": ".__init__()",
       "source_file": "shared/shepherd/rerank.py",
@@ -3469,7 +3421,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "code",
       "norm_label": ".score()",
       "source_file": "shared/shepherd/rerank.py",
@@ -3481,7 +3433,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "code",
       "norm_label": ".score()",
       "source_file": "shared/shepherd/rerank.py",
@@ -3493,7 +3445,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "code",
       "norm_label": "get_reranker()",
       "source_file": "shared/shepherd/rerank.py",
@@ -3505,7 +3457,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "code",
       "norm_label": ".score()",
       "source_file": "shared/shepherd/rerank.py",
@@ -3546,6 +3498,54 @@
       "norm_label": "test_fill_writes_questions_and_embedding_and_is_resumable()",
       "source_file": "tests/test_questions.py",
       "source_location": "L31"
+    },
+    {
+      "id": "tests_test_questions_test_question_list_respects_visibility",
+      "label": "test_question_list_respects_visibility()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "test_questions.py",
+      "file_type": "code",
+      "norm_label": "test_question_list_respects_visibility()",
+      "source_file": "tests/test_questions.py",
+      "source_location": "L43"
+    },
+    {
+      "id": "tests_test_retrieve_corpus",
+      "label": "corpus()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "test_questions.py",
+      "file_type": "code",
+      "norm_label": "corpus()",
+      "source_file": "tests/test_retrieve.py",
+      "source_location": "L23"
+    },
+    {
+      "id": "tests_test_retrieve_corpus_add_chunk",
+      "label": "add_chunk()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "test_questions.py",
+      "file_type": "code",
+      "norm_label": "add_chunk()",
+      "source_file": "tests/test_retrieve.py",
+      "source_location": "L34"
+    },
+    {
+      "id": "tests_test_retrieve_corpus_add_source",
+      "label": "add_source()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "test_questions.py",
+      "file_type": "code",
+      "norm_label": "add_source()",
+      "source_file": "tests/test_retrieve.py",
+      "source_location": "L28"
     },
     {
       "id": "api_main_activity",
@@ -3776,24 +3776,12 @@
       "source_location": "L56"
     },
     {
-      "id": "api_main_warm_models_lifespan",
-      "label": "lifespan()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 5,
-      "community_name": "api/main.py",
-      "file_type": "code",
-      "norm_label": "lifespan()",
-      "source_file": "api/main.py",
-      "source_location": "L61"
-    },
-    {
       "id": "db_migrate_applied",
       "label": "applied()",
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "applied()",
       "source_file": "db/migrate.py",
@@ -3805,23 +3793,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "main()",
       "source_file": "db/migrate.py",
       "source_location": "L26"
-    },
-    {
-      "id": "shared_shepherd_mail_send",
-      "label": "send()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "test_portal.py",
-      "file_type": "code",
-      "norm_label": "send()",
-      "source_file": "shared/shepherd/mail.py",
-      "source_location": "L17"
     },
     {
       "id": "tests_conftest_admin",
@@ -3829,7 +3805,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "admin()",
       "source_file": "tests/conftest.py",
@@ -3841,7 +3817,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "app()",
       "source_file": "tests/conftest.py",
@@ -3853,7 +3829,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "isolate_sources()",
       "source_file": "tests/conftest.py",
@@ -3865,7 +3841,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "source()",
       "source_file": "tests/conftest.py",
@@ -3877,7 +3853,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_html_is_passed_to_resend()",
       "source_file": "tests/test_mail.py",
@@ -3889,7 +3865,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_resend_error_is_raised()",
       "source_file": "tests/test_mail.py",
@@ -3901,7 +3877,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_sends_through_resend_api()",
       "source_file": "tests/test_mail.py",
@@ -3913,7 +3889,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "fake_post()",
       "source_file": "tests/test_mail.py",
@@ -3925,7 +3901,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_templates_carry_code_and_escape_names()",
       "source_file": "tests/test_mail.py",
@@ -3937,7 +3913,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_without_key_prints_instead_of_sending()",
       "source_file": "tests/test_mail.py",
@@ -3949,7 +3925,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "client()",
       "source_file": "tests/test_portal.py",
@@ -3961,7 +3937,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "login()",
       "source_file": "tests/test_portal.py",
@@ -3973,7 +3949,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_activity_renders()",
       "source_file": "tests/test_portal.py",
@@ -3985,7 +3961,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_admin_login_locks_after_repeated_failures()",
       "source_file": "tests/test_portal.py",
@@ -3997,7 +3973,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_admin_login_refuses_empty_password_when_unset()",
       "source_file": "tests/test_portal.py",
@@ -4009,7 +3985,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_book_upload_visibility_and_delete()",
       "source_file": "tests/test_portal.py",
@@ -4021,7 +3997,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_pages_require_login()",
       "source_file": "tests/test_portal.py",
@@ -4033,7 +4009,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_upload_rejects_other_file_types()",
       "source_file": "tests/test_portal.py",
@@ -4045,23 +4021,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_user_lifecycle()",
       "source_file": "tests/test_portal.py",
       "source_location": "L67"
-    },
-    {
-      "id": "api_chat_ask_endpoint_events",
-      "label": "events()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "answer.py",
-      "file_type": "code",
-      "norm_label": "events()",
-      "source_file": "api/chat.py",
-      "source_location": "L528"
     },
     {
       "id": "shared_shepherd_answer_ask",
@@ -4220,6 +4184,30 @@
       "source_location": "L168"
     },
     {
+      "id": "shared_shepherd_classify_classify",
+      "label": "classify()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "code",
+      "norm_label": "classify()",
+      "source_file": "shared/shepherd/classify.py",
+      "source_location": "L66"
+    },
+    {
+      "id": "shared_shepherd_classify_lexicon_hit",
+      "label": "lexicon_hit()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "code",
+      "norm_label": "lexicon_hit()",
+      "source_file": "shared/shepherd/classify.py",
+      "source_location": "L61"
+    },
+    {
       "id": "shared_shepherd_db_lookup_user_by_email",
       "label": "lookup_user_by_email()",
       "_callable": true,
@@ -4232,6 +4220,30 @@
       "source_location": "L31"
     },
     {
+      "id": "shared_shepherd_llm_client",
+      "label": "client()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "code",
+      "norm_label": "client()",
+      "source_file": "shared/shepherd/llm.py",
+      "source_location": "L12"
+    },
+    {
+      "id": "shared_shepherd_mail_send",
+      "label": "send()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "code",
+      "norm_label": "send()",
+      "source_file": "shared/shepherd/mail.py",
+      "source_location": "L17"
+    },
+    {
       "id": "shared_shepherd_retrieve_passage_chunk_ids",
       "label": ".chunk_ids()",
       "_callable": true,
@@ -4241,7 +4253,7 @@
       "file_type": "code",
       "norm_label": ".chunk_ids()",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L54"
+      "source_location": "L55"
     },
     {
       "id": "shared_shepherd_scripture_format_references",
@@ -4710,28 +4722,6 @@
       "source_location": ""
     },
     {
-      "id": "shared_shepherd_storage",
-      "label": "storage.py",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "storage.py",
-      "source_file": "shared/shepherd/storage.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_storage_py_path",
-      "label": "Path",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "worker_parsers_epub",
       "label": "epub.py",
       "_origin": "ast",
@@ -4752,39 +4742,6 @@
       "norm_label": "path",
       "source_file": "",
       "source_location": ""
-    },
-    {
-      "id": "worker_parsers_init",
-      "label": "parsers/__init__.py",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "code",
-      "norm_label": "parsers/__init__.py",
-      "source_file": "worker/parsers/__init__.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_storage_rationale_1",
-      "label": "Raw book files in S3-compatible storage, keyed by source id.",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "rationale",
-      "norm_label": "raw book files in s3-compatible storage, keyed by source id.",
-      "source_file": "shared/shepherd/storage.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_storage_rationale_48",
-      "label": "(streaming body, byte size) of a stored book, for serving it to a reader.",
-      "_origin": "ast",
-      "community": 0,
-      "community_name": "epub.py",
-      "file_type": "rationale",
-      "norm_label": "(streaming body, byte size) of a stored book, for serving it to a reader.",
-      "source_file": "shared/shepherd/storage.py",
-      "source_location": "L48"
     },
     {
       "id": "worker_parsers_epub_rationale_1",
@@ -4820,25 +4777,14 @@
       "source_location": "L6"
     },
     {
-      "id": "shared_shepherd_embed_py_protocol",
-      "label": "Protocol",
+      "id": "shared_shepherd_chunking",
+      "label": "chunking.py",
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
-      "norm_label": "protocol",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "shared_shepherd_enrich",
-      "label": "enrich.py",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "chunk_text",
-      "file_type": "code",
-      "norm_label": "enrich.py",
-      "source_file": "shared/shepherd/enrich.py",
+      "norm_label": "chunking.py",
+      "source_file": "shared/shepherd/chunking.py",
       "source_location": "L1"
     },
     {
@@ -4846,7 +4792,7 @@
       "label": "test_chunking.py",
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "test_chunking.py",
       "source_file": "tests/test_chunking.py",
@@ -4857,33 +4803,33 @@
       "label": "TokenCounter",
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "code",
       "norm_label": "tokencounter",
       "source_file": "",
       "source_location": ""
     },
     {
+      "id": "shared_shepherd_chunking_rationale_1",
+      "label": "Recursive, chapter-bounded chunking. Paragraphs are packed into chunks of\u2026",
+      "_origin": "ast",
+      "community": 1,
+      "community_name": "chunking.py",
+      "file_type": "rationale",
+      "norm_label": "recursive, chapter-bounded chunking. paragraphs are packed into chunks of...",
+      "source_file": "shared/shepherd/chunking.py",
+      "source_location": "L1"
+    },
+    {
       "id": "shared_shepherd_chunking_rationale_32",
       "label": "Paragraphs, with oversized paragraphs split into sentences.",
       "_origin": "ast",
       "community": 1,
-      "community_name": "chunk_text",
+      "community_name": "chunking.py",
       "file_type": "rationale",
       "norm_label": "paragraphs, with oversized paragraphs split into sentences.",
       "source_file": "shared/shepherd/chunking.py",
       "source_location": "L32"
-    },
-    {
-      "id": "shared_shepherd_enrich_rationale_1",
-      "label": "Contextual header prepended to each chunk before embedding (handoff 4d).",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "chunk_text",
-      "file_type": "rationale",
-      "norm_label": "contextual header prepended to each chunk before embedding (handoff 4d).",
-      "source_file": "shared/shepherd/enrich.py",
-      "source_location": "L1"
     },
     {
       "id": "web_package",
@@ -5293,17 +5239,6 @@
       "source_location": ""
     },
     {
-      "id": "tests_test_rls",
-      "label": "test_rls.py",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "test_rls.py",
-      "source_file": "tests/test_rls.py",
-      "source_location": "L1"
-    },
-    {
       "id": "uuid",
       "label": "UUID",
       "_origin": "ast",
@@ -5313,28 +5248,6 @@
       "norm_label": "uuid",
       "source_file": "",
       "source_location": ""
-    },
-    {
-      "id": "worker_ingest_py_connection",
-      "label": "Connection",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "code",
-      "norm_label": "connection",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "shared_shepherd_embed_rationale_21",
-      "label": "Stable pseudo-vectors from a hash. Similar texts are NOT similar; fine for\u2026",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "rationale",
-      "norm_label": "stable pseudo-vectors from a hash. similar texts are not similar; fine for...",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L21"
     },
     {
       "id": "tests_test_ingest_rationale_1",
@@ -5348,28 +5261,6 @@
       "source_location": "L1"
     },
     {
-      "id": "tests_test_ingest_rationale_139",
-      "label": "A failure mid-ingest rolls back: no chunks, status still recoverable.",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "rationale",
-      "norm_label": "a failure mid-ingest rolls back: no chunks, status still recoverable.",
-      "source_file": "tests/test_ingest.py",
-      "source_location": "L139"
-    },
-    {
-      "id": "tests_test_rls_rationale_1",
-      "label": "Schema integrity tests: FK cascade and the auth lookup function.",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "rationale",
-      "norm_label": "schema integrity tests: fk cascade and the auth lookup function.",
-      "source_file": "tests/test_rls.py",
-      "source_location": "L1"
-    },
-    {
       "id": "worker_ingest_rationale_164",
       "label": "Create a new pending version of a source. Returns the new source id.",
       "_origin": "ast",
@@ -5379,39 +5270,6 @@
       "norm_label": "create a new pending version of a source. returns the new source id.",
       "source_file": "worker/ingest.py",
       "source_location": "L164"
-    },
-    {
-      "id": "worker_ingest_rationale_36",
-      "label": "Same text + same embedding model => the old embedding (and questions) can be\u2026",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "rationale",
-      "norm_label": "same text + same embedding model => the old embedding (and questions) can be...",
-      "source_file": "worker/ingest.py",
-      "source_location": "L36"
-    },
-    {
-      "id": "worker_ingest_rationale_52",
-      "label": "fingerprint -> (embedding, questions, q_embedding) from the version being\u2026",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "rationale",
-      "norm_label": "fingerprint -> (embedding, questions, q_embedding) from the version being...",
-      "source_file": "worker/ingest.py",
-      "source_location": "L52"
-    },
-    {
-      "id": "worker_ingest_rationale_95",
-      "label": "Ingest one source. Returns the number of chunks written. Raises on failure.",
-      "_origin": "ast",
-      "community": 11,
-      "community_name": "test_ingest.py",
-      "file_type": "rationale",
-      "norm_label": "ingest one source. returns the number of chunks written. raises on failure.",
-      "source_file": "worker/ingest.py",
-      "source_location": "L95"
     },
     {
       "id": "shared_shepherd_scripture",
@@ -6173,6 +6031,17 @@
       "source_location": "L1"
     },
     {
+      "id": "worker_ingest_py_path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 16,
+      "community_name": "connect",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "shared_shepherd_db_rationale_17",
       "label": "Open a connection as the restricted application role.",
       "_origin": "ast",
@@ -6468,25 +6337,25 @@
       "source_location": ""
     },
     {
-      "id": "shared_shepherd_db",
-      "label": "db.py",
+      "id": "shared_shepherd_embed_py_protocol",
+      "label": "Protocol",
       "_origin": "ast",
       "community": 18,
       "community_name": "ingest.py",
       "file_type": "code",
-      "norm_label": "db.py",
-      "source_file": "shared/shepherd/db.py",
-      "source_location": "L1"
+      "norm_label": "protocol",
+      "source_file": "",
+      "source_location": ""
     },
     {
-      "id": "shared_shepherd_init",
-      "label": "shepherd/__init__.py",
+      "id": "shared_shepherd_enrich",
+      "label": "enrich.py",
       "_origin": "ast",
       "community": 18,
       "community_name": "ingest.py",
       "file_type": "code",
-      "norm_label": "shepherd/__init__.py",
-      "source_file": "shared/shepherd/__init__.py",
+      "norm_label": "enrich.py",
+      "source_file": "shared/shepherd/enrich.py",
       "source_location": "L1"
     },
     {
@@ -6501,47 +6370,25 @@
       "source_location": "L1"
     },
     {
-      "id": "worker_ingest_py_path",
-      "label": "Path",
+      "id": "worker_parsers_init",
+      "label": "parsers/__init__.py",
       "_origin": "ast",
       "community": 18,
       "community_name": "ingest.py",
       "file_type": "code",
-      "norm_label": "path",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "worker_main",
-      "label": "worker/main.py",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ingest.py",
-      "file_type": "code",
-      "norm_label": "worker/main.py",
-      "source_file": "worker/main.py",
+      "norm_label": "parsers/__init__.py",
+      "source_file": "worker/parsers/__init__.py",
       "source_location": "L1"
     },
     {
-      "id": "shared_shepherd_db_rationale_1",
-      "label": "Database access helpers. The app connects as the restricted `shepherd_app`\u2026",
+      "id": "shared_shepherd_enrich_rationale_1",
+      "label": "Contextual header prepended to each chunk before embedding (handoff 4d).",
       "_origin": "ast",
       "community": 18,
       "community_name": "ingest.py",
       "file_type": "rationale",
-      "norm_label": "database access helpers. the app connects as the restricted `shepherd_app`...",
-      "source_file": "shared/shepherd/db.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_init_rationale_1",
-      "label": "Shared code for the Shepherd Guide API, worker, and eval harness.",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "ingest.py",
-      "file_type": "rationale",
-      "norm_label": "shared code for the shepherd guide api, worker, and eval harness.",
-      "source_file": "shared/shepherd/__init__.py",
+      "norm_label": "contextual header prepended to each chunk before embedding (handoff 4d).",
+      "source_file": "shared/shepherd/enrich.py",
       "source_location": "L1"
     },
     {
@@ -6556,6 +6403,17 @@
       "source_location": "L1"
     },
     {
+      "id": "worker_ingest_rationale_36",
+      "label": "Same text + same embedding model => the old embedding (and questions) can be\u2026",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "rationale",
+      "norm_label": "same text + same embedding model => the old embedding (and questions) can be...",
+      "source_file": "worker/ingest.py",
+      "source_location": "L36"
+    },
+    {
       "id": "worker_ingest_rationale_41",
       "label": "Progress the admin page can see while the ingest transaction is open (own\u2026",
       "_origin": "ast",
@@ -6567,15 +6425,26 @@
       "source_location": "L41"
     },
     {
-      "id": "worker_main_rationale_1",
-      "label": "Ingestion worker loop. `python -m worker.main [--once]`.",
+      "id": "worker_ingest_rationale_52",
+      "label": "fingerprint -> (embedding, questions, q_embedding) from the version being\u2026",
       "_origin": "ast",
       "community": 18,
       "community_name": "ingest.py",
       "file_type": "rationale",
-      "norm_label": "ingestion worker loop. `python -m worker.main [--once]`.",
-      "source_file": "worker/main.py",
-      "source_location": "L1"
+      "norm_label": "fingerprint -> (embedding, questions, q_embedding) from the version being...",
+      "source_file": "worker/ingest.py",
+      "source_location": "L52"
+    },
+    {
+      "id": "worker_ingest_rationale_95",
+      "label": "Ingest one source. Returns the number of chunks written. Raises on failure.",
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "ingest.py",
+      "file_type": "rationale",
+      "norm_label": "ingest one source. returns the number of chunks written. raises on failure.",
+      "source_file": "worker/ingest.py",
+      "source_location": "L95"
     },
     {
       "id": "web_oxlintrc",
@@ -7409,17 +7278,6 @@
       "source_location": "L1"
     },
     {
-      "id": "tests_test_retrieve_py_fixture",
-      "label": "fixture",
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "code",
-      "norm_label": "fixture",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
       "id": "tests_test_retrieve_py_parametrize",
       "label": "parametrize",
       "_origin": "ast",
@@ -7431,40 +7289,7 @@
       "source_location": ""
     },
     {
-      "id": "shared_shepherd_retrieve_rationale_115",
-      "label": "Fallback when the query is essentially just a reference and has no other words\u2026",
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "rationale",
-      "norm_label": "fallback when the query is essentially just a reference and has no other words...",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L115"
-    },
-    {
-      "id": "shared_shepherd_retrieve_rationale_132",
-      "label": "Word lists a title may be written as: the whole title, and each part around ':'\u2026",
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "rationale",
-      "norm_label": "word lists a title may be written as: the whole title, and each part around ':'...",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L132"
-    },
-    {
-      "id": "shared_shepherd_retrieve_rationale_158",
-      "label": "Ids of the visible books the query names by title.",
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "rationale",
-      "norm_label": "ids of the visible books the query names by title.",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L158"
-    },
-    {
-      "id": "shared_shepherd_retrieve_rationale_227",
+      "id": "shared_shepherd_retrieve_rationale_228",
       "label": "Concatenate adjacent chunks, dropping the overlap the chunker carried from\u2026",
       "_origin": "ast",
       "community": 28,
@@ -7472,10 +7297,10 @@
       "file_type": "rationale",
       "norm_label": "concatenate adjacent chunks, dropping the overlap the chunker carried from...",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L227"
+      "source_location": "L228"
     },
     {
-      "id": "shared_shepherd_retrieve_rationale_236",
+      "id": "shared_shepherd_retrieve_rationale_237",
       "label": "Walk results best-first; a chunk next to one already taken (same book, same\u2026",
       "_origin": "ast",
       "community": 28,
@@ -7483,29 +7308,7 @@
       "file_type": "rationale",
       "norm_label": "walk results best-first; a chunk next to one already taken (same book, same...",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L236"
-    },
-    {
-      "id": "shared_shepherd_retrieve_rationale_59",
-      "label": "SQL fragment restricting sources by the caller's role. Fails closed for unknown\u2026",
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "rationale",
-      "norm_label": "sql fragment restricting sources by the caller's role. fails closed for unknown...",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L59"
-    },
-    {
-      "id": "shared_shepherd_retrieve_rationale_88",
-      "label": "Chunks whose generated questions are closest in meaning to the user's question.",
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "rationale",
-      "norm_label": "chunks whose generated questions are closest in meaning to the user's question.",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L88"
+      "source_location": "L237"
     },
     {
       "id": "tests_test_retrieve_rationale_1",
@@ -7519,92 +7322,48 @@
       "source_location": "L1"
     },
     {
+      "id": "shared_shepherd_retrieve_rationale_116",
+      "label": "Fallback when the query is essentially just a reference and has no other words\u2026",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
+      "file_type": "rationale",
+      "norm_label": "fallback when the query is essentially just a reference and has no other words...",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L116"
+    },
+    {
+      "id": "shared_shepherd_retrieve_rationale_89",
+      "label": "Chunks whose generated questions are closest in meaning to the user's question.",
+      "_origin": "ast",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
+      "file_type": "rationale",
+      "norm_label": "chunks whose generated questions are closest in meaning to the user's question.",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L89"
+    },
+    {
       "id": "tests_test_retrieve_rationale_136",
       "label": "A natural question with words absent from the passage must still match on the\u2026",
       "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
       "file_type": "rationale",
       "norm_label": "a natural question with words absent from the passage must still match on the...",
       "source_file": "tests/test_retrieve.py",
       "source_location": "L136"
     },
     {
-      "id": "tests_test_retrieve_rationale_24",
-      "label": "One leader-only source and one member source, each with chunks and embeddings.",
-      "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
-      "file_type": "rationale",
-      "norm_label": "one leader-only source and one member source, each with chunks and embeddings.",
-      "source_file": "tests/test_retrieve.py",
-      "source_location": "L24"
-    },
-    {
       "id": "tests_test_retrieve_rationale_66",
       "label": "The leak test. Every candidate path is checked independently, then the full\u2026",
       "_origin": "ast",
-      "community": 28,
-      "community_name": "test_retrieve.py",
+      "community": 29,
+      "community_name": "test_member_never_sees_leader_chunks_on_any_path",
       "file_type": "rationale",
       "norm_label": "the leak test. every candidate path is checked independently, then the full...",
       "source_file": "tests/test_retrieve.py",
       "source_location": "L66"
-    },
-    {
-      "id": "openai",
-      "label": "OpenAI",
-      "_origin": "ast",
-      "community": 29,
-      "community_name": "classify.py",
-      "file_type": "code",
-      "norm_label": "openai",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "shared_shepherd_classify",
-      "label": "classify.py",
-      "_origin": "ast",
-      "community": 29,
-      "community_name": "classify.py",
-      "file_type": "code",
-      "norm_label": "classify.py",
-      "source_file": "shared/shepherd/classify.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_llm",
-      "label": "llm.py",
-      "_origin": "ast",
-      "community": 29,
-      "community_name": "classify.py",
-      "file_type": "code",
-      "norm_label": "llm.py",
-      "source_file": "shared/shepherd/llm.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_classify_rationale_1",
-      "label": "Scope classifier, run before retrieval. off_scope -> polite decline. sensitive\u2026",
-      "_origin": "ast",
-      "community": 29,
-      "community_name": "classify.py",
-      "file_type": "rationale",
-      "norm_label": "scope classifier, run before retrieval. off_scope -> polite decline. sensitive...",
-      "source_file": "shared/shepherd/classify.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_llm_rationale_1",
-      "label": "One OpenAI-compatible client pointed at DeepSeek. Tests swap `client()` via\u2026",
-      "_origin": "ast",
-      "community": 29,
-      "community_name": "classify.py",
-      "file_type": "rationale",
-      "norm_label": "one openai-compatible client pointed at deepseek. tests swap `client()` via...",
-      "source_file": "shared/shepherd/llm.py",
-      "source_location": "L1"
     },
     {
       "id": "eval_run",
@@ -7750,6 +7509,193 @@
       "source_location": "L1"
     },
     {
+      "id": "shared_shepherd_storage",
+      "label": "storage.py",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "code",
+      "norm_label": "storage.py",
+      "source_file": "shared/shepherd/storage.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_storage_py_path",
+      "label": "Path",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "code",
+      "norm_label": "path",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "shared_shepherd_storage_rationale_1",
+      "label": "Raw book files in S3-compatible storage, keyed by source id.",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "rationale",
+      "norm_label": "raw book files in s3-compatible storage, keyed by source id.",
+      "source_file": "shared/shepherd/storage.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_storage_rationale_48",
+      "label": "(streaming body, byte size) of a stored book, for serving it to a reader.",
+      "_origin": "ast",
+      "community": 30,
+      "community_name": "storage.py",
+      "file_type": "rationale",
+      "norm_label": "(streaming body, byte size) of a stored book, for serving it to a reader.",
+      "source_file": "shared/shepherd/storage.py",
+      "source_location": "L48"
+    },
+    {
+      "id": "shared_shepherd_retrieve",
+      "label": "retrieve.py",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "code",
+      "norm_label": "retrieve.py",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_retrieve_rationale_1",
+      "label": "Hybrid retrieval: vector + keyword + generated-questions vector (+ scripture\u2026",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "rationale",
+      "norm_label": "hybrid retrieval: vector + keyword + generated-questions vector (+ scripture...",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_retrieve_rationale_133",
+      "label": "Word lists a title may be written as: the whole title, and each part around ':'\u2026",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "rationale",
+      "norm_label": "word lists a title may be written as: the whole title, and each part around ':'...",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L133"
+    },
+    {
+      "id": "shared_shepherd_retrieve_rationale_159",
+      "label": "Ids of the visible books the query names by title.",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "rationale",
+      "norm_label": "ids of the visible books the query names by title.",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L159"
+    },
+    {
+      "id": "shared_shepherd_retrieve_rationale_60",
+      "label": "SQL fragment restricting sources by the caller's role. Fails closed for unknown\u2026",
+      "_origin": "ast",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "file_type": "rationale",
+      "norm_label": "sql fragment restricting sources by the caller's role. fails closed for unknown...",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L60"
+    },
+    {
+      "id": "worker_ingest_py_connection",
+      "label": "Connection",
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "file_type": "code",
+      "norm_label": "connection",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "worker_main",
+      "label": "worker/main.py",
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "file_type": "code",
+      "norm_label": "worker/main.py",
+      "source_file": "worker/main.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "worker_main_rationale_1",
+      "label": "Ingestion worker loop. `python -m worker.main [--once]`.",
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "file_type": "rationale",
+      "norm_label": "ingestion worker loop. `python -m worker.main [--once]`.",
+      "source_file": "worker/main.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "worker_main_rationale_55",
+      "label": "Idle work: questions for chunks that have none (new books). 0 when there is\u2026",
+      "_origin": "ast",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "file_type": "rationale",
+      "norm_label": "idle work: questions for chunks that have none (new books). 0 when there is...",
+      "source_file": "worker/main.py",
+      "source_location": "L55"
+    },
+    {
+      "id": "shared_shepherd_embed_rationale_21",
+      "label": "Stable pseudo-vectors from a hash. Similar texts are NOT similar; fine for\u2026",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "test_process_source_leaves_nothing_on_failure",
+      "file_type": "rationale",
+      "norm_label": "stable pseudo-vectors from a hash. similar texts are not similar; fine for...",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L21"
+    },
+    {
+      "id": "tests_test_ingest_rationale_139",
+      "label": "A failure mid-ingest rolls back: no chunks, status still recoverable.",
+      "_origin": "ast",
+      "community": 33,
+      "community_name": "test_process_source_leaves_nothing_on_failure",
+      "file_type": "rationale",
+      "norm_label": "a failure mid-ingest rolls back: no chunks, status still recoverable.",
+      "source_file": "tests/test_ingest.py",
+      "source_location": "L139"
+    },
+    {
+      "id": "tests_test_rls",
+      "label": "test_rls.py",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "test_rls.py",
+      "file_type": "code",
+      "norm_label": "test_rls.py",
+      "source_file": "tests/test_rls.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_test_rls_rationale_1",
+      "label": "Schema integrity tests: FK cascade and the auth lookup function.",
+      "_origin": "ast",
+      "community": 34,
+      "community_name": "test_rls.py",
+      "file_type": "rationale",
+      "norm_label": "schema integrity tests: fk cascade and the auth lookup function.",
+      "source_file": "tests/test_rls.py",
+      "source_location": "L1"
+    },
+    {
       "id": "shared_shepherd_emails",
       "label": "emails.py",
       "_origin": "ast",
@@ -7802,14 +7748,80 @@
       "source_location": "L1"
     },
     {
+      "id": "shared_shepherd_config",
+      "label": "config.py",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "code",
+      "norm_label": "config.py",
+      "source_file": "shared/shepherd/config.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_embed",
+      "label": "embed.py",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "code",
+      "norm_label": "embed.py",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_init",
+      "label": "shepherd/__init__.py",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "code",
+      "norm_label": "shepherd/__init__.py",
+      "source_file": "shared/shepherd/__init__.py",
+      "source_location": "L1"
+    },
+    {
       "id": "shared_shepherd_questions",
       "label": "questions.py",
       "_origin": "ast",
       "community": 4,
-      "community_name": "questions.py",
+      "community_name": "os",
       "file_type": "code",
       "norm_label": "questions.py",
       "source_file": "shared/shepherd/questions.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_config_rationale_1",
+      "label": "Pinned models and environment-derived settings. One place to change them.",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "rationale",
+      "norm_label": "pinned models and environment-derived settings. one place to change them.",
+      "source_file": "shared/shepherd/config.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_embed_rationale_1",
+      "label": "Embedding backends. `get_embedder()` returns the pinned bge-m3 model, or a\u2026",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "rationale",
+      "norm_label": "embedding backends. `get_embedder()` returns the pinned bge-m3 model, or a...",
+      "source_file": "shared/shepherd/embed.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_init_rationale_1",
+      "label": "Shared code for the Shepherd Guide API, worker, and eval harness.",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "os",
+      "file_type": "rationale",
+      "norm_label": "shared code for the shepherd guide api, worker, and eval harness.",
+      "source_file": "shared/shepherd/__init__.py",
       "source_location": "L1"
     },
     {
@@ -7817,7 +7829,7 @@
       "label": "Questions each passage answers (improvement stage 4). DeepSeek writes 3-5\u2026",
       "_origin": "ast",
       "community": 4,
-      "community_name": "questions.py",
+      "community_name": "os",
       "file_type": "rationale",
       "norm_label": "questions each passage answers (improvement stage 4). deepseek writes 3-5...",
       "source_file": "shared/shepherd/questions.py",
@@ -7828,62 +7840,18 @@
       "label": "Generate, embed and store questions for up to `batch` chunks. Returns how many\u2026",
       "_origin": "ast",
       "community": 4,
-      "community_name": "questions.py",
+      "community_name": "os",
       "file_type": "rationale",
       "norm_label": "generate, embed and store questions for up to `batch` chunks. returns how many...",
       "source_file": "shared/shepherd/questions.py",
       "source_location": "L41"
     },
     {
-      "id": "worker_main_rationale_55",
-      "label": "Idle work: questions for chunks that have none (new books). 0 when there is\u2026",
-      "_origin": "ast",
-      "community": 4,
-      "community_name": "questions.py",
-      "file_type": "rationale",
-      "norm_label": "idle work: questions for chunks that have none (new books). 0 when there is...",
-      "source_file": "worker/main.py",
-      "source_location": "L55"
-    },
-    {
-      "id": "shared_shepherd_chunking",
-      "label": "chunking.py",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "file_type": "code",
-      "norm_label": "chunking.py",
-      "source_file": "shared/shepherd/chunking.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_config",
-      "label": "config.py",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "file_type": "code",
-      "norm_label": "config.py",
-      "source_file": "shared/shepherd/config.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_embed",
-      "label": "embed.py",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "file_type": "code",
-      "norm_label": "embed.py",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L1"
-    },
-    {
       "id": "shared_shepherd_rerank",
       "label": "rerank.py",
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "code",
       "norm_label": "rerank.py",
       "source_file": "shared/shepherd/rerank.py",
@@ -7894,62 +7862,18 @@
       "label": "Protocol",
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "code",
       "norm_label": "protocol",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "shared_shepherd_retrieve",
-      "label": "retrieve.py",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "file_type": "code",
-      "norm_label": "retrieve.py",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_chunking_rationale_1",
-      "label": "Recursive, chapter-bounded chunking. Paragraphs are packed into chunks of\u2026",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "file_type": "rationale",
-      "norm_label": "recursive, chapter-bounded chunking. paragraphs are packed into chunks of...",
-      "source_file": "shared/shepherd/chunking.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_config_rationale_1",
-      "label": "Pinned models and environment-derived settings. One place to change them.",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "file_type": "rationale",
-      "norm_label": "pinned models and environment-derived settings. one place to change them.",
-      "source_file": "shared/shepherd/config.py",
-      "source_location": "L1"
-    },
-    {
-      "id": "shared_shepherd_embed_rationale_1",
-      "label": "Embedding backends. `get_embedder()` returns the pinned bge-m3 model, or a\u2026",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "file_type": "rationale",
-      "norm_label": "embedding backends. `get_embedder()` returns the pinned bge-m3 model, or a...",
-      "source_file": "shared/shepherd/embed.py",
-      "source_location": "L1"
-    },
-    {
       "id": "shared_shepherd_rerank_rationale_1",
       "label": "Rerankers. `get_reranker()` returns the pinned bge-reranker-v2-m3 cross-\u2026",
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "rationale",
       "norm_label": "rerankers. `get_reranker()` returns the pinned bge-reranker-v2-m3 cross-...",
       "source_file": "shared/shepherd/rerank.py",
@@ -7960,22 +7884,11 @@
       "label": "Fraction of query words present in the passage. Deterministic, no model.",
       "_origin": "ast",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "file_type": "rationale",
       "norm_label": "fraction of query words present in the passage. deterministic, no model.",
       "source_file": "shared/shepherd/rerank.py",
       "source_location": "L20"
-    },
-    {
-      "id": "shared_shepherd_retrieve_rationale_1",
-      "label": "Hybrid retrieval: vector + keyword + generated-questions vector (+ scripture\u2026",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "file_type": "rationale",
-      "norm_label": "hybrid retrieval: vector + keyword + generated-questions vector (+ scripture...",
-      "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L1"
     },
     {
       "id": "tests_test_questions",
@@ -7987,6 +7900,17 @@
       "norm_label": "test_questions.py",
       "source_file": "tests/test_questions.py",
       "source_location": "L1"
+    },
+    {
+      "id": "tests_test_retrieve_py_fixture",
+      "label": "fixture",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "test_questions.py",
+      "file_type": "code",
+      "norm_label": "fixture",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "tests_test_questions_rationale_1",
@@ -8009,6 +7933,17 @@
       "norm_label": "thread-safe fake: the reply depends on the passage, not on call order.",
       "source_file": "tests/test_questions.py",
       "source_location": "L21"
+    },
+    {
+      "id": "tests_test_retrieve_rationale_24",
+      "label": "One leader-only source and one member source, each with chunks and embeddings.",
+      "_origin": "ast",
+      "community": 41,
+      "community_name": "test_questions.py",
+      "file_type": "rationale",
+      "norm_label": "one leader-only source and one member source, each with chunks and embeddings.",
+      "source_file": "tests/test_retrieve.py",
+      "source_location": "L24"
     },
     {
       "id": "api_init",
@@ -8103,7 +8038,7 @@
       "label": "migrate.py",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "migrate.py",
       "source_file": "db/migrate.py",
@@ -8114,21 +8049,21 @@
       "label": "Connection",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "connection",
       "source_file": "",
       "source_location": ""
     },
     {
-      "id": "shared_shepherd_mail",
-      "label": "mail.py",
+      "id": "shared_shepherd_db",
+      "label": "db.py",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
-      "norm_label": "mail.py",
-      "source_file": "shared/shepherd/mail.py",
+      "norm_label": "db.py",
+      "source_file": "shared/shepherd/db.py",
       "source_location": "L1"
     },
     {
@@ -8136,7 +8071,7 @@
       "label": "conftest.py",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "conftest.py",
       "source_file": "tests/conftest.py",
@@ -8147,7 +8082,7 @@
       "label": "fixture",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "fixture",
       "source_file": "",
@@ -8158,7 +8093,7 @@
       "label": "test_mail.py",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_mail.py",
       "source_file": "tests/test_mail.py",
@@ -8169,7 +8104,7 @@
       "label": "test_portal.py",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "test_portal.py",
       "source_file": "tests/test_portal.py",
@@ -8180,7 +8115,7 @@
       "label": "fixture",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "code",
       "norm_label": "fixture",
       "source_file": "",
@@ -8191,21 +8126,21 @@
       "label": "Apply db/migrations/*.sql in order, once each. Usage: uv run python\u2026",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "rationale",
       "norm_label": "apply db/migrations/*.sql in order, once each. usage: uv run python...",
       "source_file": "db/migrate.py",
       "source_location": "L1"
     },
     {
-      "id": "shared_shepherd_mail_rationale_1",
-      "label": "Outgoing email via Resend (https://resend.com). Without RESEND_API_KEY the\u2026",
+      "id": "shared_shepherd_db_rationale_1",
+      "label": "Database access helpers. The app connects as the restricted `shepherd_app`\u2026",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "rationale",
-      "norm_label": "outgoing email via resend (https://resend.com). without resend_api_key the...",
-      "source_file": "shared/shepherd/mail.py",
+      "norm_label": "database access helpers. the app connects as the restricted `shepherd_app`...",
+      "source_file": "shared/shepherd/db.py",
       "source_location": "L1"
     },
     {
@@ -8213,7 +8148,7 @@
       "label": "Superuser connection. Used only to set up and tear down fixtures.",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "rationale",
       "norm_label": "superuser connection. used only to set up and tear down fixtures.",
       "source_file": "tests/conftest.py",
@@ -8224,7 +8159,7 @@
       "label": "Restricted application role.",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "rationale",
       "norm_label": "restricted application role.",
       "source_file": "tests/conftest.py",
@@ -8235,7 +8170,7 @@
       "label": "Every source (and its chunks, via cascade) created during a test is removed\u2026",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "rationale",
       "norm_label": "every source (and its chunks, via cascade) created during a test is removed...",
       "source_file": "tests/conftest.py",
@@ -8246,7 +8181,7 @@
       "label": "One throwaway source with one chunk.",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "rationale",
       "norm_label": "one throwaway source with one chunk.",
       "source_file": "tests/conftest.py",
@@ -8257,11 +8192,22 @@
       "label": "Admin portal smoke tests: auth gate, upload validation, book and user lifecycle.",
       "_origin": "ast",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "file_type": "rationale",
       "norm_label": "admin portal smoke tests: auth gate, upload validation, book and user lifecycle.",
       "source_file": "tests/test_portal.py",
       "source_location": "L1"
+    },
+    {
+      "id": "openai",
+      "label": "OpenAI",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "code",
+      "norm_label": "openai",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "shared_shepherd_answer",
@@ -8275,6 +8221,17 @@
       "source_location": "L1"
     },
     {
+      "id": "shared_shepherd_classify",
+      "label": "classify.py",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "code",
+      "norm_label": "classify.py",
+      "source_file": "shared/shepherd/classify.py",
+      "source_location": "L1"
+    },
+    {
       "id": "shared_shepherd_db_py_connection",
       "label": "Connection",
       "_origin": "ast",
@@ -8284,6 +8241,28 @@
       "norm_label": "connection",
       "source_file": "",
       "source_location": ""
+    },
+    {
+      "id": "shared_shepherd_llm",
+      "label": "llm.py",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "code",
+      "norm_label": "llm.py",
+      "source_file": "shared/shepherd/llm.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_mail",
+      "label": "mail.py",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "code",
+      "norm_label": "mail.py",
+      "source_file": "shared/shepherd/mail.py",
+      "source_location": "L1"
     },
     {
       "id": "shared_shepherd_answer_rationale_1",
@@ -8374,6 +8353,17 @@
       "source_location": "L82"
     },
     {
+      "id": "shared_shepherd_classify_rationale_1",
+      "label": "Scope classifier, run before retrieval. off_scope -> polite decline. sensitive\u2026",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "rationale",
+      "norm_label": "scope classifier, run before retrieval. off_scope -> polite decline. sensitive...",
+      "source_file": "shared/shepherd/classify.py",
+      "source_location": "L1"
+    },
+    {
       "id": "shared_shepherd_db_rationale_32",
       "label": "Pre-auth lookup: email -> user/role, via the security-definer function.",
       "_origin": "ast",
@@ -8383,6 +8373,28 @@
       "norm_label": "pre-auth lookup: email -> user/role, via the security-definer function.",
       "source_file": "shared/shepherd/db.py",
       "source_location": "L32"
+    },
+    {
+      "id": "shared_shepherd_llm_rationale_1",
+      "label": "One OpenAI-compatible client pointed at DeepSeek. Tests swap `client()` via\u2026",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "rationale",
+      "norm_label": "one openai-compatible client pointed at deepseek. tests swap `client()` via...",
+      "source_file": "shared/shepherd/llm.py",
+      "source_location": "L1"
+    },
+    {
+      "id": "shared_shepherd_mail_rationale_1",
+      "label": "Outgoing email via Resend (https://resend.com). Without RESEND_API_KEY the\u2026",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "answer.py",
+      "file_type": "rationale",
+      "norm_label": "outgoing email via resend (https://resend.com). without resend_api_key the...",
+      "source_file": "shared/shepherd/mail.py",
+      "source_location": "L1"
     },
     {
       "id": "shared_shepherd_scripture_rationale_57",
@@ -8800,30 +8812,6 @@
       "source_location": "L1"
     },
     {
-      "id": "boto3",
-      "label": "boto3",
-      "_origin": "semantic",
-      "community": 0,
-      "community_name": "epub.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "boto3",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "botocore_exceptions",
-      "label": "botocore_exceptions",
-      "_origin": "semantic",
-      "community": 0,
-      "community_name": "epub.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "botocore_exceptions",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "bs4",
       "label": "bs4",
       "_origin": "semantic",
@@ -8844,18 +8832,6 @@
       "external": true,
       "file_type": "concept",
       "norm_label": "ebooklib",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "pathlib",
-      "label": "pathlib",
-      "_origin": "semantic",
-      "community": 0,
-      "community_name": "epub.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "pathlib",
       "source_file": "",
       "type": "external"
     },
@@ -8896,50 +8872,14 @@
       "type": "external"
     },
     {
-      "id": "sys",
-      "label": "sys",
-      "_origin": "semantic",
-      "community": 16,
-      "community_name": "connect",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "sys",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "logging",
-      "label": "logging",
+      "id": "hashlib",
+      "label": "hashlib",
       "_origin": "semantic",
       "community": 18,
       "community_name": "ingest.py",
       "external": true,
       "file_type": "concept",
-      "norm_label": "logging",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "psycopg",
-      "label": "psycopg",
-      "_origin": "semantic",
-      "community": 18,
-      "community_name": "ingest.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "psycopg",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "traceback",
-      "label": "traceback",
-      "_origin": "semantic",
-      "community": 18,
-      "community_name": "ingest.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "traceback",
+      "norm_label": "hashlib",
       "source_file": "",
       "type": "external"
     },
@@ -8992,18 +8932,6 @@
       "type": "external"
     },
     {
-      "id": "json",
-      "label": "json",
-      "_origin": "semantic",
-      "community": 29,
-      "community_name": "classify.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "json",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "datetime",
       "label": "datetime",
       "_origin": "semantic",
@@ -9016,14 +8944,86 @@
       "type": "external"
     },
     {
+      "id": "boto3",
+      "label": "boto3",
+      "_origin": "semantic",
+      "community": 30,
+      "community_name": "storage.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "boto3",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "botocore_exceptions",
+      "label": "botocore_exceptions",
+      "_origin": "semantic",
+      "community": 30,
+      "community_name": "storage.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "botocore_exceptions",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "pathlib",
+      "label": "pathlib",
+      "_origin": "semantic",
+      "community": 30,
+      "community_name": "storage.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "pathlib",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "collections",
+      "label": "collections",
+      "_origin": "semantic",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "collections",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "sys",
+      "label": "sys",
+      "_origin": "semantic",
+      "community": 31,
+      "community_name": "retrieve.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "sys",
+      "source_file": "",
+      "type": "external"
+    },
+    {
       "id": "time",
       "label": "time",
       "_origin": "semantic",
-      "community": 3,
-      "community_name": "test_answer.py",
+      "community": 32,
+      "community_name": "worker/main.py",
       "external": true,
       "file_type": "concept",
       "norm_label": "time",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "traceback",
+      "label": "traceback",
+      "_origin": "semantic",
+      "community": 32,
+      "community_name": "worker/main.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "traceback",
       "source_file": "",
       "type": "external"
     },
@@ -9040,47 +9040,11 @@
       "type": "external"
     },
     {
-      "id": "concurrent_futures",
-      "label": "concurrent_futures",
-      "_origin": "semantic",
-      "community": 4,
-      "community_name": "questions.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "concurrent_futures",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "collections",
-      "label": "collections",
-      "_origin": "semantic",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "collections",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "dataclasses",
-      "label": "dataclasses",
-      "_origin": "semantic",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "dataclasses",
-      "source_file": "",
-      "type": "external"
-    },
-    {
       "id": "functools",
       "label": "functools",
       "_origin": "semantic",
-      "community": 40,
-      "community_name": "retrieve.py",
+      "community": 4,
+      "community_name": "os",
       "external": true,
       "file_type": "concept",
       "norm_label": "functools",
@@ -9088,26 +9052,26 @@
       "type": "external"
     },
     {
-      "id": "hashlib",
-      "label": "hashlib",
+      "id": "os",
+      "label": "os",
       "_origin": "semantic",
-      "community": 40,
-      "community_name": "retrieve.py",
+      "community": 4,
+      "community_name": "os",
       "external": true,
       "file_type": "concept",
-      "norm_label": "hashlib",
+      "norm_label": "os",
       "source_file": "",
       "type": "external"
     },
     {
-      "id": "os",
-      "label": "os",
+      "id": "typing",
+      "label": "typing",
       "_origin": "semantic",
-      "community": 40,
-      "community_name": "retrieve.py",
+      "community": 4,
+      "community_name": "os",
       "external": true,
       "file_type": "concept",
-      "norm_label": "os",
+      "norm_label": "typing",
       "source_file": "",
       "type": "external"
     },
@@ -9116,22 +9080,10 @@
       "label": "re",
       "_origin": "semantic",
       "community": 40,
-      "community_name": "retrieve.py",
+      "community_name": "rerank.py",
       "external": true,
       "file_type": "concept",
       "norm_label": "re",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "typing",
-      "label": "typing",
-      "_origin": "semantic",
-      "community": 40,
-      "community_name": "retrieve.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "typing",
       "source_file": "",
       "type": "external"
     },
@@ -9248,7 +9200,7 @@
       "label": "contextlib",
       "_origin": "semantic",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "external": true,
       "file_type": "concept",
       "norm_label": "contextlib",
@@ -9260,7 +9212,7 @@
       "label": "dotenv",
       "_origin": "semantic",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "external": true,
       "file_type": "concept",
       "norm_label": "dotenv",
@@ -9272,22 +9224,10 @@
       "label": "fastapi_testclient",
       "_origin": "semantic",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "external": true,
       "file_type": "concept",
       "norm_label": "fastapi_testclient",
-      "source_file": "",
-      "type": "external"
-    },
-    {
-      "id": "httpx",
-      "label": "httpx",
-      "_origin": "semantic",
-      "community": 6,
-      "community_name": "test_portal.py",
-      "external": true,
-      "file_type": "concept",
-      "norm_label": "httpx",
       "source_file": "",
       "type": "external"
     },
@@ -9296,10 +9236,22 @@
       "label": "io",
       "_origin": "semantic",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "external": true,
       "file_type": "concept",
       "norm_label": "io",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "psycopg",
+      "label": "psycopg",
+      "_origin": "semantic",
+      "community": 6,
+      "community_name": "db.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "psycopg",
       "source_file": "",
       "type": "external"
     },
@@ -9308,10 +9260,70 @@
       "label": "pytest",
       "_origin": "semantic",
       "community": 6,
-      "community_name": "test_portal.py",
+      "community_name": "db.py",
       "external": true,
       "file_type": "concept",
       "norm_label": "pytest",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "concurrent_futures",
+      "label": "concurrent_futures",
+      "_origin": "semantic",
+      "community": 7,
+      "community_name": "answer.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "concurrent_futures",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "dataclasses",
+      "label": "dataclasses",
+      "_origin": "semantic",
+      "community": 7,
+      "community_name": "answer.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "dataclasses",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "httpx",
+      "label": "httpx",
+      "_origin": "semantic",
+      "community": 7,
+      "community_name": "answer.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "httpx",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "json",
+      "label": "json",
+      "_origin": "semantic",
+      "community": 7,
+      "community_name": "answer.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "json",
+      "source_file": "",
+      "type": "external"
+    },
+    {
+      "id": "logging",
+      "label": "logging",
+      "_origin": "semantic",
+      "community": 7,
+      "community_name": "answer.py",
+      "external": true,
+      "file_type": "concept",
+      "norm_label": "logging",
       "source_file": "",
       "type": "external"
     }
@@ -10694,7 +10706,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L105",
+      "source_location": "L106",
       "weight": 1.0
     },
     {
@@ -10706,7 +10718,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L277",
+      "source_location": "L278",
       "weight": 1.0
     },
     {
@@ -10718,7 +10730,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L278",
+      "source_location": "L279",
       "weight": 1.0
     },
     {
@@ -10730,7 +10742,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L281",
+      "source_location": "L282",
       "weight": 1.0
     },
     {
@@ -10742,7 +10754,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L257",
+      "source_location": "L258",
       "weight": 1.0
     },
     {
@@ -10754,7 +10766,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L159",
+      "source_location": "L160",
       "weight": 1.0
     },
     {
@@ -10766,7 +10778,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L161",
+      "source_location": "L162",
       "weight": 1.0
     },
     {
@@ -10778,7 +10790,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L161",
+      "source_location": "L162",
       "weight": 1.0
     },
     {
@@ -10790,7 +10802,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L89",
+      "source_location": "L90",
       "weight": 1.0
     },
     {
@@ -10802,7 +10814,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L191",
+      "source_location": "L192",
       "weight": 1.0
     },
     {
@@ -10814,7 +10826,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L192",
+      "source_location": "L193",
       "weight": 1.0
     },
     {
@@ -10826,7 +10838,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L195",
+      "source_location": "L196",
       "weight": 1.0
     },
     {
@@ -10838,7 +10850,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L199",
+      "source_location": "L200",
       "weight": 1.0
     },
     {
@@ -10850,7 +10862,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L216",
+      "source_location": "L217",
       "weight": 1.0
     },
     {
@@ -10862,7 +10874,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L223",
+      "source_location": "L224",
       "weight": 1.0
     },
     {
@@ -10874,7 +10886,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L203",
+      "source_location": "L204",
       "weight": 1.0
     },
     {
@@ -10886,7 +10898,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L204",
+      "source_location": "L205",
       "weight": 1.0
     },
     {
@@ -10898,7 +10910,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L207",
+      "source_location": "L208",
       "weight": 1.0
     },
     {
@@ -10910,7 +10922,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L209",
+      "source_location": "L210",
       "weight": 1.0
     },
     {
@@ -10922,7 +10934,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L172",
+      "source_location": "L173",
       "weight": 1.0
     },
     {
@@ -10934,7 +10946,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L116",
+      "source_location": "L117",
       "weight": 1.0
     },
     {
@@ -10946,7 +10958,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L83",
+      "source_location": "L84",
       "weight": 1.0
     },
     {
@@ -10958,7 +10970,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L72",
+      "source_location": "L73",
       "weight": 1.0
     },
     {
@@ -13982,7 +13994,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L201",
+      "source_location": "L202",
       "weight": 1.0
     },
     {
@@ -14678,7 +14690,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L235",
+      "source_location": "L236",
       "weight": 1.0
     },
     {
@@ -14690,7 +14702,7 @@
       "confidence_score": 1.0,
       "context": "generic_arg",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L183",
+      "source_location": "L184",
       "weight": 1.0
     },
     {
@@ -15423,7 +15435,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L20",
+      "source_location": "L21",
       "weight": 1.0
     },
     {
@@ -15435,7 +15447,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0
     },
     {
@@ -15447,7 +15459,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L22",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -15459,7 +15471,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L269",
+      "source_location": "L270",
       "weight": 1.0
     },
     {
@@ -15471,7 +15483,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L270",
+      "source_location": "L271",
       "weight": 1.0
     },
     {
@@ -15483,7 +15495,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L288",
+      "source_location": "L289",
       "weight": 1.0
     },
     {
@@ -17780,7 +17792,7 @@
     },
     {
       "source": "shared_shepherd_retrieve",
-      "target": "shared_shepherd_embed",
+      "target": "shared_shepherd_init",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17792,7 +17804,7 @@
     },
     {
       "source": "shared_shepherd_retrieve",
-      "target": "shared_shepherd_rerank",
+      "target": "shared_shepherd_embed",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17804,7 +17816,7 @@
     },
     {
       "source": "shared_shepherd_retrieve",
-      "target": "shared_shepherd_scripture",
+      "target": "shared_shepherd_rerank",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -17812,6 +17824,18 @@
       "context": "import",
       "source_file": "shared/shepherd/retrieve.py",
       "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "shared_shepherd_retrieve",
+      "target": "shared_shepherd_scripture",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -19445,7 +19469,7 @@
       "confidence_score": 1.0,
       "context": "parameter_type",
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L183",
+      "source_location": "L184",
       "weight": 1.0
     },
     {
@@ -19842,6 +19866,18 @@
       "context": "submodule_import",
       "source_file": "shared/shepherd/rerank.py",
       "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "shared_shepherd_retrieve",
+      "target": "shared_shepherd_config",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "submodule_import",
+      "source_file": "shared/shepherd/retrieve.py",
+      "source_location": "L20",
       "weight": 1.0
     },
     {
@@ -21452,6 +21488,17 @@
       "weight": 1.0
     },
     {
+      "source": "shared_shepherd_config",
+      "target": "shared_shepherd_config_device",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "shared/shepherd/config.py",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
       "source": "shared_shepherd_db",
       "target": "shared_shepherd_db_connect",
       "relation": "contains",
@@ -21701,7 +21748,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L104",
+      "source_location": "L105",
       "weight": 1.0
     },
     {
@@ -21712,7 +21759,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L114",
+      "source_location": "L115",
       "weight": 1.0
     },
     {
@@ -21723,7 +21770,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L131",
+      "source_location": "L132",
       "weight": 1.0
     },
     {
@@ -21734,7 +21781,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L144",
+      "source_location": "L145",
       "weight": 1.0
     },
     {
@@ -21745,7 +21792,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L157",
+      "source_location": "L158",
       "weight": 1.0
     },
     {
@@ -21756,7 +21803,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L164",
+      "source_location": "L165",
       "weight": 1.0
     },
     {
@@ -21767,7 +21814,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L183",
+      "source_location": "L184",
       "weight": 1.0
     },
     {
@@ -21778,7 +21825,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L226",
+      "source_location": "L227",
       "weight": 1.0
     },
     {
@@ -21789,7 +21836,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L235",
+      "source_location": "L236",
       "weight": 1.0
     },
     {
@@ -21800,7 +21847,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L268",
+      "source_location": "L269",
       "weight": 1.0
     },
     {
@@ -21811,7 +21858,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L41",
+      "source_location": "L42",
       "weight": 1.0
     },
     {
@@ -21822,7 +21869,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L58",
+      "source_location": "L59",
       "weight": 1.0
     },
     {
@@ -21833,7 +21880,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L71",
+      "source_location": "L72",
       "weight": 1.0
     },
     {
@@ -21844,7 +21891,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L82",
+      "source_location": "L83",
       "weight": 1.0
     },
     {
@@ -21855,7 +21902,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L87",
+      "source_location": "L88",
       "weight": 1.0
     },
     {
@@ -25670,7 +25717,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L54",
+      "source_location": "L55",
       "weight": 1.0
     },
     {
@@ -26290,80 +26337,80 @@
       "weight": 1.0
     },
     {
-      "source": "shared_shepherd_retrieve_rationale_115",
+      "source": "shared_shepherd_retrieve_rationale_116",
       "target": "shared_shepherd_retrieve_scripture_candidates",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L115",
+      "source_location": "L116",
       "weight": 1.0
     },
     {
-      "source": "shared_shepherd_retrieve_rationale_132",
+      "source": "shared_shepherd_retrieve_rationale_133",
       "target": "shared_shepherd_retrieve_title_forms",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L132",
+      "source_location": "L133",
       "weight": 1.0
     },
     {
-      "source": "shared_shepherd_retrieve_rationale_158",
+      "source": "shared_shepherd_retrieve_rationale_159",
       "target": "shared_shepherd_retrieve_named_books",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L158",
+      "source_location": "L159",
       "weight": 1.0
     },
     {
-      "source": "shared_shepherd_retrieve_rationale_227",
+      "source": "shared_shepherd_retrieve_rationale_228",
       "target": "shared_shepherd_retrieve_join",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L227",
+      "source_location": "L228",
       "weight": 1.0
     },
     {
-      "source": "shared_shepherd_retrieve_rationale_236",
+      "source": "shared_shepherd_retrieve_rationale_237",
       "target": "shared_shepherd_retrieve_merge_neighbours",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L236",
+      "source_location": "L237",
       "weight": 1.0
     },
     {
-      "source": "shared_shepherd_retrieve_rationale_59",
+      "source": "shared_shepherd_retrieve_rationale_60",
       "target": "shared_shepherd_retrieve_visibility_clause",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L59",
+      "source_location": "L60",
       "weight": 1.0
     },
     {
-      "source": "shared_shepherd_retrieve_rationale_88",
+      "source": "shared_shepherd_retrieve_rationale_89",
       "target": "shared_shepherd_retrieve_question_candidates",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "shared/shepherd/retrieve.py",
-      "source_location": "L88",
+      "source_location": "L89",
       "weight": 1.0
     },
     {

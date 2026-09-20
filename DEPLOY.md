@@ -10,7 +10,10 @@ worker, a nightly backup, and Caddy for HTTPS. Only ports 80 and 443 are open.
 ## 1. First deployment
 
 ```bash
+# get the code onto the server: git clone if the project is in a repository, otherwise copy it
 git clone <repo> shepherd && cd shepherd
+#   or, from the Mac:  rsync -a --exclude .venv --exclude node_modules --exclude .env --exclude '131-dagbooks*' \
+#                      --exclude ragflow --exclude llama_index --exclude RAG_Book_QA_System ./ <server>:~/shepherd/
 cp .env.production.example .env
 nano .env                                   # fill every value; secrets: openssl rand -hex 32
 docker compose -f docker-compose.prod.yml up -d --build
@@ -28,29 +31,29 @@ bring the library across from the development machine (next section).
 The dev Mac already holds 131 processed books (passages, embeddings, generated questions). Copying
 takes minutes; re-processing on the server would take hours of CPU.
 
-On the Mac:
+On the Mac (the MinIO container ships its own `mc`, which is simpler than a separate client on Docker Desktop):
 ```bash
-docker exec rag_sheperd-postgres-1 pg_dump -U postgres --data-only \
-  -t sources -t chunks shepherd | gzip > library.sql.gz
-docker run --rm --network host -v "$PWD:/out" minio/mc sh -c \
-  'mc alias set dev http://localhost:9000 minio minio12345 && mc mirror dev/shepherd-books /out/books'
-scp library.sql.gz -r books <server>:~/shepherd/
+docker exec rag_sheperd-postgres-1 pg_dump -U postgres --data-only -t sources -t chunks shepherd | gzip > library.sql.gz
+docker exec rag_sheperd-minio-1 sh -c 'mc alias set local http://localhost:9000 minio minio12345 && mc mirror --quiet local/shepherd-books /tmp/books'
+docker cp rag_sheperd-minio-1:/tmp/books ./books
+scp library.sql.gz <server>:~/shepherd/ && scp -r books <server>:~/shepherd/
 ```
 
-On the server:
+On the server (the stack must be up, so the schema exists):
 ```bash
 cd ~/shepherd
-gunzip -c library.sql.gz | docker compose -f docker-compose.prod.yml exec -T postgres psql -U postgres shepherd
-docker run --rm --network shepherd_default -v "$PWD/books:/books" minio/mc sh -c \
-  "mc alias set prod http://minio:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD && mc mb -p prod/shepherd-books && mc mirror /books prod/shepherd-books"
+gunzip -c library.sql.gz | docker compose -f docker-compose.prod.yml exec -T postgres psql -U postgres -q shepherd
+docker compose -f docker-compose.prod.yml cp books minio:/tmp/books
+docker compose -f docker-compose.prod.yml exec minio sh -c "mc alias set local http://localhost:9000 $MINIO_ROOT_USER $MINIO_ROOT_PASSWORD && mc mb -p local/shepherd-books; mc mirror --quiet /tmp/books local/shepherd-books"
 ```
+Tested end to end 2026-09-20: 131 books / 13,843 passages restore in about a minute; the book files are ~130 MB.
 Users, conversations and logs are not copied: the pilot starts clean. Create the first accounts by
 signing up in the app, then promote pastors and shepherds to `leader` in `/admin/users`.
 
 ## 3. Updating
 
 ```bash
-git pull
+git pull            # or the same rsync as in step 1
 docker compose -f docker-compose.prod.yml up -d --build   # rebuilds the image, restarts api + worker, runs new migrations
 ```
 

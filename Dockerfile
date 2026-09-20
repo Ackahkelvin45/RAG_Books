@@ -15,8 +15,8 @@ RUN npm run build
 FROM python:3.13-slim-bookworm AS app
 COPY --from=ghcr.io/astral-sh/uv:0.9 /uv /usr/local/bin/uv
 
-# curl for the healthcheck; postgresql-client for backups (pg_dump) and restores
-RUN apt-get update && apt-get install -y --no-install-recommends curl postgresql-client \
+# curl for the healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
  && rm -rf /var/lib/apt/lists/*
 
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy UV_PROJECT_ENVIRONMENT=/opt/venv \
@@ -44,7 +44,8 @@ RUN useradd --create-home --uid 1000 shepherd \
 USER shepherd
 
 EXPOSE 8010
-HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 \
+# start-period covers the first-ever start, when the two models (~4.5 GB) are downloaded before serving
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15m --retries=3 \
   CMD curl -fsS http://localhost:8010/api/auth/config || exit 1
 
 ENTRYPOINT ["/entrypoint.sh"]

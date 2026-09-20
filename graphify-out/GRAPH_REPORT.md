@@ -1,7 +1,7 @@
 # Graph Report - RAG_sheperd  (2026-09-20)
 
 ## Corpus Check
-- 93 files · ~42,580 words
+- 93 files · ~42,715 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 12 file(s) not represented in the graph (top: (none) 7, .example 2, .jsonl 1)
 
@@ -9,6 +9,11 @@
 - 796 nodes · 1548 edges · 39 communities (31 shown, 8 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 33 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `c96314e8`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - epub.py
