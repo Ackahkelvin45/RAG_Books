@@ -26,6 +26,19 @@ share it, and it never downloads again. Caddy fetches the HTTPS certificate auto
 Then open `https://<your domain>/admin`, sign in with `ADMIN_PASSWORD`, and either upload books or
 bring the library across from the development machine (next section).
 
+### Using your own nginx instead of Caddy
+
+If the server already runs nginx (or you prefer it), start the stack without Caddy and let nginx proxy to the API
+on `127.0.0.1:8010`:
+```bash
+docker compose -f docker-compose.prod.yml -f docker-compose.nginx.yml up -d --build
+sudo cp infra/nginx.conf /etc/nginx/sites-available/shepherd    # edit server_name
+sudo ln -s /etc/nginx/sites-available/shepherd /etc/nginx/sites-enabled/
+sudo certbot --nginx -d guide.example.org && sudo nginx -s reload
+```
+`infra/nginx.conf` already has the two settings that matter: `proxy_buffering off` (answers stream) and a long
+`proxy_read_timeout`. Use the same two compose files for every later `up`.
+
 ## 2. Moving the library from the development machine
 
 The dev Mac already holds 131 processed books (passages, embeddings, generated questions). Copying

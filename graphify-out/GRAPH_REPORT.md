@@ -1,40 +1,40 @@
 # Graph Report - RAG_sheperd  (2026-09-20)
 
 ## Corpus Check
-- 93 files · ~42,715 words
+- 93 files · ~42,863 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 12 file(s) not represented in the graph (top: (none) 7, .example 2, .jsonl 1)
+- Unclassified: 13 file(s) not represented in the graph (top: (none) 7, .example 2, .jsonl 1)
 
 ## Summary
-- 796 nodes · 1548 edges · 39 communities (31 shown, 8 thin omitted)
+- 797 nodes · 1549 edges · 40 communities (33 shown, 7 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 33 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c96314e8`
+- Built from commit: `cb00ffeb`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- epub.py
+- test_ingest.py
 - chunking.py
 - Chat.tsx
 - test_answer.py
-- os
+- embed.py
 - api/main.py
-- db.py
+- os
 - answer.py
 - test_chat_api.py
 - Shepherd Guide: Build Guide in Phases
 - package.json
-- test_ingest.py
+- google_callback
 - scripture.py
 - Shepherd Guide: Phase One Implementation Handoff (v3, books-only)
 - compilerOptions
 - compilerOptions
-- connect
+- ask_endpoint
 - Shepherd Guide
-- ingest.py
+- SignUp
 - .oxlintrc.json
 - React + TypeScript + Vite
 - tsconfig.json
@@ -46,11 +46,12 @@
 - test_member_never_sees_leader_chunks_on_any_path
 - storage.py
 - retrieve.py
-- worker/main.py
-- test_process_source_leaves_nothing_on_failure
-- test_rls.py
-- emails.py
+- Profile
+- get
+- login
+- corpus
 - entrypoint.sh
+- _named
 - rerank.py
 - test_questions.py
 
@@ -73,47 +74,47 @@
   PLAN.md → shared/shepherd/db.py
 - `add_chunk()` --calls--> `extract_verse_ids()`  [INFERRED]
   tests/test_retrieve.py → shared/shepherd/scripture.py
-- `lifespan()` --calls--> `get_embedder()`  [INFERRED]
-  api/main.py → shared/shepherd/embed.py
+- `lifespan()` --calls--> `get_reranker()`  [INFERRED]
+  api/main.py → shared/shepherd/rerank.py
 - `test_ministry_role_reaches_the_prompt()` --calls--> `_user()`  [INFERRED]
   tests/test_chat_api.py → shared/shepherd/answer.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (39 total, 8 thin omitted)
+## Communities (40 total, 7 thin omitted)
 
-### Community 0 - "epub.py"
-Cohesion: 0.16
-Nodes (16): BeautifulSoup, bs4, ebooklib, EpubBook, test_front_matter_is_skipped_and_chapters_come_from_text(), warnings, _chapter_of(), _clean() (+8 more)
+### Community 0 - "test_ingest.py"
+Cohesion: 0.05
+Nodes (60): BeautifulSoup, bs4, ebooklib, EpubBook, Exception, FakeEmbedder, Stable pseudo-vectors from a hash. Similar texts are NOT similar; fine for…, sys (+52 more)
 
 ### Community 1 - "chunking.py"
-Cohesion: 0.27
-Nodes (12): Chunk, chunk_text(), flush(), Recursive, chapter-bounded chunking. Paragraphs are packed into chunks of…, Paragraphs, with oversized paragraphs split into sentences., _units(), whitespace_tokens(), test_overlap_repeats_tail_of_previous_chunk() (+4 more)
+Cohesion: 0.17
+Nodes (17): re, Chunk, chunk_text(), flush(), Recursive, chapter-bounded chunking. Paragraphs are packed into chunks of…, Paragraphs, with oversized paragraphs split into sentences., _units(), whitespace_tokens() (+9 more)
 
 ### Community 2 - "Chat.tsx"
 Cohesion: 0.07
-Nodes (50): react, react-dom, AnswerText(), chapterLabel(), Sources(), api, ApiError, ask() (+42 more)
+Nodes (51): epubjs, react, react-dom, AnswerText(), chapterLabel(), Sources(), api, ApiError (+43 more)
 
 ### Community 3 - "test_answer.py"
 Cohesion: 0.06
 Nodes (57): datetime, ask_item(), cited_sentences(), eval_user(), generate(), injection(), judge(), load_items() (+49 more)
 
-### Community 4 - "os"
-Cohesion: 0.14
-Nodes (13): functools, os, Pinned models and environment-derived settings. One place to change them., BgeM3Embedder, get_embedder(), Embedding backends. `get_embedder()` returns the pinned bge-m3 model, or a…, Shared code for the Shepherd Guide API, worker, and eval harness., fill_batch() (+5 more)
+### Community 4 - "embed.py"
+Cohesion: 0.15
+Nodes (9): Load the embedding and reranking models at startup (~45 s), not on the first…, _warm_models(), lifespan(), hashlib, BgeM3Embedder, Embedder, get_embedder(), Protocol (+1 more)
 
 ### Community 5 - "api/main.py"
-Cohesion: 0.12
-Nodes (33): activity(), add_user(), admin(), books(), delete_book(), delete_user(), flash(), login() (+25 more)
+Cohesion: 0.09
+Nodes (49): activity(), add_user(), admin(), books(), delete_book(), delete_user(), flash(), login() (+41 more)
 
-### Community 6 - "db.py"
-Cohesion: 0.06
-Nodes (29): contextlib, applied(), main(), Connection, Apply db/migrations/*.sql in order, once each. Usage: uv run python…, dotenv, fastapi_testclient, io (+21 more)
+### Community 6 - "os"
+Cohesion: 0.05
+Nodes (36): contextlib, applied(), main(), Connection, Apply db/migrations/*.sql in order, once each. Usage: uv run python…, dotenv, fastapi_testclient, html (+28 more)
 
 ### Community 7 - "answer.py"
-Cohesion: 0.07
-Nodes (38): concurrent_futures, dataclasses, httpx, json, logging, OpenAI, ask(), attribution() (+30 more)
+Cohesion: 0.06
+Nodes (47): db(), db(), concurrent_futures, dataclasses, functools, json, logging, OpenAI (+39 more)
 
 ### Community 8 - "test_chat_api.py"
 Cohesion: 0.10
@@ -125,11 +126,11 @@ Nodes (28): Finished: what the first release looks like, Overview, Phase 1: Data
 
 ### Community 10 - "package.json"
 Cohesion: 0.06
-Nodes (33): epubjs, oxlint, react-markdown, remark-gfm, @types/node, @types/react, @types/react-dom, typescript (+25 more)
+Nodes (32): oxlint, react-markdown, remark-gfm, @types/node, @types/react, @types/react-dom, typescript, vite (+24 more)
 
-### Community 11 - "test_ingest.py"
-Cohesion: 0.26
-Nodes (18): add_source(), make_epub(), Path, Phase 2 acceptance: EPUB -> ready, failure -> failed + reason, reingest…, status_and_chunks(), test_corrupt_file_is_marked_failed_with_reason(), test_epub_reaches_ready_with_locations_and_scripture(), test_no_pending_work_returns_false() (+10 more)
+### Community 11 - "google_callback"
+Cohesion: 0.22
+Nodes (11): auth_config(), current_user(), google_callback(), _google_conf(), google_start(), google_userinfo(), logout(), Request (+3 more)
 
 ### Community 12 - "scripture.py"
 Cohesion: 0.15
@@ -147,17 +148,17 @@ Nodes (19): compilerOptions, allowArbitraryExtensions, allowImportingTsExtension
 Cohesion: 0.12
 Nodes (16): compilerOptions, allowImportingTsExtensions, erasableSyntaxOnly, lib, module, moduleDetection, noEmit, noFallthroughCasesInSwitch (+8 more)
 
-### Community 16 - "connect"
-Cohesion: 0.18
-Nodes (16): events(), db(), db(), argparse, connect(), Open a connection as the restricted application role., cmd_add(), cmd_add_dir() (+8 more)
+### Community 16 - "ask_endpoint"
+Cohesion: 0.22
+Nodes (9): Ask, ask_endpoint(), events(), conversation(), delete_conversation(), EventStream, _own(), Runs the full pipeline: classify → search the books → answer from the passages… (+1 more)
 
 ### Community 17 - "Shepherd Guide"
 Cohesion: 0.10
-Nodes (18): 1. First deployment, 2. Moving the library from the development machine, 3. Updating, 4. Backups and restore, 5. Checking it works, 6. Running costs, Deploying Shepherd Guide, Admin portal (api/) (+10 more)
+Nodes (19): 1. First deployment, 2. Moving the library from the development machine, 3. Updating, 4. Backups and restore, 5. Checking it works, 6. Running costs, Deploying Shepherd Guide, Using your own nginx instead of Caddy (+11 more)
 
-### Community 18 - "ingest.py"
-Cohesion: 0.12
-Nodes (20): Exception, hashlib, Embedder, Protocol, context_header(), enrich(), Contextual header prepended to each chunk before embedding (handoff 4d)., build_chunks() (+12 more)
+### Community 18 - "SignUp"
+Cohesion: 0.24
+Nodes (10): Code, _otp_hash(), post, Creates a **member** account, signs the person in (session cookie) and emails a…, Create (or replace) the user's code and email it. Caller holds a transaction., Codes expire after 10 minutes. Five wrong tries lock the code until a new one…, resend_code(), send_otp() (+2 more)
 
 ### Community 19 - ".oxlintrc.json"
 Cohesion: 0.33
@@ -168,64 +169,72 @@ Cohesion: 0.50
 Nodes (3): Expanding the Oxlint configuration, React Compiler, React + TypeScript + Vite
 
 ### Community 24 - "chat.py"
-Cohesion: 0.05
-Nodes (68): Ask, ask_endpoint(), auth_config(), book_file(), check_password(), Citation, Code, conversation() (+60 more)
+Cohesion: 0.15
+Nodes (17): Citation, ConversationSummary, Location, MessageOut, OK, PassageOut, JSON API for the React chat app (web/). Mounted under /api by api/main.py. Auth…, Everything past sign-up requires a confirmed email address. (+9 more)
 
 ### Community 28 - "test_retrieve.py"
-Cohesion: 0.13
-Nodes (23): _join(), merge_neighbours(), Connection, Concatenate adjacent chunks, dropping the overlap the chunker carried from…, Walk results best-first; a chunk next to one already taken (same book, same…, retrieve(), rrf(), _named() (+15 more)
+Cohesion: 0.16
+Nodes (19): _join(), merge_neighbours(), Connection, Concatenate adjacent chunks, dropping the overlap the chunker carried from…, Walk results best-first; a chunk next to one already taken (same book, same…, retrieve(), rrf(), _p() (+11 more)
 
 ### Community 29 - "test_member_never_sees_leader_chunks_on_any_path"
 Cohesion: 0.21
 Nodes (15): keyword_candidates(), question_candidates(), Fallback when the query is essentially just a reference and has no other words…, Chunks whose generated questions are closest in meaning to the user's question., gather(), scripture_candidates(), vector_candidates(), _where() (+7 more)
 
 ### Community 30 - "storage.py"
-Cohesion: 0.23
-Nodes (13): boto3, botocore_exceptions, pathlib, bucket(), _client(), delete(), download(), ensure_bucket() (+5 more)
+Cohesion: 0.26
+Nodes (12): boto3, botocore_exceptions, bucket(), _client(), delete(), download(), ensure_bucket(), open_book() (+4 more)
 
 ### Community 31 - "retrieve.py"
-Cohesion: 0.19
-Nodes (13): collections, _main(), named_books(), names_title(), Hybrid retrieval: vector + keyword + generated-questions vector (+ scripture…, Word lists a title may be written as: the whole title, and each part around ':'…, Ids of the visible books the query names by title., SQL fragment restricting sources by the caller's role. Fails closed for unknown… (+5 more)
+Cohesion: 0.21
+Nodes (12): collections, _main(), named_books(), names_title(), Hybrid retrieval: vector + keyword + generated-questions vector (+ scripture…, Word lists a title may be written as: the whole title, and each part around ':'…, Ids of the visible books the query names by title., SQL fragment restricting sources by the caller's role. Fails closed for unknown… (+4 more)
 
-### Community 32 - "worker/main.py"
-Cohesion: 0.20
-Nodes (11): test_stale_processing_source_is_requeued(), time, traceback, mark_failed(), Connection, claim(), fill_questions(), main() (+3 more)
+### Community 32 - "Profile"
+Cohesion: 0.22
+Nodes (7): Profile, Required once after sign-up. The first save also sends the welcome email., save_profile(), SignIn, date, field_validator, put
 
-### Community 33 - "test_process_source_leaves_nothing_on_failure"
-Cohesion: 0.29
-Nodes (4): FakeEmbedder, Stable pseudo-vectors from a hash. Similar texts are NOT similar; fine for…, A failure mid-ingest rolls back: no chunks, status still recoverable., test_process_source_leaves_nothing_on_failure()
+### Community 33 - "get"
+Cohesion: 0.25
+Nodes (8): book_file(), conversations(), Me, passage(), get, The app uses `email_verified` and `profile_complete` to decide which screen to…, What a citation link opens: the passage, its book and chapter, the verses it…, Streams the stored EPUB. `?download=1` sets a filename so the browser saves it.
 
-### Community 35 - "emails.py"
-Cohesion: 0.43
-Nodes (6): html, _app_url(), _layout(), otp_email(), Email templates. Each returns (subject, text, html). HTML is table-based with…, welcome_email()
+### Community 34 - "login"
+Cohesion: 0.25
+Nodes (8): check_password(), hash_password(), login(), login_locked(), A success clears the account's failures; a failure adds one., Sets the session cookie. **In Swagger, call this first**; later \"Try it out\"…, record_login(), test_password_hash_roundtrip()
+
+### Community 35 - "corpus"
+Cohesion: 0.40
+Nodes (4): corpus(), add_chunk(), fixture, One leader-only source and one member source, each with chunks and embeddings.
+
+### Community 37 - "_named"
+Cohesion: 0.67
+Nodes (4): _named(), parametrize, test_a_named_book_is_recognised(), test_everyday_words_are_not_a_book()
 
 ### Community 40 - "rerank.py"
-Cohesion: 0.18
-Nodes (9): lifespan(), re, BgeReranker, FakeReranker, get_reranker(), Protocol, Rerankers. `get_reranker()` returns the pinned bge-reranker-v2-m3 cross-…, Fraction of query words present in the passage. Deterministic, no model. (+1 more)
+Cohesion: 0.19
+Nodes (8): BgeReranker, FakeReranker, get_reranker(), Protocol, Rerankers. `get_reranker()` returns the pinned bge-reranker-v2-m3 cross-…, Fraction of query words present in the passage. Deterministic, no model., Reranker, typing
 
 ### Community 41 - "test_questions.py"
-Cohesion: 0.16
-Nodes (11): pgvector_psycopg, ByPassage, _Obj, Stage 4: generated questions per chunk, and the retrieval list that searches…, Thread-safe fake: the reply depends on the passage, not on call order., test_fill_writes_questions_and_embedding_and_is_resumable(), test_question_list_respects_visibility(), corpus() (+3 more)
+Cohesion: 0.27
+Nodes (7): pgvector_psycopg, ByPassage, _Obj, Stage 4: generated questions per chunk, and the retrieval list that searches…, Thread-safe fake: the reply depends on the passage, not on call order., test_fill_writes_questions_and_embedding_and_is_resumable(), test_question_list_respects_visibility()
 
 ## Knowledge Gaps
 - **134 isolated node(s):** `01_app_role.sh script`, `entrypoint.sh script`, `shepherd-guide`, `$schema`, `plugins` (+129 more)
   These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 316 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `M1 — Schema, local infra` connect `Shepherd Guide: Build Guide in Phases` to `connect`, `chat.py`?**
-  _High betweenness centrality (0.052) - this node is a cross-community bridge._
-- **Why does `connect()` connect `connect` to `worker/main.py`, `test_answer.py`, `os`, `api/main.py`, `db.py`, `answer.py`, `Shepherd Guide: Build Guide in Phases`, `ingest.py`, `retrieve.py`?**
+- **Why does `M1 — Schema, local infra` connect `Shepherd Guide: Build Guide in Phases` to `api/main.py`, `answer.py`?**
+  _High betweenness centrality (0.051) - this node is a cross-community bridge._
+- **Why does `connect()` connect `answer.py` to `test_ingest.py`, `test_answer.py`, `api/main.py`, `Shepherd Guide: Build Guide in Phases`, `ask_endpoint`, `retrieve.py`?**
   _High betweenness centrality (0.043) - this node is a cross-community bridge._
 - **What connects `01_app_role.sh script`, `entrypoint.sh script`, `shepherd-guide` to the rest of the system?**
   _134 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `test_ingest.py` be split into smaller, more focused modules?**
+  _Cohesion score 0.05134575569358178 - nodes in this community are weakly interconnected._
 - **Should `Chat.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.06956521739130435 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06800804828973843 - nodes in this community are weakly interconnected._
 - **Should `test_answer.py` be split into smaller, more focused modules?**
   _Cohesion score 0.06009615384615385 - nodes in this community are weakly interconnected._
-- **Should `os` be split into smaller, more focused modules?**
-  _Cohesion score 0.1380952380952381 - nodes in this community are weakly interconnected._
 - **Should `api/main.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.11932773109243698 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08686868686868687 - nodes in this community are weakly interconnected._

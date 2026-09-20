@@ -13,6 +13,7 @@ export default function Chat({ user, conversationId, onSignOut }: { user: User; 
   const [error, setError] = useState('')
   const [drawer, setDrawer] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const streamedId = useRef<string | null>(null) // conversation just created by our own stream: don't reload it
 
   const refreshList = () => api.conversations().then(setConversations).catch(() => {})
@@ -28,14 +29,14 @@ export default function Chat({ user, conversationId, onSignOut }: { user: User; 
 
   // Follow the answer as it streams, but only while the reader is already near the bottom:
   // scrolling up to re-read an earlier turn must not be yanked back on every token.
+  // The message list scrolls inside .scroll, not the window, so listen there.
   const stickToBottom = useRef(true)
   useEffect(() => {
-    const onScroll = () => {
-      const el = document.scrollingElement!
-      stickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 120
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const el = scrollRef.current
+    if (!el) return
+    const onScroll = () => { stickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 120 }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => el.removeEventListener('scroll', onScroll)
   }, [])
   useEffect(() => {
     if (stickToBottom.current) endRef.current?.scrollIntoView({ block: 'end', behavior: streaming ? 'auto' : 'smooth' })
@@ -104,7 +105,7 @@ export default function Chat({ user, conversationId, onSignOut }: { user: User; 
         </nav>
       </aside>
 
-      <div className="scroll">
+      <div className="scroll" ref={scrollRef}>
         <div className="stage">
           <header className="hero">
             <Sparkle className="hero-mark" />

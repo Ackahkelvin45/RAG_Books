@@ -10,7 +10,8 @@
   --send: #9aa9bf;
   --accent: #7b4fb8;       /* citations, verses */
   --error: #b3261e;
-  --w: min(884px, calc(100vw - 32px));
+  /* 100% (not 100vw): inside a scrolling column, 100vw is wider than the content box */
+  --w: min(884px, calc(100% - 32px));
   font-family: Manrope, system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--text);
   background: #fdfbfd;
@@ -58,9 +59,11 @@ button.link { background: none; border: 0; color: var(--slate); padding: 0; text
 }
 .suggestion:hover { background: rgb(255 255 255 / .85); border-color: #d9cdf3; }
 
-/* page frame */
-.page { height: 100%; display: flex; flex-direction: column; }
-.topbar { flex-shrink: 0; display: flex; align-items: center; gap: .25rem; padding: .8rem 1rem; }
+/* page frame. dvh so the mobile URL bar sliding in/out never hides the composer. */
+.page { height: 100%; height: 100dvh; display: flex; flex-direction: column; }
+.topbar { flex-shrink: 0; display: flex; align-items: center; gap: .25rem;
+  padding: .8rem max(1rem, env(safe-area-inset-right)) .8rem max(1rem, env(safe-area-inset-left)); }
+.center { display: grid; place-items: center; height: 100%; padding: 1rem; text-align: center; }
 .who { color: var(--muted); font-size: .88rem; font-weight: 700; margin-right: .25rem; }
 
 /* chat */
@@ -118,7 +121,7 @@ button.link { background: none; border: 0; color: var(--slate); padding: 0; text
 .source-verses { color: var(--accent); font-size: .8rem; }
 .source-read { color: var(--slate); font-size: .82rem; }
 
-.composer { position: relative; width: var(--w); margin: 0 auto 1.6rem; }
+.composer { position: relative; width: var(--w); margin: 0 auto 1.6rem; margin-bottom: calc(1.6rem + env(safe-area-inset-bottom)); }
 .composer textarea { display: block; resize: none; padding: .95rem 4.2rem .95rem 1rem; font-size: .98rem; line-height: 1.5; min-height: 3.6rem; max-height: 12rem; field-sizing: content; }
 .composer textarea::placeholder { color: var(--slate); }
 .send { position: absolute; right: .7rem; bottom: .55rem; background: none; border: 0; padding: .3rem; color: var(--send); }
@@ -152,7 +155,7 @@ button.link { background: none; border: 0; color: var(--slate); padding: 0; text
 
 /* read */
 .read { overflow-y: auto; }
-.read-inner { width: min(760px, calc(100vw - 32px)); margin: 0 auto; padding: 1rem 0 3rem; }
+.read-inner { width: min(760px, calc(100% - 32px)); margin: 0 auto; padding: 1rem 0 calc(3rem + env(safe-area-inset-bottom)); }
 .read-head { text-align: center; margin-bottom: 1.5rem; }
 .read-head h1 { font-weight: 500; color: var(--ink); margin: 1rem 0 .3rem; font-size: clamp(1.5rem, 2.4vw, 2rem); }
 .read-body { padding: 1.6rem 1.8rem; font-size: 1.08rem; line-height: 1.8; }
@@ -164,13 +167,57 @@ button.link { background: none; border: 0; color: var(--slate); padding: 0; text
 .verse p { margin: .15rem 0 0; font-style: italic; color: var(--slate); }
 .pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.4rem; }
 
+/* Tablets: the 35% indent leaves the answer in a thin column with a big empty gutter. */
+@media (max-width: 900px) {
+  .turn.ai { margin-left: 12%; }
+}
+
 @media (max-width: 760px) {
   .suggestion-row { grid-template-columns: 1fr; gap: .7rem; }
   .turn.me { max-width: 90%; }
   .turn.ai { margin-left: 8%; }
   .who { display: none; }
   .read-body { padding: 1.2rem; }
+  .composer { margin-bottom: calc(.8rem + env(safe-area-inset-bottom)); }
+  /* the hero eats the screen on a phone: shrink it so suggestions and the box are visible unscrolled */
+  .hero { padding-top: 10px; }
+  .hero h1 { margin-top: 18px; }
+  .suggestions h2 { margin-left: 0; font-size: .95rem; }
+  .who-label { margin-left: .2rem; }
+  .pager { flex-direction: column; }
+  .book-nav { padding: .5rem .8rem calc(.5rem + env(safe-area-inset-bottom)); }
+  .book-nav .suggestion { padding: .55rem .7rem; font-size: .9rem; }
+  .book-nav .muted { display: none; }
 }
+
+/* An iPhone zooms the whole page when a field under 16px takes focus. */
+@media (max-width: 480px) {
+  .composer textarea, .book select, .field, .suggestion { font-size: 16px; }
+  .turn.ai .bubble, .turn.me .bubble { padding: .65rem .8rem; font-size: .98rem; }
+  .source { grid-template-columns: auto 1fr; gap: .5rem; padding: .5rem .6rem; }
+  .source-read { display: none; }             /* the whole row is the link */
+  .auth-card { padding: 1.1rem; }
+  .otp-boxes { gap: .35rem; }
+  .otp-box { font-size: 1.25rem; }
+  .read-head h1 { font-size: 1.35rem; }
+  .verses, .book-view { padding-left: 1rem; padding-right: 1rem; }
+  .turn.ai { margin-left: 0; }                /* every pixel of width counts at 320px */
+  .turn.me { max-width: 100%; }
+  /* the drawer covers the conversation, so it must not be see-through over it */
+  .drawer { background: #fdfbfd; box-shadow: 0 8px 40px rgb(40 20 60 / .18); }
+}
+
+/* Touch screens have no hover: anything revealed on hover must always be visible,
+   and every control needs a finger-sized target. */
+@media (hover: none) {
+  .conv button { visibility: visible; }
+  .ghost, .conv button { min-height: 44px; display: inline-flex; align-items: center; }
+  .conv a { padding-block: .75rem; }          /* stays display:block so the title still ellipsises */
+}
+
+/* Long book titles, links and code must never push the layout sideways. */
+.bubble, .source-body, .read-body, .conv a, .auth-card { overflow-wrap: anywhere; }
+.turn.ai pre { overflow-x: auto; }
 
 /* google + profile */
 .google { display: flex; align-items: center; justify-content: center; gap: .6rem; padding: .75rem 1rem; background: #fff; border: 1px solid var(--line); border-radius: 8px; color: var(--text); text-decoration: none; font-weight: 600; }
@@ -202,13 +249,13 @@ button.link:disabled { color: var(--muted); text-decoration: none; cursor: defau
 .pw-eye:focus-visible { outline: 2px solid #b9a6ea; }
 
 /* in-app book reader */
-.book { display: flex; flex-direction: column; height: 100vh; }
+.book { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
 .book .topbar { gap: .5rem; flex-wrap: wrap; }
 .book .topbar .title { font-weight: 600; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 40vw; }
 .book select { font: inherit; font-size: .9rem; padding: .3rem .5rem; border-radius: 8px; border: 1px solid var(--card-line); background: rgb(255 255 255 / .8); max-width: 34vw; }
-.book-view { flex: 1; min-height: 0; margin: 0 auto 0; width: min(900px, 100vw); background: #fff; border: 1px solid var(--card-line); border-radius: 10px 10px 0 0; position: relative; }
+.book-view { flex: 1; min-height: 0; margin: 0 auto 0; width: min(900px, 100%); background: #fff; border: 1px solid var(--card-line); border-radius: 10px 10px 0 0; position: relative; }
 .book-view .epub-container { height: 100% !important; }
-.book-nav { display: flex; justify-content: space-between; align-items: center; padding: .5rem 1rem; width: min(900px, 100vw); margin: 0 auto; }
+.book-nav { display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: .5rem 1rem; width: min(900px, 100%); margin: 0 auto; }
 .book-nav .muted { font-size: .85rem; }
 .book-loading { position: absolute; inset: 0; display: grid; place-items: center; }
 @media (max-width: 720px) { .book .topbar .title { display: none; } .book select { max-width: 50vw; } }

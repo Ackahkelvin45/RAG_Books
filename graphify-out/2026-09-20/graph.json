@@ -6119,7 +6119,7 @@
       "node_kind": "heading",
       "norm_label": "2. moving the library from the development machine",
       "source_file": "DEPLOY.md",
-      "source_location": "L26"
+      "source_location": "L29"
     },
     {
       "id": "deploy_3_updating",
@@ -6131,7 +6131,7 @@
       "node_kind": "heading",
       "norm_label": "3. updating",
       "source_file": "DEPLOY.md",
-      "source_location": "L50"
+      "source_location": "L53"
     },
     {
       "id": "deploy_4_backups_and_restore",
@@ -6143,7 +6143,7 @@
       "node_kind": "heading",
       "norm_label": "4. backups and restore",
       "source_file": "DEPLOY.md",
-      "source_location": "L57"
+      "source_location": "L60"
     },
     {
       "id": "deploy_5_checking_it_works",
@@ -6155,7 +6155,7 @@
       "node_kind": "heading",
       "norm_label": "5. checking it works",
       "source_file": "DEPLOY.md",
-      "source_location": "L74"
+      "source_location": "L77"
     },
     {
       "id": "deploy_6_running_costs",
@@ -6167,7 +6167,7 @@
       "node_kind": "heading",
       "norm_label": "6. running costs",
       "source_file": "DEPLOY.md",
-      "source_location": "L82"
+      "source_location": "L85"
     },
     {
       "id": "deploy_deploying_shepherd_guide",
@@ -20758,7 +20758,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DEPLOY.md",
-      "source_location": "L26",
+      "source_location": "L29",
       "weight": 1.0
     },
     {
@@ -20769,7 +20769,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DEPLOY.md",
-      "source_location": "L50",
+      "source_location": "L53",
       "weight": 1.0
     },
     {
@@ -20780,7 +20780,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DEPLOY.md",
-      "source_location": "L57",
+      "source_location": "L60",
       "weight": 1.0
     },
     {
@@ -20791,7 +20791,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DEPLOY.md",
-      "source_location": "L74",
+      "source_location": "L77",
       "weight": 1.0
     },
     {
@@ -20802,7 +20802,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "DEPLOY.md",
-      "source_location": "L82",
+      "source_location": "L85",
       "weight": 1.0
     },
     {
@@ -27267,5 +27267,6 @@
       "weight": 0.8
     }
   ],
-  "hyperedges": []
+  "hyperedges": [],
+  "built_at_commit": "c96314e8c80a6b3bfbdf9b306b5eec00cb3369db"
 }

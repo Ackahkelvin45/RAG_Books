@@ -510,15 +510,21 @@
     "semantic_hash": ""
   },
   "DEPLOY.md": {
-    "mtime": 1789892722.7136621,
-    "seen": 1789892724.178442,
-    "ast_hash": "3e0b189c431f021cd72ee037f1f65c0d",
+    "mtime": 1789897548.815841,
+    "seen": 1789897570.260753,
+    "ast_hash": "56cae7ffa81cb8eec7466f08e28ed5f7",
     "semantic_hash": ""
   },
   "docker-compose.prod.yml": {
-    "mtime": 1789892293.3250442,
-    "seen": 1789892724.178564,
-    "ast_hash": "265556fb32c7212abf29b9dc5960c95f",
+    "mtime": 1789897568.2950494,
+    "seen": 1789897570.260861,
+    "ast_hash": "8d9149c708bbadf16e6ff3fb2c0f8d9b",
+    "semantic_hash": ""
+  },
+  "docker-compose.nginx.yml": {
+    "mtime": 1789897548.7874677,
+    "seen": 1789897570.26086,
+    "ast_hash": "cdc2694dba3eff52ffdb1cca958b43cb",
     "semantic_hash": ""
   }
 }

@@ -1,0 +1,9 @@
+# Use with your own nginx instead of Caddy:
+#   docker compose -f docker-compose.prod.yml -f docker-compose.nginx.yml up -d --build
+# Publishes the API on 127.0.0.1:8010 (localhost only) and leaves Caddy off. See infra/nginx.conf.
+services:
+  api:
+    ports:
+      - "127.0.0.1:8010:8010"
+  caddy:
+    profiles: ["caddy"]   # not started unless you ask for it

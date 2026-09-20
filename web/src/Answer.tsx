@@ -1,5 +1,5 @@
 import type { Components } from 'react-markdown'
-import Markdown from 'react-markdown'
+import Markdown, { defaultUrlTransform } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { Citation } from './api'
 import { linkProps } from './router'
@@ -26,7 +26,9 @@ export function AnswerText({ text, citations }: { text: string; citations: Citat
       return <p className={scripture ? 'scripture-line' : undefined}>{children}</p>
     },
   }
-  return <Markdown remarkPlugins={[remarkGfm]} components={components}>{src}</Markdown>
+  // react-markdown drops link schemes it doesn't know, which would empty out every cite: href
+  const urlTransform = (url: string) => (url.startsWith('cite:') ? url : defaultUrlTransform(url))
+  return <Markdown remarkPlugins={[remarkGfm]} components={components} urlTransform={urlTransform}>{src}</Markdown>
 }
 
 export function chapterLabel(loc: Citation['location'], prefix = '') {
