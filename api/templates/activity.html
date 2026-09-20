@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% set active='activity' %}{% block body %}
+<div class="card"><h3 style="margin-top:0">Last 30 days</h3>
+{% for c, n in totals %}<span class="pill">{{ c }}: {{ n }}</span> {% else %}<em>No questions yet.</em>{% endfor %}
+<br><small>Models: answers {{ models[0] }} · embeddings {{ models[1] }} · reranker {{ models[2] }}</small></div>
+<table><tr><th>When</th><th>Who</th><th>Type</th><th>Question</th><th>Answer</th></tr>
+{% for r in recent %}<tr><td style="white-space:nowrap">{{ r[0].strftime('%d %b %H:%M') }}</td><td>{{ r[1] or 'anonymous' }}</td><td><span class="pill">{{ r[2] }}</span></td><td>{{ r[4] }}</td><td><small>{{ r[5] }}</small></td></tr>{% endfor %}</table>
+{% endblock %}

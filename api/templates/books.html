@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% set active='books' %}{% block body %}
+<div class="card"><h3 style="margin-top:0">Upload a book</h3>
+<form method="post" action="/admin/books" enctype="multipart/form-data" class="row">
+ <label>File (EPUB or PDF)<input type="file" name="file" accept=".epub,.pdf" required></label>
+ <label>Title<input name="title" placeholder="from the file if blank"></label>
+ <label>Author<input name="author" value="Bishop Dag Heward-Mills"></label>
+ <label>Series<input name="series"></label>
+ <label>Visible to<select name="visibility"><option value="member">everyone</option><option value="leader">leaders only</option></select></label>
+ <button>Upload</button></form>
+<small>Queue: {{ pending }} waiting, {{ processing }} processing. The worker must be running (<code>uv run python -m worker.main</code>).</small></div>
+<table><tr><th>Title</th><th>Author</th><th>Status</th><th>Passages</th><th>Visible to</th><th></th></tr>
+{% for b in books %}<tr>
+ <td><strong>{{ b[1] }}</strong>{% if b[3] %}<br><small>{{ b[3] }}</small>{% endif %}<br><small>v{{ b[6] }} · {{ b[10].strftime('%d %b %Y') }}</small></td>
+ <td>{{ b[2] or '' }}</td>
+ <td><span class="pill {{ b[5] }}">{{ b[5] }}</span>{% if b[11] %} <small>{{ b[11] }}</small>{% endif %}{% if b[9] %} <span class="pill">scanned: needs review</span>{% endif %}{% if b[7] %}<br><small style="color:#a33">{{ b[7] }}</small>{% endif %}</td>
+ <td>{{ b[8] }}</td>
+ <td><form method="post" action="/admin/books/{{ b[0] }}/visibility" class="inline"><select name="visibility" onchange="this.form.submit()"><option value="member" {{ 'selected' if b[4]=='member' }}>everyone</option><option value="leader" {{ 'selected' if b[4]=='leader' }}>leaders only</option></select></form></td>
+ <td style="white-space:nowrap">
+  {% if b[5] in ('ready','failed') %}<form method="post" action="/admin/books/{{ b[0] }}/reingest" class="inline"><button class="quiet">Re-process</button></form>{% endif %}
+  {% if b[9] %}<form method="post" action="/admin/books/{{ b[0] }}/reviewed" class="inline"><button class="quiet">Mark reviewed</button></form>{% endif %}
+  <form method="post" action="/admin/books/{{ b[0] }}/delete" class="inline" onsubmit="return confirm('Delete {{ b[1]|e }} and all its passages?')"><button class="danger">Delete</button></form></td>
+</tr>{% else %}<tr><td colspan="6"><em>No books yet.</em></td></tr>{% endfor %}</table>
+{% endblock %}

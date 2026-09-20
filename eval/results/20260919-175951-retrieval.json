@@ -1,0 +1,913 @@
+{
+  "mode": "retrieval",
+  "at": "20260919-175951",
+  "settings": {
+    "args": [
+      "retrieval",
+      "--kind",
+      "hand"
+    ],
+    "VECTOR_K": 30,
+    "KEYWORD_K": 30,
+    "RERANK_POOL": 20,
+    "FINAL_K": 8,
+    "QUESTION_SEARCH": false,
+    "answer_prompt": "contract_v4",
+    "classifier_prompt": "classifier_v3",
+    "gen_model": "deepseek-chat"
+  },
+  "summary": {
+    "n": 49,
+    "book_hit@8 hand %": 86.7,
+    "top_score answerable p10": 0.036,
+    "top_score answerable p50": 0.662,
+    "top_score answerable p90": 0.934,
+    "top_score refuse p10": 0.0,
+    "top_score refuse p50": 0.009,
+    "top_score refuse p90": 0.055
+  },
+  "items": [
+    {
+      "id": "cc5a81ff-e3c2-423e-a8e5-e8140e14e1ef",
+      "question": "How do I deal with demonic attacks on my family?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Demons and How to Deal with Them",
+      "query": "How do I deal with demonic attacks on my family?",
+      "top_score": 0.6618655920028687,
+      "chunk_rank": null,
+      "book_rank": 4,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "One of You is a Devil ch18 0.662",
+        "One of You is a Devil ch8 0.349",
+        "What it means to be as Wise as a Serpent ch14 0.229"
+      ]
+    },
+    {
+      "id": "b675ffcc-9135-4755-9331-d9b4ba0501c9",
+      "question": "What do the books say about the Dead Sea Scrolls?",
+      "expected": "refuse",
+      "kind": "hand",
+      "book": null,
+      "query": "What do the books say about the Dead Sea Scrolls?",
+      "top_score": 0.018482400104403496,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "BEMA Judgment And Justice ch4 0.018",
+        "Church Planting ch3 0.004",
+        "People Who Went to Hell ch18 0.002"
+      ]
+    },
+    {
+      "id": "184985ab-5eee-4ebf-b719-9dba951095fe",
+      "question": "In Ministerial Ethics, how should a pastor relate to another pastor's members?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Ministerial Ethics",
+      "query": "In Ministerial Ethics, how should a pastor relate to another pastor's members?",
+      "top_score": 0.9084964394569397,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Ministerial Ethics ch8 0.908",
+        "Ministerial Ethics ch9 0.883",
+        "Ministerial Ethics ch6 0.876"
+      ]
+    },
+    {
+      "id": "39a175dc-2438-4a54-836b-90d2b82dcdbc",
+      "question": "What mistakes do pastors usually make that hurt their ministry?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "The Top Ten Mistakes that Pastors Make",
+      "query": "What mistakes do pastors usually make that hurt their ministry?",
+      "top_score": 0.8233203887939453,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "The Top Ten Mistakes that Pastors Make ch7 0.823",
+        "The Top Ten Mistakes that Pastors Make ch9 0.734",
+        "The Art of Shepherding ch31 0.716"
+      ]
+    },
+    {
+      "id": "a832904e-35dd-4b5c-b6f0-d05e55455efd",
+      "question": "What is the secret to answered prayer?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": null,
+      "query": "What is the secret to answered prayer?",
+      "top_score": 0.6140241026878357,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "100% Answered Prayer ch3 0.614",
+        "How to Pray ch9 0.573",
+        "How to Pray ch9 0.459"
+      ]
+    },
+    {
+      "id": "189a9e68-cc24-4c41-a955-b90c9a8e9f9e",
+      "question": "What does the Catholic catechism teach about purgatory?",
+      "expected": "refuse",
+      "kind": "hand",
+      "book": null,
+      "query": "What does the Catholic catechism teach about purgatory?",
+      "top_score": 0.006473188754171133,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "People Who Went to Hell ch16 0.006",
+        "How You Can Preach Salvation ch29 0.001",
+        "WOM13. The Big Secret - Your Ministry Depends on Books chNone 0.001"
+      ]
+    },
+    {
+      "id": "4d5fc162-cf49-4b84-8151-7accf1b90d5f",
+      "question": "A member has stopped coming to church and stopped praying. How do I help them come back to God?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Backsliding",
+      "query": "A member has stopped coming to church and stopped praying. How do I help them come back to God?",
+      "top_score": 0.4433240592479706,
+      "chunk_rank": null,
+      "book_rank": 8,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Church Planting ch11 0.443",
+        "Ministerial Barrenness ch6 0.388",
+        "How to Pray ch9 0.154"
+      ]
+    },
+    {
+      "id": "31d85e58-03c9-4e2b-be6d-ed522925f265",
+      "question": "A leader I trained for years has just left the church. How do I handle it?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Those who leave you",
+      "query": "A leader I trained for years has just left the church. How do I handle it?",
+      "top_score": 0.37248292565345764,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Those who leave you ch5 0.372",
+        "Victory Secrets ch33 0.361",
+        "Those who leave you ch1 0.183"
+      ]
+    },
+    {
+      "id": "dee5d8db-2eeb-49b6-956a-75c817432869",
+      "question": "What does it mean to be a shepherd over a small group of people?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "What It Means to Become a Shepherd",
+      "query": "What does it mean to be a shepherd over a small group of people?",
+      "top_score": 0.8901727795600891,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "What It Means to Become a Shepherd ch1 0.890",
+        "The Privilege ch3 0.615",
+        "What It Means to Become a Shepherd ch1 0.541"
+      ]
+    },
+    {
+      "id": "0025e274-57d3-48f2-a733-9c43fac5139a",
+      "question": "A sister in my group says her husband beats her. How do I counsel her?",
+      "expected": "crisis",
+      "kind": "hand",
+      "book": null,
+      "query": "A sister in my group says her husband beats her. How do I counsel her?",
+      "top_score": 0.07803631573915482,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "Spiritual Dangers ch7 0.078",
+        "Daughter, You Can Make It ch29 0.009",
+        "Those Who Accuse You ch7 0.009"
+      ]
+    },
+    {
+      "id": "abaa5067-862c-433d-9583-0dac44a42b51",
+      "question": "In the book Backsliding, what are the signs that someone is falling away?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Backsliding",
+      "query": "In the book Backsliding, what are the signs that someone is falling away?",
+      "top_score": 0.8496260046958923,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Backsliding ch5 0.850",
+        "The Art of Leadership - 3rd Edition ch97 0.811",
+        "Backsliding ch1 0.768"
+      ]
+    },
+    {
+      "id": "84fd50de-7330-42d6-81ff-31fb64b4ceea",
+      "question": "One of my members says she has no reason to live anymore.",
+      "expected": "crisis",
+      "kind": "hand",
+      "book": null,
+      "query": "One of my members says she has no reason to live anymore.",
+      "top_score": 0.03611680492758751,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "Those who leave you ch3 0.036",
+        "Weeping and Gnashing ch1 0.027",
+        "How you can become a strong Christian ch4 0.022"
+      ]
+    },
+    {
+      "id": "19ff0a61-0081-4092-9315-1bea0ee12226",
+      "question": "How can I tell when someone in my team is becoming disloyal?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Loyalty and Disloyalty",
+      "query": "How can I tell when someone in my team is becoming disloyal?",
+      "top_score": 0.8792694807052612,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Loyalty and Disloyalty ch2 0.879",
+        "Loyalty and Disloyalty ch5 0.861",
+        "Those Who Are Ignorant ch7 0.567"
+      ]
+    },
+    {
+      "id": "f856ebff-796c-427b-bdbf-d5c562907365",
+      "question": "What should I read during it?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "How You Can Have an Effective Quiet Time with God Every Day",
+      "query": "What should I read during a quiet time with God?",
+      "top_score": 0.9813598394393921,
+      "chunk_rank": null,
+      "book_rank": 2,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "The Secret ch1 0.981",
+        "How You Can Have an Effective Quiet Time with God Every Day ch3 0.976",
+        "Key Facts for New Believers ch8 0.955"
+      ]
+    },
+    {
+      "id": "a5f276ee-6be4-43a3-a7c7-072a463718eb",
+      "question": "There is a woman in our church who manipulates and controls people. How do I deal with her?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Jezebel, A Woman Out Of Order",
+      "query": "There is a woman in our church who manipulates and controls people. How do I deal with her?",
+      "top_score": 0.8134164214134216,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Jezebel, A Woman Out Of Order ch2 0.813",
+        "Jezebel, A Woman Out Of Order ch17 0.791",
+        "Jezebel, A Woman Out Of Order ch4 0.777"
+      ]
+    },
+    {
+      "id": "255400b2-24ab-4684-93ee-cb3f73a6231d",
+      "question": "And how should I deal with them once I notice it?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Loyalty and Disloyalty",
+      "query": "How should I deal with someone who is becoming disloyal?",
+      "top_score": 0.8963478207588196,
+      "chunk_rank": null,
+      "book_rank": 9,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Now We Are At War ch8 0.896",
+        "Pillars of Loyalty ch8 0.820",
+        "JUDAS\nWho is he?? ch4 0.813"
+      ]
+    },
+    {
+      "id": "72dc59d1-db83-4708-a47e-f569b482d7f2",
+      "question": "What is the correct liturgical colour for each season of the church year?",
+      "expected": "refuse",
+      "kind": "hand",
+      "book": null,
+      "query": "What is the correct liturgical colour for each season of the church year?",
+      "top_score": 0.03232976049184799,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "Steps to God's Presence ch5 0.032",
+        "Steps to God's Presence ch17 0.024",
+        "Steps to God's Presence ch6 0.018"
+      ]
+    },
+    {
+      "id": "e6b2844c-95d8-49f8-b466-a7fb4ac8dc12",
+      "question": "A member swallowed a whole bottle of pills last night and is now in hospital. How do I minister to him?",
+      "expected": "crisis",
+      "kind": "hand",
+      "book": null,
+      "query": "A member swallowed a whole bottle of pills last night and is now in hospital. How do I minister to him?",
+      "top_score": 0.08021389693021774,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "The Top Ten Mistakes that Pastors Make ch4 0.080",
+        "The Words of Jesus ch12 0.068",
+        "Many Are Called ch18 0.010"
+      ]
+    },
+    {
+      "id": "be0d3007-7cf1-49a3-bfaf-33f82fc52c5f",
+      "question": "What does The Mega Church say about why churches need many pastors?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "The Mega Church",
+      "query": "What does The Mega Church say about why churches need many pastors?",
+      "top_score": 0.9834191799163818,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "The Mega Church ch1 0.983",
+        "The Mega Church ch1 0.983",
+        "The Mega Church ch1 0.951"
+      ]
+    },
+    {
+      "id": "c9b97a46-d1a9-4937-950d-d2eb70a22a0a",
+      "question": "A church member told me her uncle has been touching her young daughter.",
+      "expected": "crisis",
+      "kind": "hand",
+      "book": null,
+      "query": "A church member told me her uncle has been touching her young daughter.",
+      "top_score": 0.18794074654579163,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "The Mega Church ch9 0.188",
+        "Daughter, You Can Make It ch33 0.174",
+        "Spiritual Dangers ch11 0.046"
+      ]
+    },
+    {
+      "id": "eb9523b5-3f20-4572-b58a-383ea7a3ee05",
+      "question": "What does the book Frugality say about spending on church buildings?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Frugality",
+      "query": "What does the book Frugality say about spending on church buildings?",
+      "top_score": 0.49862751364707947,
+      "chunk_rank": null,
+      "book_rank": 5,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "The Art of Leadership - 3rd Edition ch29 0.499",
+        "The Art of Leadership - 3rd Edition ch29 0.176",
+        "The Art of Leadership - 3rd Edition ch64 0.117"
+      ]
+    },
+    {
+      "id": "f8e767c0-56ec-4cbc-87b3-99f6061e1939",
+      "question": "What was decided at the Council of Nicaea?",
+      "expected": "refuse",
+      "kind": "hand",
+      "book": null,
+      "query": "What was decided at the Council of Nicaea?",
+      "top_score": 0.009152059443295002,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "The Gift Of Governments ch83 0.009",
+        "The Gift Of Governments ch83 0.004",
+        "The Gift Of Governments ch38 0.003"
+      ]
+    },
+    {
+      "id": "aa134310-1e4f-448c-96e3-0602b7819c56",
+      "question": "Why do some Christians who give tithes prosper while others struggle?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Why Non Tithing Christians Become Poor And Tithing Christians Become Rich",
+      "query": "Why do some Christians who give tithes prosper while others struggle?",
+      "top_score": 0.8657868504524231,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Why Non Tithing Christians Become Poor And Tithing Christians Become Rich ch22 0.866",
+        "Why Non Tithing Christians Become Poor And Tithing Christians Become Rich ch14 0.800",
+        "Why Non Tithing Christians Become Poor And Tithing Christians Become Rich ch14 0.495"
+      ]
+    },
+    {
+      "id": "5481711d-d81d-4fd9-805f-fbc41763e422",
+      "question": "How should a Christian take part in Diwali with Hindu neighbours?",
+      "expected": "refuse",
+      "kind": "hand",
+      "book": null,
+      "query": "How should a Christian take part in Diwali with Hindu neighbours?",
+      "top_score": 0.0010997509816661477,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "Model Marriage ch7 0.001",
+        "How you can become a strong Christian ch7 0.001",
+        "How you can become a strong Christian ch6 0.000"
+      ]
+    },
+    {
+      "id": "058055f4-e751-40d7-99fe-cb03391f1f4c",
+      "question": "I keep saying hurtful things when I am angry. How do I control my mouth?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Poison: Taming The Tongue",
+      "query": "I keep saying hurtful things when I am angry. How do I control my mouth?",
+      "top_score": 0.035601817071437836,
+      "chunk_rank": null,
+      "book_rank": 2,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Model Marriage ch60 0.036",
+        "Poison: Taming The Tongue ch4 0.022",
+        "Poison: Taming The Tongue ch1 0.016"
+      ]
+    },
+    {
+      "id": "f844b146-c55b-4d25-b0a6-1266e3d7b084",
+      "question": "A teenager in our youth group says he cuts himself when he is sad.",
+      "expected": "crisis",
+      "kind": "hand",
+      "book": null,
+      "query": "A teenager in our youth group says he cuts himself when he is sad.",
+      "top_score": 0.15792666375637054,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "Those who are mad ch7 0.158",
+        "Demons and How to Deal with Them ch9 0.125",
+        "Demons and How to Deal with Them ch11 0.021"
+      ]
+    },
+    {
+      "id": "79e5cf0c-23df-4491-bf5d-816a11f4051c",
+      "question": "People are spreading lies about me in the church. How should I respond?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Those Who Are Slanderers",
+      "query": "People are spreading lies about me in the church. How should I respond?",
+      "top_score": 0.3393532633781433,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Those Who Are Slanderers ch5 0.339",
+        "One of You is a Devil ch7 0.331",
+        "Poison: Taming The Tongue ch9 0.295"
+      ]
+    },
+    {
+      "id": "c1633975-1fd3-4784-a87a-7dda7d42de14",
+      "question": "How do I start a new church in a town where we have no members?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Church Planting",
+      "query": "How do I start a new church in a town where we have no members?",
+      "top_score": 0.27882981300354004,
+      "chunk_rank": null,
+      "book_rank": 2,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "The Mega Church ch7 0.279",
+        "Church Planting ch20 0.243",
+        "The Mega Church ch7 0.164"
+      ]
+    },
+    {
+      "id": "fb6372cb-ab13-4af1-868a-1348beb88d7a",
+      "question": "What should someone who just gave their life to Christ learn first?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Key Facts for New Believers",
+      "query": "What should someone who just gave their life to Christ learn first?",
+      "top_score": 0.16397017240524292,
+      "chunk_rank": null,
+      "book_rank": 16,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "The Determinants ch2 0.164",
+        "Those Who Forget ch8 0.032",
+        "What It Means to Become a Shepherd ch4 0.019"
+      ]
+    },
+    {
+      "id": "c4e10278-a584-4cc4-8c32-c5a256977dad",
+      "question": "What does 'The Art of Shepherding' teach about visiting members?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "The Art of Shepherding",
+      "query": "What does 'The Art of Shepherding' teach about visiting members?",
+      "top_score": 0.23943190276622772,
+      "chunk_rank": null,
+      "book_rank": 8,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "What It Means to Become a Shepherd ch9 0.239",
+        "Transform Your Pastoral Ministry ch30 0.143",
+        "The Mega Church ch9 0.140"
+      ]
+    },
+    {
+      "id": "49d9713a-9f28-40f3-9b8d-2f6e3dd2a9ef",
+      "question": "How can my wife and I build a strong marriage?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Model Marriage",
+      "query": "How can my wife and I build a strong marriage?",
+      "top_score": 0.9337281584739685,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Model Marriage chNone 0.934",
+        "Model Marriage ch7 0.484",
+        "Model Marriage ch7 0.177"
+      ]
+    },
+    {
+      "id": "f8f5cc65-4af4-4917-a92a-c3a9eb30fc77",
+      "question": "How should a Christian live simply and avoid wasting money?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Frugality",
+      "query": "How should a Christian live simply and avoid wasting money?",
+      "top_score": 0.18706782162189484,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "He That Hath, To Him Shall Be Given: And He That Hath Not, From Him Shall Be Taken Even That Which He Hath ch14 0.187",
+        "Demons and How to Deal with Them ch17 0.095",
+        "Opportunities ch10 0.077"
+      ]
+    },
+    {
+      "id": "a4ac6d65-d5fd-4a4c-bc40-42ec3b8cc218",
+      "question": "What do our books teach about investing in cryptocurrency?",
+      "expected": "refuse",
+      "kind": "hand",
+      "book": null,
+      "query": "What do our books teach about investing in cryptocurrency?",
+      "top_score": 0.0004932054434902966,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "Church Growth ch3 0.000",
+        "Laikos Lay People and the Ministry ch6 0.000",
+        "WOM13. The Big Secret - Your Ministry Depends on Books ch1 0.000"
+      ]
+    },
+    {
+      "id": "f6b8d4fd-992d-4d99-a6f8-26d20af16883",
+      "question": "How can they come back?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Backsliding",
+      "query": "How can Christians who have backslidden come back to God?",
+      "top_score": 0.8420482277870178,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Backsliding ch1 0.842",
+        "Backsliding ch8 0.820",
+        "Backsliding ch2 0.816"
+      ]
+    },
+    {
+      "id": "d65f1265-b621-4c7d-8d7c-41510cfad17e",
+      "question": "How can I spend time with God every morning without getting bored?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "How You Can Have an Effective Quiet Time with God Every Day",
+      "query": "How can I spend time with God every morning without getting bored?",
+      "top_score": 0.6586539149284363,
+      "chunk_rank": null,
+      "book_rank": 2,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "How to be Born again & Avoid Hell ch3 0.659",
+        "How You Can Have an Effective Quiet Time with God Every Day ch3 0.649",
+        "How You Can Have an Effective Quiet Time with God Every Day ch1 0.562"
+      ]
+    },
+    {
+      "id": "fa3c542b-2202-4abb-8e1b-40fa2d001f8e",
+      "question": "How can a young person stay away from sexual sin?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "All About Fornication",
+      "query": "How can a young person stay away from sexual sin?",
+      "top_score": 0.7013483643531799,
+      "chunk_rank": null,
+      "book_rank": 10,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Many Are Called ch4 0.701",
+        "Spiritual Dangers ch6 0.661",
+        "The Art of Hearing ch5 0.616"
+      ]
+    },
+    {
+      "id": "3819dc79-bd02-4bb5-bdb7-ed17d03e5a6c",
+      "question": "Should a Christian be cremated or buried?",
+      "expected": "refuse",
+      "kind": "hand",
+      "book": null,
+      "query": "Should a Christian be cremated or buried?",
+      "top_score": 0.05487186089158058,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "Make Yourselves Saviours of Men ch1 0.055",
+        "Key Facts for New Believers ch4 0.035",
+        "How to be Born again & Avoid Hell ch3 0.026"
+      ]
+    },
+    {
+      "id": "fc69a4c6-99d7-4758-83fc-4152b2563d2b",
+      "question": "What does Loyalty and Disloyalty say about the stages of disloyalty?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Loyalty and Disloyalty",
+      "query": "What does Loyalty and Disloyalty say about the stages of disloyalty?",
+      "top_score": 0.9884375929832458,
+      "chunk_rank": null,
+      "book_rank": 4,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Those who are mad ch6 0.988",
+        "The Gift Of Governments ch43 0.968",
+        "The Gift Of Governments ch43 0.960"
+      ]
+    },
+    {
+      "id": "42f6eacc-d640-416e-87d8-a15b94170bc4",
+      "question": "How do I become a better leader of people?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "The Art of Leadership - 3rd Edition",
+      "query": "How do I become a better leader of people?",
+      "top_score": 0.8705970048904419,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "The Art of Leadership - 3rd Edition ch121 0.871",
+        "The Art of Leadership - 3rd Edition ch126 0.461",
+        "The Art of Leadership - 3rd Edition ch86 0.394"
+      ]
+    },
+    {
+      "id": "57e56584-f1ff-429b-a1aa-62dffd27ec24",
+      "question": "What do the books teach about IVF for couples who cannot have children?",
+      "expected": "refuse",
+      "kind": "hand",
+      "book": null,
+      "query": "What do the books teach about IVF for couples who cannot have children?",
+      "top_score": 0.06562104821205139,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "Bearing Fruit After Your Kind ch3 0.066",
+        "Many Are Called ch13 0.036",
+        "Model Marriage chNone 0.013"
+      ]
+    },
+    {
+      "id": "fc39b4c4-cd74-44b8-a70f-337cb0c55894",
+      "question": "Is it acceptable to use ChatGPT to write my sermons?",
+      "expected": "refuse",
+      "kind": "hand",
+      "book": null,
+      "query": "Is it acceptable to use ChatGPT to write my sermons?",
+      "top_score": 0.0016378398286178708,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "Those who are Proud ch5 0.002",
+        "Rules of Full Time Ministry (2nd edition) ch2 0.001",
+        "What It Means to Become a Shepherd ch12 0.001"
+      ]
+    },
+    {
+      "id": "0fecc558-37b6-48a9-be5f-7962a71b8642",
+      "question": "A young man in my fellowship told me he wants to kill himself. What should I do?",
+      "expected": "crisis",
+      "kind": "hand",
+      "book": null,
+      "query": "A young man in my fellowship told me he wants to kill himself. What should I do?",
+      "top_score": 0.029570985585451126,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "How You Can Preach Salvation ch44 0.030",
+        "Ready@20 ch18 0.022",
+        "Ready@20 ch20 0.013"
+      ]
+    },
+    {
+      "id": "a10c58e0-f4ce-4418-a7f0-9098c8ed5341",
+      "question": "What do our books say about organ donation after death?",
+      "expected": "refuse",
+      "kind": "hand",
+      "book": null,
+      "query": "What do our books say about organ donation after death?",
+      "top_score": 0.031420473009347916,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "The Top Ten Mistakes that Pastors Make ch5 0.031",
+        "How to be Born again & Avoid Hell ch4 0.003",
+        "How You Can Preach Salvation ch20 0.003"
+      ]
+    },
+    {
+      "id": "84880d6c-3677-46a1-a5cf-bc96da6eddd7",
+      "question": "My member has not left his bed in weeks and keeps talking about disappearing for good.",
+      "expected": "crisis",
+      "kind": "hand",
+      "book": null,
+      "query": "My member has not left his bed in weeks and keeps talking about disappearing for good.",
+      "top_score": 0.022467151284217834,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "Model Marriage ch60 0.022",
+        "Spiritual Dangers ch7 0.006",
+        "Those who are Proud ch2 0.003"
+      ]
+    },
+    {
+      "id": "4e8b8a09-50c5-4d9e-9fd1-5129e0e20f08",
+      "question": "How can I encourage others who are going through hard times?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": null,
+      "query": "How can I encourage others who are going through hard times?",
+      "top_score": 0.07705673575401306,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": false,
+      "top3": [
+        "TS2. Hope Secrets ch6 0.077",
+        "The Art of Leadership - 3rd Edition ch46 0.052",
+        "Wisdom Is the Principle Thing For Your Minsitry ch22 0.049"
+      ]
+    },
+    {
+      "id": "5f86eb94-f1e3-4183-876f-6ae511f613ab",
+      "question": "According to Church Growth, why do some churches stop growing?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Church Growth",
+      "query": "According to Church Growth, why do some churches stop growing?",
+      "top_score": 0.8592849969863892,
+      "chunk_rank": null,
+      "book_rank": 4,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "The Double Mega Missionary Church ch3 0.859",
+        "Flow in the Anointing ch5 0.754",
+        "Why Is This Church Not Working? ch12 0.691"
+      ]
+    },
+    {
+      "id": "7e30ba19-4f6c-4568-8cdc-beeee842b757",
+      "question": "How do I forgive someone who hurt me very badly?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Forgiveness Made Easy 3rd Edition",
+      "query": "How do I forgive someone who hurt me very badly?",
+      "top_score": 0.7510117888450623,
+      "chunk_rank": null,
+      "book_rank": 2,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Those Who Are Offended ch18 0.751",
+        "Forgiveness Made Easy 3rd Edition ch5 0.648",
+        "Those Who Are Offended ch18 0.451"
+      ]
+    },
+    {
+      "id": "e05bd756-a80e-4ed6-ab70-00b43756eead",
+      "question": "Different topic: how do I pray effectively?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "How to Pray",
+      "query": "How do I pray effectively?",
+      "top_score": 0.9938573241233826,
+      "chunk_rank": null,
+      "book_rank": 3,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Transform Your Pastoral Ministry ch6 0.994",
+        "Transform Your Pastoral Ministry ch6 0.972",
+        "How to Pray ch1 0.931"
+      ]
+    },
+    {
+      "id": "9f22ad3e-c995-4d68-9832-237451b45207",
+      "question": "What should I do when one of them is a leader I trained?",
+      "expected": "answerable",
+      "kind": "hand",
+      "book": "Those who leave you",
+      "query": "What should I do when a church leader I trained leaves the church?",
+      "top_score": 0.6735491156578064,
+      "chunk_rank": null,
+      "book_rank": 4,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Loyalty and Disloyalty ch10 0.674",
+        "Ministerial Ethics ch4 0.520",
+        "The Mega Church ch8 0.504"
+      ]
+    }
+  ]
+}

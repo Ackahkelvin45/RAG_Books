@@ -1,0 +1,8 @@
+# Automatic HTTPS for {$DOMAIN}; everything else is proxied to the API container.
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy api:8010 {
+		# answers stream as server-sent events: pass them through as they arrive
+		flush_interval -1
+	}
+}

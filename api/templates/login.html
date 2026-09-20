@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block body %}
+<div class="card" style="max-width:360px;margin:3rem auto"><h2>Admin sign in</h2>
+<form method="post" action="/admin/login" class="row"><label>Password<span style="display:flex;gap:.3rem"><input id="pw" type="password" name="password" autofocus required><button type="button" class="quiet" aria-pressed="false" aria-label="Show password" onclick="const i=document.getElementById('pw'),s=i.type==='password';i.type=s?'text':'password';this.textContent=s?'Hide':'Show';this.setAttribute('aria-pressed',s);this.setAttribute('aria-label',s?'Hide password':'Show password')">Show</button></span></label><button>Sign in</button></form></div>
+{% endblock %}

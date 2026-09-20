@@ -1,0 +1,17 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^python3 - <<'EOF'\nimport dis, marshal, importlib\\.util, sys\np = \"/Users/kelvinackah/Desktop/projects/freelance/RAG_sheperd/worker/__pycache__/ingest\\.cpython-313\\.pyc\"\nimport os\nprint\\(os\\.path\\.exists\\(p\\)\\)\nEOF$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python3 - <<'EOF'\nimport marshal, importlib\\.util, sys\np = \"/Users/kelvinackah/Desktop/projects/freelance/RAG_sheperd/worker/__pycache__/ingest\\.cpython-313\\.pyc\"\nwith open\\(p, \"rb\"\\) as f:\n    f\\.read\\(16\\)\n    code = marshal\\.load\\(f\\)\n\ndef find\\(co, name\\):\n    for c in co\\.co_consts:\n        if hasattr\\(c, \"co_name\"\\):\n            if c\\.co_name == name:\n                return c\n            r = find\\(c, name\\)\n            if r: return r\n\nco = find\\(code, \"enqueue_reingest\"\\)\nprint\\(\"found:\", co is not None\\)\nprint\\(\"consts:\", \\[c for c in co\\.co_consts if isinstance\\(c, str\\)\\]\\)\nprint\\(\"names:\", co\\.co_names\\)\nprint\\(\"varnames:\", co\\.co_varnames\\)\nEOF$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python3 - <<'EOF'\nimport dis, marshal\np = \"/Users/kelvinackah/Desktop/projects/freelance/RAG_sheperd/worker/__pycache__/ingest\\.cpython-313\\.pyc\"\nwith open\\(p, \"rb\"\\) as f:\n    f\\.read\\(16\\); code = marshal\\.load\\(f\\)\ndef find\\(co, name\\):\n    for c in co\\.co_consts:\n        if hasattr\\(c, \"co_name\"\\):\n            if c\\.co_name == name: return c\n            r = find\\(c, name\\)\n            if r: return r\nco = find\\(code, \"enqueue_reingest\"\\)\ndis\\.dis\\(co\\)\nEOF$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "docker compose": true
+    }
+}

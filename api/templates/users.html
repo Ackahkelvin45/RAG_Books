@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% set active='users' %}{% block body %}
+<div class="card"><h3 style="margin-top:0">Add a user</h3>
+<form method="post" action="/admin/users" class="row">
+ <label>Email<input type="email" name="email" required></label><label>Name<input name="name"></label>
+ <label>Role<select name="role">{% for r in roles %}<option value="{{ r }}">{{ r }}</option>{% endfor %}</select></label><button>Add</button></form>
+<small><strong>Says they are</strong> is what the person chose at sign-up. <strong>Access</strong> is what you grant: member sees books for everyone; leader and admin also see leaders-only books. Promote verified shepherds and pastors to leader here.</small></div>
+<table><tr><th>Email</th><th>Name</th><th>Says they are</th><th>Born</th><th>Access</th><th>Chats</th><th>Since</th><th></th></tr>
+{% for u in users %}<tr><td>{{ u[1] }}{% if u[8] %} <span class="pill">Google</span>{% endif %}</td><td>{{ u[2] or '' }}</td>
+ <td>{% if u[6] %}<span class="pill {{ 'ready' if u[6] != 'member' }}">{{ u[6] }}</span>{% else %}<small>not yet</small>{% endif %}</td>
+ <td>{{ u[7].strftime('%d %b %Y') if u[7] else '' }}</td>
+ <td><form method="post" action="/admin/users/{{ u[0] }}/role" class="inline"><select name="role" onchange="this.form.submit()">{% for r in roles %}<option value="{{ r }}" {{ 'selected' if u[3]==r }}>{{ r }}</option>{% endfor %}</select></form></td>
+ <td>{{ u[5] }}</td><td>{{ u[4].strftime('%d %b %Y') }}</td>
+ <td><form method="post" action="/admin/users/{{ u[0] }}/delete" class="inline" onsubmit="return confirm('Remove {{ u[1] }} and their conversations?')"><button class="danger">Remove</button></form></td></tr>{% endfor %}</table>
+{% endblock %}
