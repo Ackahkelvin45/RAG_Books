@@ -32,7 +32,7 @@ class BgeReranker:
     def __init__(self) -> None:
         from sentence_transformers import CrossEncoder
 
-        self.model = CrossEncoder(config.RERANK_MODEL, device=config.device(), max_length=1024)
+        self.model = CrossEncoder(config.RERANK_MODEL, device=config.device(), max_length=config.RERANK_MAX_LEN)
 
     def score(self, query: str, passages: Sequence[str]) -> list[float]:
         if not passages:
