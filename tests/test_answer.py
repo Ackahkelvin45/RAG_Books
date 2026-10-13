@@ -294,3 +294,14 @@ def test_attribution_not_doubled_when_the_model_writes_its_own(app, pastor, fake
     text = "".join(e["text"] for e in answer.ask(app, "a member's sister died", pastor) if e["type"] == "text")
     assert text.count("talks about this in") == 1
     app.commit()
+
+
+def test_refusal_after_a_kind_sentence_still_counts_as_a_refusal(app, pastor, fake_llm, monkeypatch):
+    # eval 2026-10-13: "I want to be honest...: our books have not directly addressed this." was logged as
+    # answerable (case-sensitive match on "Our"), so the attribution line was wrongly appended to a refusal
+    monkeypatch.setattr(answer, "retrieve", lambda *a, **k: [P("unrelated")])
+    fake_llm(ANSWERABLE, ["I want to be honest with you: our books have not directly addressed this. They do speak about neighbours [1]."])
+    text = "".join(e["text"] for e in answer.ask(app, "a question about Diwali", pastor) if e["type"] == "text")
+    assert "talks about this in" not in text
+    assert app.execute("select classification from query_logs where user_id = %s", (pastor,)).fetchone()[0] == "refused"
+    app.commit()

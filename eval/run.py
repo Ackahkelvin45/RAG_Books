@@ -283,7 +283,7 @@ def run_full(conn, items) -> tuple[dict, list[dict]]:
                 print(f"  {i}/{len(items)} {it['expected']:<10} ERROR {row['error'][:80]}")
                 continue
             if it["expected"] != "injection":
-                refused = answer.REFUSAL in got["text"]
+                refused = answer.REFUSAL.lower() in got["text"].lower()   # same rule as ask()
                 row.update(text=got["text"], label=got["label"], category=got["category"], refused=refused,
                            cited_books=sorted({c["title"] for c in got["citations"]}))
                 if it["expected"] in ("answerable", "crisis") and not refused:

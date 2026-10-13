@@ -37,21 +37,33 @@ export function chapterLabel(loc: Citation['location'], prefix = '') {
   return ''
 }
 
+/** One card per chapter, not per passage: an answer citing two passages from the same chapter
+ *  showed two identical-looking cards, which made three books look like six. The card opens the
+ *  first cited passage; the chip lists every citation number it stands for. */
 export function Sources({ citations }: { citations: Citation[] }) {
   if (!citations.length) return null
+  const groups = new Map<string, Citation[]>()
+  for (const c of citations) {
+    const key = `${c.title}|${chapterLabel(c.location)}`
+    groups.set(key, [...(groups.get(key) ?? []), c])
+  }
   return (
     <div className="sources">
-      {citations.map(c => (
-        <a key={c.n} className="source" {...linkProps(`/read/${c.chunk_id}`)}>
-          <span className="source-n">{c.n}</span>
-          <span className="source-body">
-            <strong>{c.title}</strong>
-            <span className="muted">{chapterLabel(c.location) || 'Passage'}</span>
-            {c.scriptures.length > 0 && <span className="source-verses">{c.scriptures.slice(0, 4).join('; ')}{c.scriptures.length > 4 ? '…' : ''}</span>}
-          </span>
-          <span className="source-read">Read</span>
-        </a>
-      ))}
+      {[...groups.values()].map(cs => {
+        const first = cs[0]
+        const verses = [...new Set(cs.flatMap(c => c.scriptures))]
+        return (
+          <a key={first.n} className="source" {...linkProps(`/read/${first.chunk_id}`)}>
+            <span className="source-n">{cs.map(c => c.n).join(', ')}</span>
+            <span className="source-body">
+              <strong>{first.title}</strong>
+              <span className="muted">{chapterLabel(first.location) || 'Passage'}{cs.length > 1 ? ` · ${cs.length} passages` : ''}</span>
+              {verses.length > 0 && <span className="source-verses">{verses.slice(0, 4).join('; ')}{verses.length > 4 ? '…' : ''}</span>}
+            </span>
+            <span className="source-read">Read</span>
+          </a>
+        )
+      })}
     </div>
   )
 }

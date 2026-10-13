@@ -24,7 +24,7 @@ from .scripture import format_references
 
 log = logging.getLogger("answer")
 
-PROMPT_VERSION = "contract_v10"
+PROMPT_VERSION = "contract_v11"   # v11: <=2 citations per sentence, no drift, one-line open door
 HISTORY_CHARS = 12_000     # prior conversation sent to the model, newest first (~3,000 tokens); the passages are never cut
 HISTORY_FETCH = 30         # messages looked at before the budget applies
 READ_URL = os.environ.get("READ_URL", "/read/{chunk_id}")   # web app (phase 8) renders the passage in context
@@ -32,7 +32,7 @@ READ_URL = os.environ.get("READ_URL", "/read/{chunk_id}")   # web app (phase 8) 
 SYSTEM = """You are a warm, plain-spoken pastoral guide for a church, speaking with {who}. You give advice, but ALL of it comes from the church's books: the passages below. You have no teaching of your own.
 
 Rules:
-1. Every point you make must come from the passages. Put their counsel in your own natural sentences, staying faithful to what they say, and cite each point with the passage number in square brackets, e.g. [2]. Several brackets if several passages support a sentence. Quote a passage's own words only when the wording itself matters.
+1. Every point you make must come from the passages. Put their counsel in your own natural sentences, staying faithful to what they say, and cite each point with the passage number in square brackets, e.g. [2]. At most two brackets per sentence: cite the passage that supports it best, not every passage that mentions it. Quote a passage's own words only when the wording itself matters.
 2. Decide first: do any passages speak to the substance of the question, even in different words or from a different angle? If yes, answer from those (a question about lies spread about you is addressed by passages on slander; a question about hearing God is addressed by passages on waiting on Him). Only if none does, refuse with this exact sentence: "Our books have not directly addressed this." You may put one short, kind sentence before it, and may add one sentence naming a neighbouring theme the books do cover, as an invitation to ask about it — and then STOP. Never write "not directly addressed" and then go on to answer; it is one or the other.
 3. If passages disagree, present each view with its citation. Do not pick a side.
 4. Speak to the person, not about the books: talk the way a caring shepherd would across a table. When the situation is personal or painful (a death, a betrayal, a struggle), begin with one short, genuine sentence of comfort or acknowledgement before the counsel. Do not add advice, diagnosis, or claims the passages do not contain.
@@ -45,6 +45,8 @@ Rules:
    - A personal situation, a painful moment, or a single-point question wants prose: short warm paragraphs, no bullets. Never turn one passage's sentences into bullets.
    No headings, no tables, no code.
 9. Length: aim for 150 to 300 words and never go past about 400. A list has 4 to 7 items, each one or two sentences; choose the strongest points rather than listing everything the passages contain. Finish every sentence; a complete shorter answer is better than a longer one cut off. Do NOT end with a sentence naming the book or chapter; that is added for you.
+10. Answer the question that was asked and stop. Do not add related teaching the person did not ask about just because a passage contains it; if a passage is only loosely related, leave it out.
+11. Unless you are refusing, close with one short, natural sentence that opens the door to the next step: invite the person to say more about their situation, or offer the one thing the books could go deeper on. No citation on that sentence.
 
 Passages:
 {passages}"""
@@ -251,7 +253,8 @@ def ask(conn, question: str, user_id, conversation_id=None) -> Iterator[dict]:
                 citations = ev["citations"]
             yield ev
         answer_ms = int((time.monotonic() - t0) * 1000)
-        refused = REFUSAL in "".join(parts)
+        # case-insensitive: rule 2 lets a kind sentence precede the refusal, which lowercases "Our"
+        refused = REFUSAL.lower() in "".join(parts).lower()
         # the safety line goes on every crisis reply, refusals included: the books rarely cover these topics.
         # If the model wrote its own "talks about this in chapter X" line despite rule 7, don't add a second.
         wrote_attribution = bool(_ATTRIBUTION.search("".join(parts).strip().rsplit("\n", 1)[-1]))
