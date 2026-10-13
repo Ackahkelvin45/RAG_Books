@@ -13,6 +13,7 @@ import logging
 import os
 import re
 import sys
+import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 from typing import Iterator
@@ -227,12 +228,15 @@ def ask(conn, question: str, user_id, conversation_id=None) -> Iterator[dict]:
     # (CPU: embed + rerank) run at the same time; the few off-scope questions waste one search, nothing more.
     # A follow-up searches on the classifier's rewrite, so it must wait. The connection stays on this thread.
     speculate = not prev and len(question.split()) >= SPECULATE_MIN_WORDS   # "hi" / "thanks" must not wait for a search
+    search_ms = answer_ms = None
     if speculate:
         yield {"type": "status", "text": "Searching the books"}
+        t0 = time.monotonic()
         with ThreadPoolExecutor(1) as pool:
             pending = pool.submit(classify, question, prev, last_answer)
             retrieved = retrieve(conn, question, role=role)
             v = pending.result()
+        search_ms = int((time.monotonic() - t0) * 1000)
         context_q = question
     else:
         v = classify(question, prev, last_answer)
@@ -249,14 +253,18 @@ def ask(conn, question: str, user_id, conversation_id=None) -> Iterator[dict]:
     else:
         if not speculate:
             yield {"type": "status", "text": "Searching the books"}
+            t0 = time.monotonic()
             retrieved = retrieve(conn, context_q, role=role)
+            search_ms = int((time.monotonic() - t0) * 1000)
         yield {"type": "status", "text": "Writing your answer"}
+        t0 = time.monotonic()
         for ev in generate(question, retrieved, history, who):
             if ev["type"] == "text":
                 parts.append(ev["text"])
             else:
                 citations = ev["citations"]
             yield ev
+        answer_ms = int((time.monotonic() - t0) * 1000)
         refused = REFUSAL in "".join(parts)
         # the safety line goes on every crisis reply, refusals included: the books rarely cover these topics.
         # If the model wrote its own "talks about this in chapter X" line despite rule 7, don't add a second.
@@ -276,10 +284,11 @@ def ask(conn, question: str, user_id, conversation_id=None) -> Iterator[dict]:
         conn.execute("update conversations set updated_at = now() where id = %s", (conversation_id,))
         conn.execute(
             "insert into query_logs (user_id, question, classification, language, retrieved_ids, answer, prompt_version, "
-            " retrieval_query, scores, cited_ids) values (%s, %s, %s, %s, %s::uuid[], %s, %s, %s, %s, %s::uuid[])",
+            " retrieval_query, scores, cited_ids, search_ms, answer_ms) "
+            "values (%s, %s, %s, %s, %s::uuid[], %s, %s, %s, %s, %s::uuid[], %s, %s)",
             (user_id, question, classification, v.language, [p.chunk_id for p in retrieved], answer_text,
              f"{PROMPT_VERSION}+{v.source}", context_q if retrieved else None, [p.score for p in retrieved],
-             [c["chunk_id"] for c in citations]))
+             [c["chunk_id"] for c in citations], search_ms, answer_ms))
 
 
 def _main(argv: list[str]) -> int:

@@ -53,9 +53,10 @@ def test_query_log_records_search_query_scores_and_citations(app, pastor, fake_l
     monkeypatch.setattr(answer, "retrieve", lambda *a, **k: [p1, p2])
     fake_llm(ANSWERABLE, ["Only the second [2]."])
     list(answer.ask(app, "a question", pastor))
-    q, scores, retrieved, cited = app.execute(
-        "select retrieval_query, scores, retrieved_ids::text[], cited_ids::text[] from query_logs where user_id = %s",
-        (pastor,)).fetchone()
+    q, scores, retrieved, cited, search_ms, answer_ms = app.execute(
+        "select retrieval_query, scores, retrieved_ids::text[], cited_ids::text[], search_ms, answer_ms "
+        "from query_logs where user_id = %s", (pastor,)).fetchone()
     assert q == "a question" and scores == [0.8, 0.4]
     assert retrieved == [p1.chunk_id, p2.chunk_id] and cited == [p2.chunk_id]
+    assert search_ms is not None and answer_ms is not None     # every answer times itself
     app.commit()

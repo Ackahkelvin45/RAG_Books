@@ -10,9 +10,12 @@ load_dotenv()
 # Pinned per handoff section 4f / 5 / 6. Changing EMBED_MODEL requires a full re-embed.
 EMBED_MODEL = "BAAI/bge-m3"
 EMBED_DIM = 1024
-RERANK_MODEL = "BAAI/bge-reranker-v2-m3"
+# Reranking is by far the slowest step on a CPU: 4.6s per passage for this 568M-parameter
+# model on one core. SHEPHERD_RERANK_MODEL swaps in a smaller one; measure the cost with
+# `python -m eval.run retrieval` before changing it on a live server.
+RERANK_MODEL = os.environ.get("SHEPHERD_RERANK_MODEL", "BAAI/bge-reranker-v2-m3")
 # Reranking cost scales with the pool size AND with this window. Chunks are at most 500
-# tokens, so a small server can set SHEPHERD_RERANK_MAX_LEN=512 and truncate almost nothing.
+# tokens, so the 1024 default never truncates in practice; lowering it saves nothing.
 RERANK_MAX_LEN = int(os.environ.get("SHEPHERD_RERANK_MAX_LEN", "1024"))
 # Where the models run: cpu on the server; a Mac with Apple silicon uses its GPU (mps, ~3x faster). SHEPHERD_DEVICE overrides.
 RERANK_POOL = int(os.environ.get("SHEPHERD_RERANK_POOL", "20"))   # candidates reranked per question; the reranker is the slow step
