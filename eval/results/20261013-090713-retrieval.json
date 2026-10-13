@@ -1,0 +1,90 @@
+{
+  "mode": "retrieval",
+  "at": "20261013-090713",
+  "settings": {
+    "args": [
+      "retrieval",
+      "--limit",
+      "3"
+    ],
+    "VECTOR_K": 30,
+    "KEYWORD_K": 30,
+    "RERANK_POOL": 20,
+    "FINAL_K": 8,
+    "QUESTION_SEARCH": false,
+    "MERGE_NEIGHBOURS": true,
+    "answer_prompt": "contract_v10",
+    "classifier_prompt": "classifier_v4",
+    "gen_model": "deepseek-chat"
+  },
+  "summary": {
+    "n": 3,
+    "passage_hit@1 %": 100.0,
+    "passage_hit@8 %": 100.0,
+    "passage_mrr": 1.0,
+    "book_hit@8 book %": 50.0,
+    "book_hit@8 generated %": 100.0,
+    "top_score answerable p10": 0.637,
+    "top_score answerable p50": 3.263,
+    "top_score answerable p90": 3.263,
+    "top_score refuse p10": null,
+    "top_score refuse p50": null,
+    "top_score refuse p90": null
+  },
+  "items": [
+    {
+      "id": "370f1725-9a48-48ff-996e-2a257d8cebb2",
+      "question": "How do I calm down and wait on God so I can hear from Him?",
+      "expected": "answerable",
+      "kind": "generated",
+      "book": "Stir It Up",
+      "query": "How do I calm down and wait on God so I can hear from Him?",
+      "top_score": 3.26302170753479,
+      "chunk_rank": 1,
+      "book_rank": 1,
+      "wants_chunk": true,
+      "wants_book": true,
+      "top3": [
+        "Stir It Up ch8 3.263",
+        "How to Pray ch4 -1.146",
+        "Steps to the Anointing ch7 -2.102"
+      ]
+    },
+    {
+      "id": "5df4b182-99c4-43b9-bfce-12d69f10e67c",
+      "question": "How do I stop caring so much about what people think and just live for God?",
+      "expected": "answerable",
+      "kind": "book",
+      "book": "Who Is He That Overcometh the World",
+      "query": "How do I stop caring so much about what people think and just live for God?",
+      "top_score": 0.6372225284576416,
+      "chunk_rank": null,
+      "book_rank": null,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "If You Love The Lord ch10 0.637",
+        "Lord I Know You Need Somebody ch1 -0.044",
+        "Opportunities ch7 -0.685"
+      ]
+    },
+    {
+      "id": "b74f7329-dd18-4ae6-9122-b238264a540f",
+      "question": "How do I get more of God's power working in my life?",
+      "expected": "answerable",
+      "kind": "book",
+      "book": "Stir It Up",
+      "query": "How do I get more of God's power working in my life?",
+      "top_score": 4.50737190246582,
+      "chunk_rank": null,
+      "book_rank": 1,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Stir It Up ch4 4.507",
+        "Predestination ch4 4.300",
+        "He That Hath, To Him Shall Be Given: And He That Hath Not, From Him Shall Be Taken Even That Which He Hath ch11 3.633"
+      ]
+    }
+  ]
+}

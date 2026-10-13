@@ -1,0 +1,72 @@
+{
+  "mode": "retrieval",
+  "at": "20261013-092506",
+  "settings": {
+    "args": [
+      "retrieval",
+      "--limit",
+      "2"
+    ],
+    "VECTOR_K": 30,
+    "KEYWORD_K": 30,
+    "RERANK_POOL": 20,
+    "FINAL_K": 8,
+    "QUESTION_SEARCH": true,
+    "MERGE_NEIGHBOURS": true,
+    "answer_prompt": "contract_v10",
+    "classifier_prompt": "classifier_v4",
+    "gen_model": "deepseek-chat"
+  },
+  "summary": {
+    "n": 2,
+    "passage_hit@1 %": 100.0,
+    "passage_hit@8 %": 100.0,
+    "passage_mrr": 1.0,
+    "book_hit@8 book %": 0.0,
+    "book_hit@8 generated %": 100.0,
+    "top_score answerable p10": 1.945,
+    "top_score answerable p50": 1.945,
+    "top_score answerable p90": 1.945,
+    "top_score refuse p10": null,
+    "top_score refuse p50": null,
+    "top_score refuse p90": null
+  },
+  "items": [
+    {
+      "id": "370f1725-9a48-48ff-996e-2a257d8cebb2",
+      "question": "How do I calm down and wait on God so I can hear from Him?",
+      "expected": "answerable",
+      "kind": "generated",
+      "book": "Stir It Up",
+      "query": "How do I calm down and wait on God so I can hear from Him?",
+      "top_score": 3.2630205154418945,
+      "chunk_rank": 1,
+      "book_rank": 1,
+      "wants_chunk": true,
+      "wants_book": true,
+      "top3": [
+        "Stir It Up ch8 3.263",
+        "The Sweet Influences of the Anointing ch35 0.097",
+        "How to Pray ch4 -1.146"
+      ]
+    },
+    {
+      "id": "5df4b182-99c4-43b9-bfce-12d69f10e67c",
+      "question": "How do I stop caring so much about what people think and just live for God?",
+      "expected": "answerable",
+      "kind": "book",
+      "book": "Who Is He That Overcometh the World",
+      "query": "How do I stop caring so much about what people think and just live for God?",
+      "top_score": 1.9450340270996094,
+      "chunk_rank": null,
+      "book_rank": 20,
+      "wants_chunk": false,
+      "wants_book": true,
+      "top3": [
+        "Others ch2 1.945",
+        "Others ch3 1.337",
+        "If You Love The Lord ch10 0.637"
+      ]
+    }
+  ]
+}
