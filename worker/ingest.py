@@ -53,7 +53,7 @@ def reusable(conn, old_id, prints: list[str]) -> dict:
     if not old_id:
         return {}
     rows = conn.execute(
-        "select fingerprint, embedding, questions, q_embedding from chunks "
+        f"select fingerprint, {config.EMBED_COLUMN}, questions, q_embedding from chunks "
         "where source_id = %s and fingerprint = any(%s)", (old_id, prints)).fetchall()
     return {r[0]: r[1:] for r in rows}
 
@@ -124,8 +124,9 @@ def process_source(conn: psycopg.Connection, source_id, embedder: Embedder | Non
 
         with conn.cursor() as cur:
             cur.executemany(
-                "insert into chunks (source_id, content, raw_content, embedding, location, scripture, token_count, "
-                " fingerprint, questions, q_embedding) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                # the column follows the embedding model in use (config guards the name)
+                f"insert into chunks (source_id, content, raw_content, {config.EMBED_COLUMN}, location, scripture, "
+                " token_count, fingerprint, questions, q_embedding) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                 [
                     (source_id, r["content"], r["raw_content"], v, json.dumps(r["location"]), r["scripture"],
                      r["token_count"], fp, *(old[fp][1:] if fp in old else (None, None)))

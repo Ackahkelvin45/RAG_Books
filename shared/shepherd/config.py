@@ -8,8 +8,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Pinned per handoff section 4f / 5 / 6. Changing EMBED_MODEL requires a full re-embed.
-EMBED_MODEL = "BAAI/bge-m3"
-EMBED_DIM = 1024
+# bge-m3 is 2.2 GB resident and 2.7s per question on one core. A small server can run a
+# smaller model instead: set all three together, and backfill the new column first with
+# `python -m worker.reembed` - the two columns coexist, so switching back is one env change.
+EMBED_MODEL = os.environ.get("SHEPHERD_EMBED_MODEL", "BAAI/bge-m3")
+EMBED_DIM = int(os.environ.get("SHEPHERD_EMBED_DIM", "1024"))
+EMBED_COLUMN = os.environ.get("SHEPHERD_EMBED_COLUMN", "embedding")
+if EMBED_COLUMN not in ("embedding", "embedding_small", "embedding_base"):     # it is interpolated into SQL
+    raise RuntimeError(f"SHEPHERD_EMBED_COLUMN must be embedding, embedding_small or embedding_base, not {EMBED_COLUMN!r}")
 # Reranking is by far the slowest step on a CPU: 4.6s per passage for this 568M-parameter
 # model on one core. SHEPHERD_RERANK_MODEL swaps in a smaller one; measure the cost with
 # `python -m eval.run retrieval` before changing it on a live server.

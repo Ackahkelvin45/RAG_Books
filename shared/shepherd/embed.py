@@ -41,11 +41,10 @@ class BgeM3Embedder:
     def __init__(self) -> None:
         from sentence_transformers import SentenceTransformer
 
-        # use_safetensors=False: load the pytorch_model.bin weights so the hub
-        # does not also fetch the 2.2 GB safetensors copy (matters on slow links).
-        self.model = SentenceTransformer(
-            config.EMBED_MODEL, device=config.device(), model_kwargs={"use_safetensors": False}
-        )
+        # bge-m3 only: load the pytorch_model.bin weights so the hub does not also fetch the
+        # 2.2 GB safetensors copy (matters on slow links). Smaller models ship one copy.
+        kwargs = {"use_safetensors": False} if "bge-m3" in config.EMBED_MODEL else {}
+        self.model = SentenceTransformer(config.EMBED_MODEL, device=config.device(), model_kwargs=kwargs)
         self.tokenizer = self.model.tokenizer
 
     def embed(self, texts: Sequence[str]) -> list[list[float]]:

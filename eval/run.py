@@ -99,6 +99,44 @@ def seed(conn) -> None:
     print(f"loaded {len(items)} hand-written items")
 
 
+BOOK_PROMPT = """You write test questions for a church book-search tool used by pastors, shepherds and church members.
+You are given a book's title and a few passages from it. Write {per} different questions a real person would type that THIS book answers well.
+Everyday words, as someone would actually ask ("my member keeps missing church", "I keep losing my temper"). Vary them: one practical, one about the heart of the matter.
+Never name the book, the author or a chapter, and do not quote the passages. One question per line, nothing else."""
+
+
+def generate_books(conn, per: int, replace: bool) -> None:
+    """One labelled question per book: measures 'did the right book come up' over 262 items, not 30."""
+    have = conn.execute("select count(*) from eval_items where kind = 'book'").fetchone()[0]
+    if have and not replace:
+        raise SystemExit(f"{have} book items already exist; pass --replace to write a new set")
+    books = conn.execute(
+        "select s.id, s.title from sources s where s.status = 'ready' "
+        "and exists (select 1 from chunks c where c.source_id = s.id) order by s.title").fetchall()
+    made = []
+    for i, (sid, title) in enumerate(books, 1):
+        passages = conn.execute(
+            "select raw_content from chunks where source_id = %s and token_count >= 200 order by random() limit 3",
+            (sid,)).fetchall()
+        if not passages:
+            continue
+        sample = "\n\n---\n\n".join(p[0][:1200] for p in passages)
+        r = llm.client().chat.completions.create(
+            model=config.JUDGE_MODEL, temperature=0.8, max_tokens=120,
+            messages=[{"role": "system", "content": BOOK_PROMPT.format(per=per)},
+                      {"role": "user", "content": f"Title: {title}\n\n{sample}"}])
+        qs = [q.strip(" -•\"").strip() for q in (r.choices[0].message.content or "").splitlines() if q.strip()]
+        for q in qs[:per]:
+            made.append((q, sid))
+        print(f"  {i}/{len(books)}  {title[:40]:<40} {len(qs[:per])} questions")
+    with conn.transaction():
+        conn.execute("delete from eval_items where kind = 'book'")
+        for q, sid in made:
+            conn.execute("insert into eval_items (question, expected, kind, expected_source_id) "
+                         "values (%s, 'answerable', 'book', %s)", (q, sid))
+    print(f"wrote {len(made)} book items over {len(books)} books")
+
+
 def generate(conn, n: int, replace: bool) -> None:
     have = conn.execute("select count(*) from eval_items where kind = 'generated'").fetchone()[0]
     if have and not replace:
@@ -164,7 +202,7 @@ def summarize_retrieval(rows: list[dict]) -> dict:
         s["passage_hit@1 %"] = rate([within(r, "chunk_rank", 1) for r in gen])
         s[f"passage_hit@{K} %"] = rate([within(r, "chunk_rank", K) for r in gen])
         s["passage_mrr"] = round(sum(1 / r["chunk_rank"] for r in gen if r["chunk_rank"]) / len(gen), 3)
-    for kind in ("generated", "hand"):
+    for kind in sorted({r["kind"] for r in rows}):
         b = [r for r in rows if r["wants_book"] and r["kind"] == kind]
         if b:
             s[f"book_hit@{K} {kind} %"] = rate([within(r, "book_rank", K) for r in b])
@@ -308,7 +346,7 @@ def save_and_print(mode: str, summary: dict, rows: list[dict], argv: list[str]) 
 
 
 def main(argv: list[str]) -> int:
-    if not argv or argv[0] not in ("seed", "generate", "retrieval", "full"):
+    if not argv or argv[0] not in ("seed", "generate", "generate-books", "retrieval", "full"):
         print(__doc__)
         return 2
     opt = lambda name, default=None: argv[argv.index(name) + 1] if name in argv else default  # noqa: E731
@@ -318,6 +356,8 @@ def main(argv: list[str]) -> int:
             seed(conn)
         elif mode == "generate":
             generate(conn, int(opt("--n", 150)), "--replace" in argv)
+        elif mode == "generate-books":
+            generate_books(conn, int(opt("--per", 2)), "--replace" in argv)
         else:
             limit = int(opt("--limit")) if opt("--limit") else None
             items = load_items(conn, limit, opt("--kind"))

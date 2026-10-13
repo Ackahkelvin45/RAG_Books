@@ -22,8 +22,9 @@ from .embed import get_embedder
 from .rerank import get_reranker
 from .scripture import extract_verse_ids
 
-VECTOR_K = 30
-KEYWORD_K = 30
+# how many candidates each leg contributes before fusion; widen them to trade CPU for recall
+VECTOR_K = int(os.environ.get("SHEPHERD_VECTOR_K", "30"))
+KEYWORD_K = int(os.environ.get("SHEPHERD_KEYWORD_K", "30"))
 RERANK_POOL = config.RERANK_POOL
 FINAL_K = 8
 RRF_K = 60
@@ -81,8 +82,10 @@ def _where(role: str, verse_ids: list[int], book_ids: list[str] | None, extra: s
 
 
 def vector_candidates(conn, qvec, role: str, verse_ids: list[int], k: int = VECTOR_K, book_ids=None) -> list[tuple]:
+    # config.EMBED_COLUMN, not a parameter: the column must match the model that made qvec.
     where, params = _where(role, verse_ids, book_ids)
-    return conn.execute(_SELECT + where + " order by c.embedding <=> %s::vector limit %s", params + [qvec, k]).fetchall()
+    return conn.execute(_SELECT + where + f" order by c.{config.EMBED_COLUMN} <=> %s::vector limit %s",
+                        params + [qvec, k]).fetchall()
 
 
 def question_candidates(conn, qvec, role: str, verse_ids: list[int], k: int = VECTOR_K, book_ids=None) -> list[tuple]:
