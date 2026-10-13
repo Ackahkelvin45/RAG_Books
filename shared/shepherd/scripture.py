@@ -5,7 +5,17 @@ chapter or book is a contiguous integer range. Do not hand-roll the regex.
 """
 from __future__ import annotations
 
+import re
+
 import pythonbible as pb
+
+
+# Book names that are also everyday words. "his secular job", "the numbers 7 and 12", "a mark of
+# honour" all parse as references when a number follows (seen in production: three lay-ministry
+# passages showed "Job 1:1-22"). A printed reference is always capitalised, so require the
+# capitalised stem ("Rev", "Num" cover the abbreviations too) somewhere in the text.
+_EVERYDAY_WORDS = {"Job": "Job", "Mark": "Mar", "Acts": "Act", "Numbers": "Num", "Judges": "Jud",
+                   "Revelation": "Rev", "Lamentations": "Lam", "1 Kings": "Kin", "2 Kings": "Kin"}
 
 
 def extract_verse_ids(text: str) -> list[int]:
@@ -15,6 +25,9 @@ def extract_verse_ids(text: str) -> list[int]:
         # A bare book name ("Psalms", "John", "James") resolves to every verse in
         # that book, and in prose it is often a person's name. Require a chapter.
         if ref.start_chapter is None:
+            continue
+        stem = _EVERYDAY_WORDS.get(ref.book.title)
+        if stem and not re.search(rf"\b{stem}", text):
             continue
         try:
             ids.update(pb.convert_reference_to_verse_ids(ref))

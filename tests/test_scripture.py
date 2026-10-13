@@ -41,3 +41,12 @@ def test_prose_that_crashes_the_library_is_skipped_not_fatal():
     text = ("John the Apostle could not minister effectively to Diotrephes because he felt too big "
             "(pre-eminence) to receive from John. I believe this chapter matters.\nSee Romans 8:28.")
     assert 45008028 in extract_verse_ids(text)
+
+
+def test_everyday_words_are_not_bible_books_unless_capitalised():
+    # production, 2026-10-13: "maintains his secular job" + a stray number showed "Job 1:1-22"
+    assert extract_verse_ids("He keeps his secular job and yet serves. There were 3 of them.") == []
+    assert extract_verse_ids("the numbers 7 and 12 matter; it left a mark 3 times; acts 2 of kindness") == []
+    assert extract_verse_ids("the revelation 2 years ago changed him") == []
+    # printed references, full name or abbreviation, still count
+    assert extract_verse_ids("Job 1:21 and Rev. 3:20 and Num 6:24") == [4006024, 18001021, 66003020]

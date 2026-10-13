@@ -69,6 +69,21 @@ def cmd_list(a):
         print(f"{r[0]}  v{r[1]}  {r[2]:<10} chunks={r[4]:<5} {r[3]}" + (f"  [{r[5]}]" if r[5] else ""))
 
 
+def cmd_rescan_scripture(a):
+    """Recompute every passage's Bible references with the current extractor (after a rule change)."""
+    from shepherd.scripture import extract_verse_ids
+    with connect() as conn:
+        with transaction(conn):
+            rows = conn.execute("select id, raw_content, scripture from chunks").fetchall()
+            changed = 0
+            for cid, text, old in rows:
+                new = extract_verse_ids(text)
+                if new != sorted(old or []):
+                    conn.execute("update chunks set scripture = %s where id = %s", (new, cid))
+                    changed += 1
+    print(f"rescanned {len(rows)} passages, {changed} changed")
+
+
 def main():
     p = argparse.ArgumentParser()
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -79,6 +94,7 @@ def main():
     s.add_argument("--visibility", default="member", choices=["leader", "member"]); s.set_defaults(f=cmd_add_dir)
     s = sub.add_parser("reingest"); s.add_argument("source_id"); s.set_defaults(f=cmd_reingest)
     s = sub.add_parser("list"); s.set_defaults(f=cmd_list)
+    s = sub.add_parser("rescan-scripture"); s.set_defaults(f=cmd_rescan_scripture)
     a = p.parse_args(); a.f(a)
 
 
