@@ -265,10 +265,19 @@ def test_history_is_budgeted_by_length_and_starts_on_a_user_turn(app, pastor):
 def test_greeting_gets_a_short_reply_not_the_help_text(app, pastor, fake_llm, monkeypatch):
     monkeypatch.setattr(answer, "retrieve", lambda *a, **k: pytest.fail("retrieved"))
     f = fake_llm(json.dumps({"label": "chat", "language": "en"}), "Hello Pastor Kofi! What's on your mind today?")
-    ev = list(answer.ask(app, "hi", pastor))          # two words: no speculative search, retrieve would fail
+    ev = list(answer.ask(app, "hi", pastor))
     assert ev[2]["text"] == "Hello Pastor Kofi! What's on your mind today?" and ev[3]["citations"] == []
     assert "Pastor Kofi" in f.calls[1]["messages"][0]["content"]
     assert app.execute("select classification from query_logs where user_id = %s", (pastor,)).fetchone()[0] == "chat"
+    app.commit()
+
+
+def test_help_question_never_waits_for_a_search(app, pastor, fake_llm, monkeypatch):
+    # query_logs 2026-10-13: "What can I ask you to do?" sat 58s on a speculative search for a canned reply
+    monkeypatch.setattr(answer, "retrieve", lambda *a, **k: pytest.fail("searched for a help question"))
+    fake_llm(json.dumps({"label": "help", "language": "en"}))
+    ev = list(answer.ask(app, "What can I ask you to do in this app?", pastor))
+    assert ev[2]["text"] == answer.HELP and not any(e["type"] == "status" for e in ev)
     app.commit()
 
 

@@ -14,7 +14,6 @@ import os
 import re
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict
 from typing import Iterator
 
@@ -28,7 +27,6 @@ log = logging.getLogger("answer")
 PROMPT_VERSION = "contract_v10"
 HISTORY_CHARS = 12_000     # prior conversation sent to the model, newest first (~3,000 tokens); the passages are never cut
 HISTORY_FETCH = 30         # messages looked at before the budget applies
-SPECULATE_MIN_WORDS = 4    # a first message this long is searched while it is being classified
 READ_URL = os.environ.get("READ_URL", "/read/{chunk_id}")   # web app (phase 8) renders the passage in context
 
 SYSTEM = """You are a warm, plain-spoken pastoral guide for a church, speaking with {who}. You give advice, but ALL of it comes from the church's books: the passages below. You have no teaching of your own.
@@ -224,23 +222,12 @@ def ask(conn, question: str, user_id, conversation_id=None) -> Iterator[dict]:
     parts: list[str] = []
     citations: list[dict] = []
 
-    # A first question needs no rewrite, so the DeepSeek classification (network) and the book search
-    # (CPU: embed + rerank) run at the same time; the few off-scope questions waste one search, nothing more.
-    # A follow-up searches on the classifier's rewrite, so it must wait. The connection stays on this thread.
-    speculate = not prev and len(question.split()) >= SPECULATE_MIN_WORDS   # "hi" / "thanks" must not wait for a search
+    # Classify first (DeepSeek, ~1.5s), search second. Searching speculatively in parallel looked
+    # like a free win, but on a one-core server a search is 10-60s, and "What can I ask you?"
+    # sat on "Searching the books" for a minute to get its canned reply (query_logs, 2026-10-13).
     search_ms = answer_ms = None
-    if speculate:
-        yield {"type": "status", "text": "Searching the books"}
-        t0 = time.monotonic()
-        with ThreadPoolExecutor(1) as pool:
-            pending = pool.submit(classify, question, prev, last_answer)
-            retrieved = retrieve(conn, question, role=role)
-            v = pending.result()
-        search_ms = int((time.monotonic() - t0) * 1000)
-        context_q = question
-    else:
-        v = classify(question, prev, last_answer)
-        context_q = retrieval_query(prev, question, v.search)
+    v = classify(question, prev, last_answer)
+    context_q = retrieval_query(prev, question, v.search)
     yield {"type": "classification", **asdict(v)}
 
     if v.label in ("off_scope", "help", "chat"):
@@ -251,11 +238,10 @@ def ask(conn, question: str, user_id, conversation_id=None) -> Iterator[dict]:
         yield {"type": "text", "text": fixed}
         yield {"type": "citations", "citations": []}
     else:
-        if not speculate:
-            yield {"type": "status", "text": "Searching the books"}
-            t0 = time.monotonic()
-            retrieved = retrieve(conn, context_q, role=role)
-            search_ms = int((time.monotonic() - t0) * 1000)
+        yield {"type": "status", "text": "Searching the books"}
+        t0 = time.monotonic()
+        retrieved = retrieve(conn, context_q, role=role)
+        search_ms = int((time.monotonic() - t0) * 1000)
         yield {"type": "status", "text": "Writing your answer"}
         t0 = time.monotonic()
         for ev in generate(question, retrieved, history, who):

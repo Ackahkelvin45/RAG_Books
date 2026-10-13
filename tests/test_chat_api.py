@@ -347,3 +347,10 @@ def test_book_file_streams_epub_with_visibility_and_download_name(client, admin,
     assert r.headers["content-disposition"] == "attachment; filename*=UTF-8''Why%20Loyalty%3F.epub"
     assert client.get(f"/api/books/{hidden}/file").status_code == 404
     assert client.get("/api/books/nope/file").status_code == 404
+
+
+def test_keep_warm_thread_runs_while_the_app_is_up(client):
+    import threading
+    # startup loads the models and then keeps touching them every KEEP_WARM_SECONDS (fakes here),
+    # so a quiet server never evicts them: query_logs showed 8s warm vs 60s cold (2026-10-13)
+    assert any(t.name == "keep-warm" and t.daemon for t in threading.enumerate())

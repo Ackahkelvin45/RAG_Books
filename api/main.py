@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import hmac
+import logging
 import os
 import shutil
 import tempfile
@@ -53,16 +54,38 @@ TAGS = [
     {"name": "Admin portal", "description": "Server-rendered HTML pages at /admin, protected by ADMIN_PASSWORD. Listed for reference; use them in the browser."},
 ]
 
+log = logging.getLogger("api")
+KEEP_WARM_SECONDS = int(os.environ.get("SHEPHERD_KEEP_WARM_SECONDS", "300"))   # 0 switches it off
+
+
 def _warm_models(app_):
-    """Load the embedding and reranking models at startup (~45 s), not on the first question."""
+    """Load the embedding and reranking models at startup (~45 s), not on the first question,
+    and keep touching them: on a small server the OS evicts their memory during quiet hours,
+    and the next question paid ~60s to read them back (query_logs, 2026-10-13: 8s warm, 60s cold)."""
+    import threading
+    import time
     from contextlib import asynccontextmanager
+
+    def touch():
+        from shepherd.embed import get_embedder
+        from shepherd.rerank import get_reranker
+        get_embedder().embed(["keep warm"])          # one short forward pass reads every weight
+        get_reranker().score("keep warm", ["keep warm"])
+
+    def keep_warm():
+        while True:
+            time.sleep(KEEP_WARM_SECONDS)
+            try:
+                touch()
+            except Exception:  # noqa: BLE001 - a failed ping must not kill the loop
+                log.exception("keep-warm ping failed")
 
     @asynccontextmanager
     async def lifespan(_):
         import asyncio
-        from shepherd.embed import get_embedder
-        from shepherd.rerank import get_reranker
-        await asyncio.get_running_loop().run_in_executor(None, lambda: (get_embedder(), get_reranker()))
+        await asyncio.get_running_loop().run_in_executor(None, touch)
+        if KEEP_WARM_SECONDS > 0:
+            threading.Thread(target=keep_warm, name="keep-warm", daemon=True).start()
         yield
     return lifespan
 
