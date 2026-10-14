@@ -11,6 +11,7 @@ import hmac
 import json
 import os
 import secrets
+import threading
 import uuid
 from typing import Literal
 from urllib.parse import urlencode
@@ -489,6 +490,7 @@ def conversation(conversation_id: str, user=Depends(verified_user), conn=Depends
 def delete_conversation(conversation_id: str, user=Depends(verified_user), conn=Depends(db)):
     with transaction(conn):
         _own(conn, conversation_id, user["id"])
+        conn.execute("delete from query_logs where conversation_id = %s", (conversation_id,))
         conn.execute("delete from conversations where id = %s", (conversation_id,))
     return {"ok": True}
 
@@ -505,6 +507,14 @@ class EventStream(StreamingResponse):
     media_type = "text/event-stream"   # so the docs show the stream, not JSON
 
 
+# Each question is seconds of the one CPU core plus a paid model call, so: one question at a time per
+# person, and a rolling daily cap. Searches themselves queue behind shepherd.retrieve.GATE.
+DAILY_QUESTIONS = int(os.environ.get("SHEPHERD_DAILY_QUESTIONS", "100"))   # per user, last 24 h; 0 = no cap
+BUSY = "Please wait for your current answer to finish."
+_inflight: set[str] = set()
+_inflight_lock = threading.Lock()
+
+
 @router.post("/ask", tags=["Chat"], summary="Ask a question (answer streams back)", response_class=EventStream, responses={
     200: {"description": "Server-sent events, one JSON object per `data:` line", "content": {"text/event-stream": {"example":
         'data: {"type": "conversation", "id": "8c1f…"}\n\n'
@@ -513,7 +523,8 @@ class EventStream(StreamingResponse):
         'data: {"type": "text", "text": ", not something that happens overnight [2]."}\n\n'
         'data: {"type": "citations", "citations": [{"n": 2, "chunk_id": "fe8f…", "title": "Loyalty and Disloyalty", "location": {"chapter": 2}}]}\n\n'
         'data: {"type": "text", "text": "\\n\\nBishop Dag Heward-Mills talks about this in chapter 2 of *Loyalty and Disloyalty*."}\n\n'}}},
-    404: {"description": "conversation_id is not yours"}})
+    404: {"description": "conversation_id is not yours"},
+    429: {"description": "A question of yours is still being answered, or today's limit is reached"}})
 def ask_endpoint(body: Ask, user=Depends(verified_user), conn=Depends(db)):
     """Runs the full pipeline: classify → search the books → answer from the passages only.
 
@@ -521,9 +532,17 @@ def ask_endpoint(body: Ask, user=Depends(verified_user), conn=Depends(db)):
     pieces (join them), `citations`, then closing `text` pieces (the "talks about this in chapter X"
     line and the scriptures line). An `error` event means the answer failed part-way.
     Swagger shows the whole stream once it finishes; the app renders it live."""
-    if body.conversation_id:
-        with transaction(conn):
+    with transaction(conn):
+        if body.conversation_id:
             _own(conn, body.conversation_id, user["id"])
+        asked = conn.execute("select count(*) from query_logs where user_id = %s and created_at > now() - interval '1 day'",
+                             (user["id"],)).fetchone()[0]
+    if DAILY_QUESTIONS and asked >= DAILY_QUESTIONS:
+        raise HTTPException(429, f"You have reached today's limit of {DAILY_QUESTIONS} questions. Please come back tomorrow.")
+    with _inflight_lock:
+        if user["id"] in _inflight:
+            raise HTTPException(429, BUSY)
+        _inflight.add(user["id"])
 
     def events():
         c = connect()          # the request's conn closes when the handler returns; the stream needs its own
@@ -537,6 +556,8 @@ def ask_endpoint(body: Ask, user=Depends(verified_user), conn=Depends(db)):
             raise e
         finally:
             c.close()
+            with _inflight_lock:
+                _inflight.discard(user["id"])
 
     return EventStream(events(), headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 

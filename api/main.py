@@ -90,10 +90,19 @@ def _warm_models(app_):
     return lifespan
 
 
+def session_secret() -> str:
+    """The cookie-signing key. It used to fall back to a fixed string when unset, in production too, which
+    would have let anyone forge an admin session."""
+    secret = os.environ.get("SESSION_SECRET", "")
+    if not secret and os.environ.get("PUBLIC_URL", "").startswith("https://"):
+        raise RuntimeError("SESSION_SECRET is not set; generate one with: openssl rand -hex 32")
+    return secret or "dev-only"
+
+
 app = FastAPI(title="First Love Church API", version="1.0", description=DESCRIPTION, openapi_tags=TAGS, lifespan=_warm_models(None),
               swagger_ui_parameters={"docExpansion": "list", "defaultModelsExpandDepth": 0, "tryItOutEnabled": True})
 # behind Caddy (PUBLIC_URL is https) the cookie is marked Secure; locally it must not be, or the browser drops it
-app.add_middleware(SessionMiddleware, secret_key=os.environ.get("SESSION_SECRET", "dev-only"),
+app.add_middleware(SessionMiddleware, secret_key=session_secret(),
                    https_only=os.environ.get("PUBLIC_URL", "").startswith("https://"))
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 app.include_router(chat_router)
@@ -284,8 +293,11 @@ def activity(request: Request, conn=Depends(db)):
         totals = conn.execute("""
             select classification, count(*) from query_logs
             where created_at > now() - interval '30 days' group by 1 order by 2 desc""").fetchall()
+        # a sensitive question (self-harm, abuse, ...) shows only its category: the text stays with the person
         recent = conn.execute("""
-            select q.created_at, u.email, q.classification, q.language, left(q.question, 120), left(q.answer, 160)
+            select q.created_at, u.email, q.classification, q.language,
+                   case when q.category is null then left(q.question, 120) else '[' || q.category || ': text hidden]' end,
+                   case when q.category is null then left(q.answer, 160) else '' end
             from query_logs q left join users u on u.id = q.user_id order by q.created_at desc limit 50""").fetchall()
     return page(request, "activity.html", totals=totals, recent=recent, models=(config.GEN_MODEL, config.EMBED_MODEL, config.RERANK_MODEL))
 

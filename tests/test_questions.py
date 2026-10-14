@@ -4,9 +4,10 @@ import os
 os.environ["SHEPHERD_EMBEDDER"] = "fake"
 os.environ["SHEPHERD_RERANKER"] = "fake"
 
+import pytest  # noqa: E402
 from pgvector.psycopg import register_vector  # noqa: E402
 
-from shepherd import llm, questions  # noqa: E402
+from shepherd import config, llm, questions  # noqa: E402
 from shepherd.embed import get_embedder  # noqa: E402
 from shepherd.retrieve import question_candidates  # noqa: E402
 from test_retrieve import corpus  # noqa: E402,F401 - fixture reused
@@ -28,6 +29,17 @@ class ByPassage:
         return _Obj(choices=[_Obj(message=_Obj(content=reply))])
 
 
+parked = pytest.mark.skipif(config.EMBED_DIM != questions.Q_EMBEDDING_DIM,
+                            reason="generated-question leg is parked: q_embedding is bge-m3 sized")
+
+
+def test_fill_refuses_a_model_of_another_size(app, monkeypatch):
+    monkeypatch.setattr(config, "EMBED_DIM", 768)
+    with pytest.raises(RuntimeError, match="q_embedding"):
+        questions.fill_batch(app)
+
+
+@parked
 def test_fill_writes_questions_and_embedding_and_is_resumable(admin, app, corpus, monkeypatch):  # noqa: F811
     monkeypatch.setattr(llm, "client", lambda: ByPassage())
     while questions.fill_batch(app, batch=2):
@@ -40,6 +52,7 @@ def test_fill_writes_questions_and_embedding_and_is_resumable(admin, app, corpus
     assert questions.fill_batch(app) == 0           # nothing left: a rerun is free
 
 
+@parked
 def test_question_list_respects_visibility(admin, app, corpus, monkeypatch):  # noqa: F811
     monkeypatch.setattr(llm, "client", lambda: ByPassage())
     while questions.fill_batch(app):

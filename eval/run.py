@@ -1,6 +1,7 @@
 """Eval harness: scores search and answers against eval_items.
 
-    uv run python -m eval.run seed                          # load eval/seed.jsonl (replaces hand-written items)
+    uv run python -m eval.run seed [--file eval/user.jsonl --kind user]   # load eval/seed.jsonl (hand), or labelled real questions
+    uv run python -m eval.run sample-citations [--n 50]     # judged citations from the latest full run, for a person to check
     uv run python -m eval.run generate [--n 150] [--replace]  # DeepSeek writes one question per sampled passage
     uv run python -m eval.run retrieval [--limit N] [--kind hand|generated]   # search only (DeepSeek only for follow-up rewrites)
     uv run python -m eval.run full      [--limit N] [--kind hand|generated]   # end to end, calls DeepSeek
@@ -82,21 +83,51 @@ def load_items(conn, limit=None, kind=None) -> list[dict]:
     return items[:limit] if limit else items
 
 
-def seed(conn) -> None:
-    items = [json.loads(line) for line in (HERE / "seed.jsonl").read_text().splitlines() if line.strip()]
-    titles = dict(conn.execute("select title, id from sources where status = 'ready'").fetchall())
-    missing = sorted({it["book"] for it in items if it.get("book") and it["book"] not in titles})
-    if missing:
-        raise SystemExit(f"books named in seed.jsonl are not in the library: {missing}")
-    with conn.transaction():
-        conn.execute("delete from eval_items where kind = 'hand'")
+def seed(conn, path: Path | None = None, kind: str = "hand") -> None:
+    """Load a jsonl of {question, expected, book?, earlier?, inject?, note?} as `kind`, replacing that kind.
+    'user' items are real questions exported from production and labelled by a person (README)."""
+    items = [json.loads(line) for line in (path or HERE / "seed.jsonl").read_text().splitlines() if line.strip()]
+    with conn.transaction():      # one block: a bare select first would leave the writes in an uncommitted transaction
+        titles = dict(conn.execute("select title, id from sources where status = 'ready'").fetchall())
+        missing = sorted({it["book"] for it in items if it.get("book") and it["book"] not in titles})
+        if missing:
+            raise SystemExit(f"books named in {path or 'seed.jsonl'} are not in the library: {missing}")
+        conn.execute("delete from eval_items where kind = %s", (kind,))
         for it in items:
             extra = {k: it[k] for k in ("earlier", "inject") if k in it}
             conn.execute(
                 "insert into eval_items (question, expected, kind, expected_source_id, extra, note) "
-                "values (%s, %s, 'hand', %s, %s, %s)",
-                (it["question"], it["expected"], titles.get(it.get("book")), json.dumps(extra), it.get("note")))
-    print(f"loaded {len(items)} hand-written items")
+                "values (%s, %s, %s, %s, %s, %s)",
+                (it["question"], it["expected"], kind, titles.get(it.get("book")), json.dumps(extra), it.get("note")))
+    print(f"loaded {len(items)} {kind} items")
+
+
+def sample_citations(conn, n: int = 50) -> Path:
+    """A checklist of judged citations from the latest full run, for a person to mark. The judge is the same model
+    as the generator, so its 'supported' rate is self-agreement until a human sample agrees with it."""
+    import random
+    files = sorted(RESULTS.glob("*-full.json"))
+    if not files:
+        raise SystemExit("no full run yet: run `eval.run full` first")
+    d = json.loads(files[-1].read_text())
+    pool = [(r["question"], j) for r in d["items"] for j in r.get("judged", []) if j.get("chunk_id")]
+    random.seed(0)
+    picks = random.sample(pool, min(n, len(pool)))
+    text = {}
+    with conn.transaction():
+        for cid, raw in conn.execute("select id::text, raw_content from chunks where id = any(%s::uuid[])",
+                                     ([j["chunk_id"] for _, j in picks],)).fetchall():
+            text[cid] = raw
+    out = RESULTS / f"{files[-1].stem}-citation-check.md"
+    lines = [f"# Citation check: {len(picks)} of {len(pool)} judged citations from {files[-1].name}", "",
+             "Tick the box when the passage really supports the sentence. Compare your ticks with the judge's verdicts.", ""]
+    for i, (q, j) in enumerate(picks, 1):
+        lines += [f"## {i}. judge: {'supported' if j['supported'] else 'NOT supported'}", f"**Question:** {q}", "",
+                  f"**Sentence:** {j['sentence']}", "", "**Passage:**", "", "> " + (text.get(j["chunk_id"]) or "(passage no longer in the library)").replace("\n", "\n> "), "",
+                  "- [ ] supported", ""]
+    out.write_text("\n".join(lines))
+    print(f"wrote {out.relative_to(HERE.parent)}: {len(picks)} citations to check")
+    return out
 
 
 BOOK_PROMPT = """You write test questions for a church book-search tool used by pastors, shepherds and church members.
@@ -287,8 +318,9 @@ def run_full(conn, items) -> tuple[dict, list[dict]]:
                 row.update(text=got["text"], label=got["label"], category=got["category"], refused=refused,
                            cited_books=sorted({c["title"] for c in got["citations"]}))
                 if it["expected"] in ("answerable", "crisis") and not refused:
-                    passages = {c["n"]: c["raw_content"] for c in got["citations"]}
-                    row["judged"] = [{"n": n, "sentence": s, "supported": judge(s, passages[n]) if n in passages else False}
+                    passages = {c["n"]: c for c in got["citations"]}
+                    row["judged"] = [{"n": n, "chunk_id": passages[n]["chunk_id"] if n in passages else None, "sentence": s,
+                                      "supported": judge(s, passages[n]["raw_content"]) if n in passages else False}
                                      for s, ns in cited_sentences(got["text"]) for n in ns]
             row["seconds"] = round(time.time() - t0, 1)
             rows.append(row)
@@ -325,14 +357,28 @@ def summarize_full(rows: list[dict]) -> dict:
 
 # --- save + compare ---------------------------------------------------------------------------
 
+def run_settings(argv: list[str]) -> dict:
+    """Everything a number depends on. Runs made with different models (the 2026-09-20 and 2026-10-13 retrieval
+    runs had reranker scores on different scales) were not comparable because this used to omit them."""
+    from shepherd import chunking
+    return {"args": argv, "models": config.MODELS,
+            "embed_model": config.EMBED_MODEL, "embed_column": config.EMBED_COLUMN, "embed_dim": config.EMBED_DIM,
+            "rerank_model": config.RERANK_MODEL, "rerank_max_len": config.RERANK_MAX_LEN, "rerank_activation": "identity",
+            "device": os.environ.get("SHEPHERD_DEVICE", "auto"),
+            "embedder": os.environ.get("SHEPHERD_EMBEDDER", "real"), "reranker": os.environ.get("SHEPHERD_RERANKER", "real"),
+            "chunk_target": chunking.TARGET, "chunk_max": chunking.MAX_TOKENS, "chunk_overlap": chunking.OVERLAP, "chunk_min_tail": chunking.MIN_TAIL,
+            "VECTOR_K": R.VECTOR_K, "KEYWORD_K": R.KEYWORD_K, "RERANK_POOL": R.RERANK_POOL,
+            "FINAL_K": R.FINAL_K, "QUESTION_SEARCH": R.QUESTION_SEARCH, "MERGE_NEIGHBOURS": R.MERGE_NEIGHBOURS, "MERGE_MAX": R.MERGE_MAX,
+            "answer_prompt": answer.PROMPT_VERSION, "classifier_prompt": classify.PROMPT_VERSION,
+            "gen_model": config.GEN_MODEL, "judge_model": config.JUDGE_MODEL}
+
+
 def save_and_print(mode: str, summary: dict, rows: list[dict], argv: list[str]) -> Path:
     RESULTS.mkdir(exist_ok=True)
     prev_files = sorted(RESULTS.glob(f"*-{mode}.json"))
     prev = json.loads(prev_files[-1].read_text())["summary"] if prev_files else {}
     stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
-    settings = {"args": argv, "VECTOR_K": R.VECTOR_K, "KEYWORD_K": R.KEYWORD_K, "RERANK_POOL": R.RERANK_POOL,
-                "FINAL_K": R.FINAL_K, "QUESTION_SEARCH": R.QUESTION_SEARCH, "MERGE_NEIGHBOURS": R.MERGE_NEIGHBOURS, "answer_prompt": answer.PROMPT_VERSION,
-                "classifier_prompt": classify.PROMPT_VERSION, "gen_model": config.GEN_MODEL}
+    settings = run_settings(argv)
     path = RESULTS / f"{stamp}-{mode}.json"
     path.write_text(json.dumps({"mode": mode, "at": stamp, "settings": settings, "summary": summary, "items": rows},
                                indent=2, default=str))
@@ -346,14 +392,16 @@ def save_and_print(mode: str, summary: dict, rows: list[dict], argv: list[str]) 
 
 
 def main(argv: list[str]) -> int:
-    if not argv or argv[0] not in ("seed", "generate", "generate-books", "retrieval", "full"):
+    if not argv or argv[0] not in ("seed", "generate", "generate-books", "retrieval", "full", "sample-citations"):
         print(__doc__)
         return 2
     opt = lambda name, default=None: argv[argv.index(name) + 1] if name in argv else default  # noqa: E731
     mode = argv[0]
     with connect() as conn:
         if mode == "seed":
-            seed(conn)
+            seed(conn, Path(opt("--file")) if opt("--file") else None, opt("--kind", "hand"))
+        elif mode == "sample-citations":
+            sample_citations(conn, int(opt("--n", 50)))
         elif mode == "generate":
             generate(conn, int(opt("--n", 150)), "--replace" in argv)
         elif mode == "generate-books":

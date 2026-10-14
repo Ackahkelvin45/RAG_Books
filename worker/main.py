@@ -7,15 +7,16 @@ import sys
 import time
 import traceback
 
-from shepherd import config
+from shepherd import mail
 from shepherd.db import connect
-from shepherd.questions import fill_batch
 
+from . import reembed
 from .ingest import mark_failed, process_source
 
 log = logging.getLogger("worker")
 
 STALE_AFTER = "30 minutes"   # a source 'processing' longer than this is requeued
+ALERT_EMAIL = os.environ.get("SHEPHERD_ALERT_EMAIL", "")   # a failed book is reported here; empty = log only
 IDLE_SLEEP = 3               # seconds between polls when the queue is empty
 
 
@@ -48,18 +49,32 @@ def run_one(conn) -> bool:
         reason = f"{type(e).__name__}: {e}"
         log.error("failed source=%s %s\n%s", source_id, reason, traceback.format_exc())
         mark_failed(conn, source_id, reason)
+        alert_failure(conn, source_id, reason)
     return True
 
 
-def fill_questions(conn) -> int:
-    """Idle work: questions for chunks that have none (new books). 0 when there is nothing to do or no API key."""
-    # ponytail: no row locking; two workers idle at once may write the same chunk's questions twice (wasted calls only)
-    if not config.LLM_API_KEY:
-        return 0
+def alert_failure(conn, source_id, reason: str) -> None:
+    """One email per failed book, so nobody finds out from the admin page a week later."""
+    if not ALERT_EMAIL:
+        return
     try:
-        return fill_batch(conn)
-    except Exception as e:  # noqa: BLE001 - DeepSeek down must not stop ingestion
-        log.error("question fill failed: %s: %s", type(e).__name__, e)
+        with conn.transaction():
+            row = conn.execute("select title from sources where id = %s", (source_id,)).fetchone()
+        title = row[0] if row else str(source_id)
+        mail.send(ALERT_EMAIL, f"Shepherd Guide: '{title}' failed to process",
+                  f"{title} ({source_id}) could not be processed:\n\n{reason}\n\nOpen /admin/books to re-process or delete it.")
+    except Exception as e:  # noqa: BLE001 - the alert must never hurt the worker
+        log.error("failure alert not sent: %s: %s", type(e).__name__, e)
+
+
+def fill_embeddings(conn) -> int:
+    """Idle work: embed chunks whose configured column is empty (after a model switch, or a book ingested
+    while another column was selected). 0 when there is nothing to do."""
+    # ponytail: no row locking; two idle workers may embed the same batch twice (wasted CPU only)
+    try:
+        return reembed.fill_batch(conn)
+    except Exception as e:  # noqa: BLE001 - a backfill problem must not stop ingestion
+        log.error("embedding backfill failed: %s: %s", type(e).__name__, e)
         return 0
 
 
@@ -75,7 +90,7 @@ def main(argv: list[str]) -> int:
             if once or (drain and not did):
                 return 0
             if not did:
-                if fill_questions(conn):
+                if fill_embeddings(conn):
                     continue
                 time.sleep(IDLE_SLEEP)
                 requeue_stale(conn)

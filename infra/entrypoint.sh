@@ -1,6 +1,6 @@
 #!/bin/sh
 # api:    apply migrations, then serve the API and the web app on :8010
-# worker: process queued books, generate questions when idle
+# worker: process queued books, backfill missing embeddings when idle
 # any other args run as a command inside the image (e.g. `python -m eval.run retrieval`)
 set -e
 case "$1" in

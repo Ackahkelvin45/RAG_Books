@@ -19,7 +19,7 @@ from typing import Iterator
 
 from . import config, llm
 from .classify import SAFETY_CATEGORIES, classify
-from .retrieve import Passage, retrieve
+from .retrieve import GATE, Passage, retrieve
 from .scripture import format_references
 
 log = logging.getLogger("answer")
@@ -120,6 +120,15 @@ def _format_passages(ps: list[Passage]) -> str:
 
 _CITE = re.compile(r"\[(\d+)\]")
 _ATTRIBUTION = re.compile(r"talks about this in .*(chapter|page|\*)", re.I)
+_MARKS = re.compile(r"\s*\[\d+\]")
+
+
+def _plain(answer_text: str) -> str:
+    """An earlier answer as conversation history: without its [n] markers (they numbered that turn's passages,
+    and a model that copies one cites whatever passage has that number now) and without the closing lines."""
+    paras = [p for p in answer_text.split("\n\n")
+             if not p.startswith("Scriptures referenced:") and not _ATTRIBUTION.search(p) and p.strip() != SAFETY_NOTE.strip()]
+    return _MARKS.sub("", "\n\n".join(paras))
 
 
 def _citation(n: int, p: Passage) -> dict:
@@ -140,8 +149,21 @@ def scriptures_line(citations: list[dict], limit: int = 10) -> str:
     return "\n\nScriptures referenced: " + "; ".join(shown) + more + "."
 
 
+def _usage(u) -> dict:
+    """Token counts from the stream's usage block. DeepSeek reports cache hits as prompt_cache_hit_tokens;
+    the OpenAI shape puts them under prompt_tokens_details.cached_tokens."""
+    if u is None:
+        return {}
+    cached = getattr(u, "prompt_cache_hit_tokens", None)
+    if cached is None:
+        cached = getattr(getattr(u, "prompt_tokens_details", None), "cached_tokens", None)
+    return {"prompt_tokens": getattr(u, "prompt_tokens", None),
+            "completion_tokens": getattr(u, "completion_tokens", None), "cached_tokens": cached}
+
+
 def generate(question: str, passages: list[Passage], history: list[dict] = (), who: str = "a pastor") -> Iterator[dict]:
-    """Stream {'type':'text'} events, then one {'type':'citations'} event."""
+    """Stream {'type':'text'} events, one {'type':'citations'} event, then {'type':'usage'} (token counts;
+    ask() keeps it for query_logs and does not send it to the client)."""
     if not passages:
         yield {"type": "text", "text": REFUSAL}
         yield {"type": "citations", "citations": []}
@@ -151,9 +173,11 @@ def generate(question: str, passages: list[Passage], history: list[dict] = (), w
         messages=[{"role": "system", "content": SYSTEM.format(who=who, passages=_format_passages(passages))},
                   *history, {"role": "user", "content": question}],
         temperature=0.1, max_tokens=1100, stream=True,   # the prompt asks for <=400 words; the cap is a safety net, not the limit
+        stream_options={"include_usage": True},
     )
-    full = []
+    full, usage = [], None
     for chunk in stream:
+        usage = getattr(chunk, "usage", None) or usage
         delta = chunk.choices[0].delta.content if chunk.choices else None
         if delta:
             full.append(delta)
@@ -164,6 +188,7 @@ def generate(question: str, passages: list[Passage], history: list[dict] = (), w
     for c, n in zip(cits, cited):
         c["_verse_ids"] = passages[n - 1].scripture
     yield {"type": "citations", "citations": cits}
+    yield {"type": "usage", **_usage(usage)}
 
 
 def _user(conn, user_id) -> tuple[str, str]:
@@ -187,6 +212,8 @@ def _history(conn, conversation_id) -> list[dict]:
         (conversation_id, HISTORY_FETCH)).fetchall()
     kept, used = [], 0
     for role, content in rows:
+        if role == "assistant":
+            content = _plain(content)
         if used + len(content) > HISTORY_CHARS:
             break
         kept.append({"role": role, "content": content})
@@ -228,6 +255,8 @@ def ask(conn, question: str, user_id, conversation_id=None) -> Iterator[dict]:
     # like a free win, but on a one-core server a search is 10-60s, and "What can I ask you?"
     # sat on "Searching the books" for a minute to get its canned reply (query_logs, 2026-10-13).
     search_ms = answer_ms = None
+    timings: dict = {}
+    usage: dict = {}
     v = classify(question, prev, last_answer)
     context_q = retrieval_query(prev, question, v.search)
     yield {"type": "classification", **asdict(v)}
@@ -241,16 +270,25 @@ def ask(conn, question: str, user_id, conversation_id=None) -> Iterator[dict]:
         yield {"type": "citations", "citations": []}
     else:
         yield {"type": "status", "text": "Searching the books"}
+        if not GATE.acquire(blocking=False):          # another question is on the CPU: queue, and say so
+            yield {"type": "status", "text": "Waiting for an earlier question"}
+            GATE.acquire()
         t0 = time.monotonic()
-        retrieved = retrieve(conn, context_q, role=role)
+        try:
+            retrieved = retrieve(conn, context_q, role=role, timings=timings)
+        finally:
+            GATE.release()
         search_ms = int((time.monotonic() - t0) * 1000)
         yield {"type": "status", "text": "Writing your answer"}
         t0 = time.monotonic()
         for ev in generate(question, retrieved, history, who):
             if ev["type"] == "text":
                 parts.append(ev["text"])
-            else:
+            elif ev["type"] == "citations":
                 citations = ev["citations"]
+            else:
+                usage = ev
+                continue
             yield ev
         answer_ms = int((time.monotonic() - t0) * 1000)
         # case-insensitive: rule 2 lets a kind sentence precede the refusal, which lowercases "Our"
@@ -273,11 +311,15 @@ def ask(conn, question: str, user_id, conversation_id=None) -> Iterator[dict]:
         conn.execute("update conversations set updated_at = now() where id = %s", (conversation_id,))
         conn.execute(
             "insert into query_logs (user_id, question, classification, language, retrieved_ids, answer, prompt_version, "
-            " retrieval_query, scores, cited_ids, search_ms, answer_ms) "
-            "values (%s, %s, %s, %s, %s::uuid[], %s, %s, %s, %s, %s::uuid[], %s, %s)",
+            " retrieval_query, scores, cited_ids, search_ms, answer_ms, models, embed_ms, sql_ms, rerank_ms, "
+            " prompt_tokens, completion_tokens, cached_tokens, category, conversation_id) "
+            "values (%s, %s, %s, %s, %s::uuid[], %s, %s, %s, %s, %s::uuid[], %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
             (user_id, question, classification, v.language, [p.chunk_id for p in retrieved], answer_text,
              f"{PROMPT_VERSION}+{v.source}", context_q if retrieved else None, [p.score for p in retrieved],
-             [c["chunk_id"] for c in citations], search_ms, answer_ms))
+             [c["chunk_id"] for c in citations], search_ms, answer_ms, config.MODELS,
+             timings.get("embed_ms"), timings.get("sql_ms"), timings.get("rerank_ms"),
+             usage.get("prompt_tokens"), usage.get("completion_tokens"), usage.get("cached_tokens"),
+             v.category if v.label == "sensitive" else None, conversation_id))
 
 
 def _main(argv: list[str]) -> int:

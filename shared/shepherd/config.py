@@ -25,6 +25,8 @@ RERANK_MODEL = os.environ.get("SHEPHERD_RERANK_MODEL", "BAAI/bge-reranker-v2-m3"
 RERANK_MAX_LEN = int(os.environ.get("SHEPHERD_RERANK_MAX_LEN", "1024"))
 # Where the models run: cpu on the server; a Mac with Apple silicon uses its GPU (mps, ~3x faster). SHEPHERD_DEVICE overrides.
 RERANK_POOL = int(os.environ.get("SHEPHERD_RERANK_POOL", "20"))   # candidates reranked per question; the reranker is the slow step
+# Written to query_logs.models and every eval run, so a number can always be traced to the models behind it.
+MODELS = f"{EMBED_MODEL}@{EMBED_COLUMN}+{RERANK_MODEL}"
 
 
 def device() -> str:

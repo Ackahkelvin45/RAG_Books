@@ -3,8 +3,10 @@
 One server runs everything: Postgres, MinIO (book files), the API with the web app, the ingestion
 worker, a nightly backup, and Caddy for HTTPS. Only ports 80 and 443 are open.
 
-**Server:** Ubuntu 22.04/24.04, **8 GB RAM** (the two search models take ~3 GB in memory), 2+ CPUs,
-40 GB disk. Docker Engine + Compose plugin installed (`curl -fsSL https://get.docker.com | sh`).
+**Server:** Ubuntu 22.04/24.04. With the models chosen on 2026-10-14 (bge-base-en-v1.5 + MiniLM-L6, about
+0.6 GB together) the stack runs on **1 vCPU / 4 GB**, which is what the pilot box is; 8 GB and 2 CPUs were
+needed for the original bge-m3 + bge-reranker-v2-m3 pair. 40 GB disk. Docker Engine + Compose plugin
+installed (`curl -fsSL https://get.docker.com | sh`).
 **DNS:** an A record for your domain (e.g. `guide.firstlovechurch.org`) pointing at the server.
 
 ## 1. First deployment
@@ -20,8 +22,13 @@ docker compose -f docker-compose.prod.yml up -d --build
 docker compose -f docker-compose.prod.yml logs -f api   # wait for "Application startup complete"
 ```
 
-The first start downloads the two models (~4.5 GB) into the `models` volume; the API and worker
-share it, and it never downloads again. Caddy fetches the HTTPS certificate automatically once DNS resolves.
+The first start downloads the two models (~0.6 GB with the default pair in `.env.production.example`)
+into the `models` volume; the API and worker share it, and it never downloads again. Caddy fetches the
+HTTPS certificate automatically once DNS resolves.
+
+**Changing the embedding model later:** set the three `SHEPHERD_EMBED_*` values together and restart; the
+worker embeds every passage into the new column while idle (hours on one core: copy the library from the
+Mac instead, section 2, if it already has that column). Measure first with `python -m eval.run retrieval`.
 
 Then open `https://<your domain>/admin`, sign in with `ADMIN_PASSWORD`, and either upload books or
 bring the library across from the development machine (next section).
@@ -62,6 +69,29 @@ docker compose -f docker-compose.prod.yml exec minio sh -c "mc alias set local h
 Tested end to end 2026-09-20: 131 books / 13,843 passages restore in about a minute; the book files are ~130 MB.
 Users, conversations and logs are not copied: the pilot starts clean. Create the first accounts by
 signing up in the app, then promote pastors and shepherds to `leader` in `/admin/users`.
+
+### 2b. Replacing the library on a server that already has one
+
+Section 2 only works on an empty database. After a re-ingest on the Mac (new chunk ids, new source versions)
+replace the two tables wholesale. Conversations and users are untouched; citation links in old answers stop
+resolving (the reader says the passage is not available), which was accepted on 2026-10-14.
+
+On the Mac (only ready books and their chunks; the superseded versions stay behind):
+```bash
+docker exec rag_sheperd-postgres-1 psql -U postgres -d shepherd -c "\copy (select * from sources where status = 'ready') to '/tmp/sources.tsv'" -c "\copy (select c.* from chunks c join sources s on s.id = c.source_id where s.status = 'ready') to '/tmp/chunks.tsv'"
+docker cp rag_sheperd-postgres-1:/tmp/sources.tsv . && docker cp rag_sheperd-postgres-1:/tmp/chunks.tsv .
+scp sources.tsv chunks.tsv <server>:~/shepherd/
+```
+On the server, with the stack up and the new `.env` in place (the `SHEPHERD_EMBED_*` lines must match the Mac's):
+```bash
+docker compose -f docker-compose.prod.yml cp sources.tsv postgres:/tmp/ && docker compose -f docker-compose.prod.yml cp chunks.tsv postgres:/tmp/
+docker compose -f docker-compose.prod.yml exec -T postgres psql -U postgres -d shepherd -v ON_ERROR_STOP=1 -c "begin" \
+  -c "delete from eval_items" -c "delete from chunks" -c "delete from sources" \
+  -c "\copy sources from '/tmp/sources.tsv'" -c "\copy chunks from '/tmp/chunks.tsv'" -c "commit"
+docker compose -f docker-compose.prod.yml restart api worker
+```
+The book files keep their storage keys across versions, so MinIO needs nothing. `eval_items` is dropped because its
+labels pointed at the old chunks; the Mac holds the current set.
 
 ## 3. Updating
 

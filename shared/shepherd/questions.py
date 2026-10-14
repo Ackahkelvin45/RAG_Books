@@ -37,8 +37,14 @@ def write_questions(passage: str) -> list[str]:
     return [l for l in lines if l.endswith("?")][:5]
 
 
+Q_EMBEDDING_DIM = 1024   # chunks.q_embedding was built for bge-m3; the leg is parked (2026-10-14), see migration 0023
+
+
 def fill_batch(conn, batch: int = BATCH, embedder=None) -> int:
     """Generate, embed and store questions for up to `batch` chunks. Returns how many were filled."""
+    if config.EMBED_DIM != Q_EMBEDDING_DIM:
+        raise RuntimeError(f"q_embedding is {Q_EMBEDDING_DIM}-dim; the configured model gives {config.EMBED_DIM}. "
+                           "Re-create the column for the new model before generating questions.")
     with conn.transaction():
         rows = conn.execute(
             "select id, raw_content from chunks where questions is null order by source_id, id limit %s", (batch,)).fetchall()

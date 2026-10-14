@@ -25,10 +25,11 @@ from shepherd.scripture import extract_verse_ids
 
 from .parsers import ParsedBook
 from .parsers.epub import parse_epub
+from .parsers.pdf import parse_pdf
 
 log = logging.getLogger("worker.ingest")
 
-PARSERS = {".epub": parse_epub}
+PARSERS = {".epub": parse_epub, ".pdf": parse_pdf}
 EMBED_SLICE = 64     # chunks embedded per progress report
 
 

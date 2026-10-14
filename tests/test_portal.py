@@ -22,6 +22,16 @@ def login(c):
     assert r.status_code == 303 and r.headers["location"] == "/admin/books"
 
 
+def test_session_secret_is_required_behind_https(monkeypatch):
+    from api.main import session_secret
+    monkeypatch.setenv("PUBLIC_URL", "https://guide.example.org")
+    monkeypatch.delenv("SESSION_SECRET", raising=False)
+    with pytest.raises(RuntimeError):
+        session_secret()
+    monkeypatch.setenv("PUBLIC_URL", "http://localhost:8010")
+    assert session_secret() == "dev-only"
+
+
 def test_pages_require_login(client):
     for path in ("/admin/books", "/admin/users", "/admin/activity"):
         r = client.get(path, follow_redirects=False)
@@ -77,6 +87,14 @@ def test_user_lifecycle(client, admin):
     assert admin.execute("select count(*) from users where id = %s", (uid,)).fetchone()[0] == 0
 
 
-def test_activity_renders(client):
+def test_activity_renders_and_hides_sensitive_text(client, admin):
     login(client)
-    assert client.get("/admin/activity").status_code == 200
+    admin.execute("insert into query_logs (question, classification, category, answer) values "
+                  "('plain question about prayer', 'answerable', null, 'an answer'), "
+                  "('my secret crisis text', 'answerable', 'self_harm', 'secret answer text')")
+    try:
+        page = client.get("/admin/activity")
+        assert page.status_code == 200 and "plain question about prayer" in page.text
+        assert "secret" not in page.text and "self_harm: text hidden" in page.text
+    finally:
+        admin.execute("delete from query_logs where question in ('plain question about prayer', 'my secret crisis text')")

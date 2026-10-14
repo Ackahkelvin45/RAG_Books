@@ -89,6 +89,17 @@ def test_ask_streams_and_persists(client, fake_llm, monkeypatch):
     assert [m["role"] for m in msgs] == ["user", "assistant"] and msgs[1]["citations"][0]["n"] == 1
 
 
+def test_daily_question_cap(client, fake_llm, monkeypatch):
+    import api.chat as chat
+    signup(client)
+    monkeypatch.setattr(chat, "DAILY_QUESTIONS", 1)
+    monkeypatch.setattr(answer, "retrieve", lambda *a, **k: [P("x")])
+    fake_llm(ANSWERABLE, ["ok [1]."])
+    assert client.post("/api/ask", json={"question": "one"}).status_code == 200
+    r = client.post("/api/ask", json={"question": "two"})
+    assert r.status_code == 429 and "limit" in r.json()["detail"]
+
+
 def test_conversations_are_private(client, fake_llm, monkeypatch):
     signup(client)
     monkeypatch.setattr(answer, "retrieve", lambda *a, **k: [P("x")])
@@ -100,6 +111,17 @@ def test_conversations_are_private(client, fake_llm, monkeypatch):
     assert client.post("/api/ask", json={"question": "hijack", "conversation_id": conv}).status_code == 404
     assert client.delete(f"/api/conversations/{conv}").status_code == 404
     assert client.get("/api/conversations").json() == []
+
+
+def test_deleting_a_conversation_deletes_its_logs(client, admin, fake_llm, monkeypatch):
+    signup(client)
+    monkeypatch.setattr(answer, "retrieve", lambda *a, **k: [P("x")])
+    fake_llm(ANSWERABLE, ["ok [1]."])
+    conv = sse(client.post("/api/ask", json={"question": "mine"}))[0]["id"]
+    logs = lambda: admin.execute("select count(*) from query_logs where conversation_id = %s", (conv,)).fetchone()[0]  # noqa: E731
+    assert logs() == 1
+    assert client.delete(f"/api/conversations/{conv}").status_code == 200
+    assert logs() == 0
 
 
 def test_passage_respects_visibility_and_links_neighbours(client, admin):

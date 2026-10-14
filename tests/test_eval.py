@@ -4,14 +4,35 @@ import os
 os.environ["SHEPHERD_EMBEDDER"] = "fake"
 os.environ["SHEPHERD_RERANKER"] = "fake"
 
-from eval.run import cited_sentences, rate, summarize_full, summarize_retrieval  # noqa: E402
-from shepherd import answer  # noqa: E402
+import json  # noqa: E402
+
+from eval.run import cited_sentences, rate, run_settings, seed, summarize_full, summarize_retrieval  # noqa: E402
+from shepherd import answer, config  # noqa: E402
 from test_answer import ANSWERABLE, P, fake_llm, pastor  # noqa: E402,F401 - fixtures reused
 
 
 def test_cited_sentences_moves_trailing_markers_back_to_their_sentence():
     text = "Disloyalty is a process [2]. It starts small. [1][3] Pray for them.\n\nA talks about this."
     assert cited_sentences(text) == [("Disloyalty is a process.", [2]), ("It starts small.", [1, 3])]
+
+
+def test_settings_name_every_model_and_knob():
+    # 2026-09-20 and 2026-10-13 retrieval runs could not be compared: neither said which reranker ran
+    s = run_settings(["retrieval"])
+    assert s["models"] == config.MODELS and s["embed_model"] == config.EMBED_MODEL and s["rerank_model"] == config.RERANK_MODEL
+    assert s["rerank_activation"] == "identity" and s["chunk_min_tail"] == 80 and s["reranker"] == "fake"
+
+
+def test_seed_loads_labelled_real_questions_as_their_own_kind(app, admin, tmp_path):
+    f = tmp_path / "user.jsonl"
+    f.write_text(json.dumps({"question": "my member keeps missing church", "expected": "answerable"}) + "\n")
+    seed(app, f, "user")
+    try:
+        assert admin.execute("select count(*) from eval_items where kind = 'user'").fetchone()[0] == 1
+        assert admin.execute("select count(*) from eval_items where kind = 'hand'").fetchone()[0] == \
+            admin.execute("select count(*) from eval_items where kind = 'hand'").fetchone()[0]   # other kinds untouched
+    finally:
+        admin.execute("delete from eval_items where kind = 'user'")
 
 
 def test_rate_ignores_unmeasured():
@@ -53,10 +74,11 @@ def test_query_log_records_search_query_scores_and_citations(app, pastor, fake_l
     monkeypatch.setattr(answer, "retrieve", lambda *a, **k: [p1, p2])
     fake_llm(ANSWERABLE, ["Only the second [2]."])
     list(answer.ask(app, "a question", pastor))
-    q, scores, retrieved, cited, search_ms, answer_ms = app.execute(
-        "select retrieval_query, scores, retrieved_ids::text[], cited_ids::text[], search_ms, answer_ms "
+    q, scores, retrieved, cited, search_ms, answer_ms, models = app.execute(
+        "select retrieval_query, scores, retrieved_ids::text[], cited_ids::text[], search_ms, answer_ms, models "
         "from query_logs where user_id = %s", (pastor,)).fetchone()
     assert q == "a question" and scores == [0.8, 0.4]
     assert retrieved == [p1.chunk_id, p2.chunk_id] and cited == [p2.chunk_id]
     assert search_ms is not None and answer_ms is not None     # every answer times itself
+    assert models == config.MODELS                              # and says which models answered
     app.commit()

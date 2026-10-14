@@ -30,9 +30,13 @@ class FakeReranker:
 
 class BgeReranker:
     def __init__(self) -> None:
+        import torch
         from sentence_transformers import CrossEncoder
 
-        self.model = CrossEncoder(config.RERANK_MODEL, device=config.device(), max_length=config.RERANK_MAX_LEN)
+        # Raw logits, pinned. Left to the library, the scale depends on the model's config (MiniLM gives
+        # logits, others a sigmoid), and query_logs.scores and the eval score percentiles stop being comparable.
+        self.model = CrossEncoder(config.RERANK_MODEL, device=config.device(), max_length=config.RERANK_MAX_LEN,
+                                  activation_fn=torch.nn.Identity())
         # Never ask a model for more tokens than it has positions: MiniLM stops at 512, and a
         # merged neighbour passage can exceed that, which crashes the whole answer mid-request.
         limit = getattr(self.model.model.config, "max_position_embeddings", config.RERANK_MAX_LEN)

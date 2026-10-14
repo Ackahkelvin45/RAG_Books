@@ -50,7 +50,12 @@ protocol stalls on some networks, plain HTTP does not. Tests set
 `SHEPHERD_EMBEDDER=fake` and never load the model.
 
 A book left in `processing` for over 30 minutes (worker crash) is requeued
-automatically the next time a worker starts or idles.
+automatically the next time a worker starts or idles. When idle the worker also embeds any passage
+whose configured embedding column is empty, so switching `SHEPHERD_EMBED_MODEL`/`SHEPHERD_EMBED_COLUMN`
+heals itself (`python -m worker.reembed` does the same in one go).
+
+PDFs with a text layer are accepted too (chapters from the outline, page numbers in citations);
+scanned PDFs are refused.
 
 ## Searching (phase 3)
 
@@ -86,6 +91,19 @@ uv run python -m eval.run generate --n 150     # DeepSeek writes a question per 
 uv run python -m eval.run retrieval            # search only: is the right passage/book found? free, ~20 min on CPU
 uv run python -m eval.run full                 # end to end with DeepSeek: refusals, citations, crisis, injection (~$0.50)
 ```
+
+Real questions from production are the set that matters. Export them on the server, label 50 to 100 in the
+`seed.jsonl` format (`question`, `expected`, and the `book` that should answer it), then load and run them:
+
+```bash
+# server: docker compose -f docker-compose.prod.yml exec -T postgres psql -U postgres -d shepherd \
+#   -c "\copy (select distinct question from query_logs where classification = 'answerable') to '/tmp/questions.csv' csv"
+uv run python -m eval.run seed --file eval/user.jsonl --kind user
+uv run python -m eval.run retrieval --kind user
+uv run python -m eval.run sample-citations          # 50 judged citations from the latest full run, to mark by hand
+```
+The citation judge is the same model as the generator, so its figure counts as self-judged until a person's
+sample of 50 agrees with it.
 
 Add `--kind hand` or `--limit N` for a quicker run. Each run is saved in `eval/results/` and printed next to the
 previous run of the same mode, so a change can be judged before it ships. `query_logs` also records the search

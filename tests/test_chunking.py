@@ -28,6 +28,17 @@ def test_oversized_paragraph_is_split_by_sentence():
     assert all(c.token_count <= 250 for c in chunks)
 
 
+def test_small_tail_joins_the_previous_chunk():
+    # a section ending in a bare verse reference must not become a 4-token passage of its own
+    paras = [f"Paragraph {i}. " + "word " * 80 for i in range(5)] + ["John 3:16-17"]
+    chunks = chunk_text("\n\n".join(paras), whitespace_tokens, target=200, max_tokens=250)
+    assert chunks[-1].text.endswith("John 3:16-17") and all(c.token_count >= 80 for c in chunks)
+    assert [c.index for c in chunks] == list(range(len(chunks)))
+    # a tail that is big enough stays a chunk of its own
+    chunks = chunk_text("\n\n".join(paras[:5] + ["tail " * 120]), whitespace_tokens, target=200, max_tokens=250)
+    assert chunks[-1].text.startswith("tail")
+
+
 def test_short_text_is_one_chunk():
     chunks = chunk_text("Just a line.\n\nAnd another.", whitespace_tokens)
     assert len(chunks) == 1

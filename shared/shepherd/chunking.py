@@ -16,6 +16,11 @@ TokenCounter = Callable[[str], int]
 _SENT = re.compile(r"(?<=[.!?])\s+(?=[A-Z\"'(])")
 _PARA = re.compile(r"\n\s*\n")
 
+TARGET, MAX_TOKENS, OVERLAP = 400, 500, 0.15
+# A section's last few paragraphs used to become a chunk of their own however small (289 of 13,843 chunks
+# were under 100 tokens; the smallest, a bare verse reference, was 4). A tail under this joins the previous chunk.
+MIN_TAIL = 80
+
 
 @dataclass
 class Chunk:
@@ -49,17 +54,19 @@ def _units(text: str, count: TokenCounter, max_tokens: int) -> list[tuple[str, i
 def chunk_text(
     text: str,
     count: TokenCounter = whitespace_tokens,
-    target: int = 400,
-    max_tokens: int = 500,
-    overlap_ratio: float = 0.15,
+    target: int = TARGET,
+    max_tokens: int = MAX_TOKENS,
+    overlap_ratio: float = OVERLAP,
+    min_tail: int = MIN_TAIL,
 ) -> list[Chunk]:
     units = _units(text, count, max_tokens)
     chunks: list[Chunk] = []
     cur: list[tuple[str, int]] = []
     cur_n = 0
+    carried = 0          # how many leading units of `cur` are overlap copied from the previous chunk
 
     def flush() -> None:
-        nonlocal cur, cur_n
+        nonlocal cur, cur_n, carried
         if not cur:
             return
         body = "\n\n".join(u for u, _ in cur)
@@ -84,7 +91,7 @@ def chunk_text(
                 keep_n += n
             if tail:
                 keep = [(" ".join(tail), keep_n)]
-        cur, cur_n = keep, keep_n
+        cur, cur_n, carried = keep, keep_n, len(keep)
 
     for unit, n in units:
         if cur and cur_n + n > max_tokens:
@@ -93,10 +100,15 @@ def chunk_text(
         cur_n += n
         if cur_n >= target:
             flush()
-    # final flush without carrying overlap forward
-    if cur and (not chunks or "\n\n".join(u for u, _ in cur) != chunks[-1].text):
-        body = "\n\n".join(u for u, _ in cur)
-        # skip a tail that is purely overlap already emitted
-        if not chunks or body not in chunks[-1].text:
+    # the tail: whatever arrived after the last flush (the carried overlap alone is nothing new)
+    new = cur[carried:]
+    if new:
+        new_n = sum(n for _, n in new)
+        if chunks and new_n < min_tail and chunks[-1].token_count + new_n <= max_tokens + min_tail:
+            prev = chunks[-1]
+            text = prev.text + "\n\n" + "\n\n".join(u for u, _ in new)
+            chunks[-1] = Chunk(text, count(text), prev.index)
+        else:
+            body = "\n\n".join(u for u, _ in cur)
             chunks.append(Chunk(body, count(body), len(chunks)))
     return chunks

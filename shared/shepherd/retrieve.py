@@ -11,6 +11,8 @@ from __future__ import annotations
 import os
 import re
 import sys
+import threading
+import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 
@@ -35,8 +37,17 @@ RRF_K = 60
 MERGE_NEIGHBOURS = os.environ.get("SHEPHERD_MERGE_NEIGHBOURS", "on").lower() != "off"
 MERGE_MAX = 3            # chunks per merged passage, so one passage never crowds out the rest
 QUESTION_SEARCH = os.environ.get("SHEPHERD_QUESTION_SEARCH", "off").lower() == "on"
+# A verse in the question filters every list to passages citing it (scripture is a first-class query). 'soft',
+# the default, tops a thin filtered pool up with unfiltered candidates, ranked below the citing ones, so a
+# personal question that happens to quote a verse still gets its best passages. 'hard' keeps the filter alone.
+SCRIPTURE_FILTER = os.environ.get("SHEPHERD_SCRIPTURE_FILTER", "soft").lower()
+KEYWORD_PREFILTER = int(os.environ.get("SHEPHERD_KEYWORD_PREFILTER", "1000"))   # rows ranked by ts_rank_cd before the per-row coverage sort
 
 _ROLE_SEES_LEADER = {"leader": True, "admin": True, "member": False}
+
+# ponytail: one in-process gate. The server has one core, so two searches at once each take twice as long;
+# queued, the second waits and both finish sooner. Raise it on a box with cores to spare.
+GATE = threading.BoundedSemaphore(int(os.environ.get("SHEPHERD_MAX_CONCURRENT_SEARCHES", "1")))
 
 
 @dataclass
@@ -106,13 +117,17 @@ _COVERAGE = (
 
 
 def keyword_candidates(conn, query: str, role: str, verse_ids: list[int], k: int = KEYWORD_K, book_ids=None) -> list[tuple]:
+    # Rank by how many distinct query terms the chunk covers, then by ts_rank_cd, so one passage matching every
+    # term beats a long one repeating a single term. The coverage sort is a set intersection per row, so it runs
+    # over the KEYWORD_PREFILTER best rows by ts_rank_cd only: an ordinary question OR-matches most of the library
+    # (8,045 of 13,843 chunks) and the per-row subquery over all of them was the slowest SQL in a search.
     where, params = _where(role, verse_ids, book_ids, f" and c.ts_doc @@ {_TSQUERY}")
-    sql, params = _SELECT + where, [query] + params
-    # rank by how many distinct query terms the chunk covers, then by ts_rank_cd,
-    # so one passage matching every term beats a long one repeating a single term
-    sql += f" order by {_COVERAGE} desc, ts_rank_cd(c.ts_doc, {_TSQUERY}) desc limit %s"
-    params += [query, query, k]
-    return conn.execute(sql, params).fetchall()
+    inner = (f"select c.id::text, c.source_id::text, s.title, s.author, c.location, c.raw_content, c.scripture, c.ts_doc "
+             f"from chunks c join sources s on s.id = c.source_id {where} "
+             f"order by ts_rank_cd(c.ts_doc, {_TSQUERY}) desc limit %s")
+    sql = (f"select id, source_id, title, author, location, raw_content, scripture from ({inner}) c "
+           f"order by {_COVERAGE} desc, ts_rank_cd(c.ts_doc, {_TSQUERY}) desc limit %s")
+    return conn.execute(sql, [query] + params + [query, max(KEYWORD_PREFILTER, k), query, query, k]).fetchall()
 
 
 def scripture_candidates(conn, role: str, verse_ids: list[int], k: int = VECTOR_K, book_ids=None) -> list[tuple]:
@@ -191,39 +206,53 @@ def retrieve(
     final_k: int = FINAL_K,
     embedder=None,
     reranker=None,
+    timings: dict | None = None,
 ) -> list[Passage]:
+    """`timings`, when given, receives embed_ms, sql_ms and rerank_ms for query_logs."""
     embedder = embedder or get_embedder()
     reranker = reranker or get_reranker()
     register_vector(conn)
+    t = timings if timings is not None else {}
+    t0 = time.monotonic()
 
     verse_ids = extract_verse_ids(query)
     qvec = embedder.embed([query])[0]
+    t["embed_ms"], t0 = int((time.monotonic() - t0) * 1000), time.monotonic()
 
     with conn.transaction():
         books = named_books(conn, query, role)
 
-        def gather(book_ids):
+        def gather(book_ids, verses=verse_ids):
             lists = {
-                "vector": vector_candidates(conn, qvec, role, verse_ids, book_ids=book_ids),
-                "keyword": keyword_candidates(conn, query, role, verse_ids, book_ids=book_ids),
+                "vector": vector_candidates(conn, qvec, role, verses, book_ids=book_ids),
+                "keyword": keyword_candidates(conn, query, role, verses, book_ids=book_ids),
             }
             if QUESTION_SEARCH:
-                lists["questions"] = question_candidates(conn, qvec, role, verse_ids, book_ids=book_ids)
-            if verse_ids and not any(lists.values()):
-                lists["scripture"] = scripture_candidates(conn, role, verse_ids, book_ids=book_ids)
+                lists["questions"] = question_candidates(conn, qvec, role, verses, book_ids=book_ids)
+            if verses and not any(lists.values()):
+                lists["scripture"] = scripture_candidates(conn, role, verses, book_ids=book_ids)
             return lists
 
         lists = gather(books or None)
         if books and not any(lists.values()):   # the named book has nothing on it: search everything
             lists = gather(None)
+        fused = rrf(lists)[:RERANK_POOL]
+        if verse_ids and SCRIPTURE_FILTER != "hard" and len(fused) < RERANK_POOL:
+            seen = {p.chunk_id for p in fused}      # top up from the unfiltered search; sorted below the citing ones later
+            fused += [p for p in rrf(gather(books or None, [])) if p.chunk_id not in seen][:RERANK_POOL - len(fused)]
 
-    fused = rrf(lists)[:RERANK_POOL]
+    t["sql_ms"], t0 = int((time.monotonic() - t0) * 1000), time.monotonic()
     if not fused:
+        t["rerank_ms"] = 0
         return []
     scores = reranker.score(query, [p.raw_content for p in fused])
+    t["rerank_ms"] = int((time.monotonic() - t0) * 1000)
     for p, s in zip(fused, scores):
         p.score = s
     fused.sort(key=lambda p: p.score, reverse=True)
+    if verse_ids:                                   # passages that cite the verse stay ahead of any top-up
+        wanted = set(verse_ids)
+        fused.sort(key=lambda p: not (wanted & set(p.scripture)))
     return merge_neighbours(fused, final_k) if MERGE_NEIGHBOURS else fused[:final_k]
 
 

@@ -8,7 +8,7 @@ from ebooklib import epub
 
 os.environ["SHEPHERD_EMBEDDER"] = "fake"
 
-from shepherd import storage  # noqa: E402
+from shepherd import config, storage  # noqa: E402
 from shepherd.db import transaction  # noqa: E402
 from shepherd.embed import FakeEmbedder  # noqa: E402
 from worker.ingest import enqueue_reingest, process_source  # noqa: E402
@@ -38,6 +38,35 @@ def make_epub(path: Path, chapters: int = 3) -> Path:
     book.spine = ["nav", *items]
     epub.write_epub(str(path), book)
     return path
+
+
+def make_pdf(path: Path, chapters: int = 2, scanned: bool = False, outline: bool = True) -> Path:
+    import pymupdf
+    doc = pymupdf.open()
+    toc = []
+    for i in range(1, chapters + 1):
+        page = doc.new_page()
+        if not scanned:
+            text = f"Chapter {i}: Title {i}\n" + "\n".join(
+                f"Chapter {i} paragraph {j}. Consider Romans {i}:{j}. " + "grace " * 30 for j in range(1, 5))
+            assert page.insert_textbox(pymupdf.Rect(36, 36, 560, 800), text, fontsize=9) >= 0
+        toc.append([1, f"Chapter {i}: Title {i}", i])
+    if outline:
+        doc.set_toc(toc)
+    doc.set_metadata({"title": "A PDF Book", "author": "Test Author"})
+    doc.save(str(path))
+    return path
+
+
+def test_parse_pdf_uses_the_outline_for_chapters(tmp_path):
+    from worker.parsers.pdf import parse_pdf
+    parsed = parse_pdf(make_pdf(tmp_path / "t.pdf"))
+    assert parsed.title == "A PDF Book" and parsed.author == "Test Author"
+    assert [(s.chapter, s.title, s.page) for s in parsed.sections] == [(1, "Title 1", 1), (2, "Title 2", 2)]
+    assert "paragraph 3" in parsed.sections[0].text
+    # no outline: one section per page, numbered by page only
+    parsed = parse_pdf(make_pdf(tmp_path / "n.pdf", outline=False))
+    assert [(s.chapter, s.page) for s in parsed.sections] == [(None, 1), (None, 2)]
 
 
 def test_parse_epub_yields_chapters(tmp_path):
@@ -76,7 +105,7 @@ def test_epub_reaches_ready_with_locations_and_scripture(app, tmp_path):
 
     with transaction(app):
         rows = app.execute(
-            "select location, scripture, content, raw_content, embedding is not null, token_count "
+            f"select location, scripture, content, raw_content, {config.EMBED_COLUMN} is not null, token_count "
             "from chunks where source_id = %s order by (location->>'chapter')::int, (location->>'chunk')::int",
             (sid,),
         ).fetchall()
@@ -95,6 +124,47 @@ def test_corrupt_file_is_marked_failed_with_reason(app, tmp_path):
     assert run_one(app) is True
     status, reason, n = status_and_chunks(app, sid)
     assert status == "failed" and reason and n == 0
+
+
+def test_pdf_reaches_ready_with_pages_and_chapters(app, tmp_path):
+    sid = add_source(app, make_pdf(tmp_path / "t.pdf"))
+    assert run_one(app) is True
+    status, reason, n = status_and_chunks(app, sid)
+    assert status == "ready", reason
+    with transaction(app):
+        locs = [r[0] for r in app.execute("select location from chunks where source_id = %s", (sid,)).fetchall()]
+    assert n >= 2 and {l["chapter"] for l in locs} == {1, 2} and all(l["page"] for l in locs)
+
+
+def test_scanned_pdf_is_refused_with_a_reason(app, tmp_path):
+    sid = add_source(app, make_pdf(tmp_path / "scan.pdf", scanned=True))
+    run_one(app)
+    status, reason, n = status_and_chunks(app, sid)
+    assert status == "failed" and "no text layer" in reason and n == 0
+
+
+def test_idle_worker_backfills_missing_embeddings(app, admin, tmp_path):
+    from worker.main import fill_embeddings
+    sid = add_source(app, make_epub(tmp_path / "e.epub", chapters=1))
+    assert run_one(app) is True
+    admin.execute(f"update chunks set {config.EMBED_COLUMN} = null where source_id = %s", (sid,))
+    assert fill_embeddings(app) > 0
+    assert admin.execute(f"select count(*) from chunks where source_id = %s and {config.EMBED_COLUMN} is null", (sid,)).fetchone()[0] == 0
+    assert fill_embeddings(app) == 0
+
+
+def test_failed_book_sends_an_alert_email(app, tmp_path, monkeypatch):
+    import worker.main as wm
+    sent = []
+    monkeypatch.setattr(wm, "ALERT_EMAIL", "ops@example.org")
+    monkeypatch.setattr("shepherd.mail.send", lambda to, subject, body, html=None: sent.append((to, subject, body)))
+    f = tmp_path / "broken.epub"
+    f.write_bytes(b"not an epub")
+    sid = add_source(app, f, title="Broken Book")
+    run_one(app)
+    assert status_and_chunks(app, sid)[0] == "failed"
+    assert len(sent) == 1 and sent[0][0] == "ops@example.org" and "Broken Book" in sent[0][1] and str(sid) in sent[0][2]
+    assert run_one(app) is False     # the worker carried on: the failed-book select left no open transaction behind
 
 
 def test_unsupported_extension_fails_cleanly(app, tmp_path):
@@ -200,7 +270,7 @@ def test_front_matter_is_skipped_and_chapters_come_from_text(tmp_path):
 def test_reingest_reuses_unchanged_embeddings_and_questions(app, admin, tmp_path, monkeypatch):
     sid = add_source(app, make_epub(tmp_path / "v1.epub"))
     run_one(app)
-    admin.execute("update chunks set questions = 'What is grace?', q_embedding = embedding where source_id = %s", (sid,))
+    admin.execute("update chunks set questions = 'What is grace?' where source_id = %s", (sid,))
     calls = []
     real = FakeEmbedder.embed
     monkeypatch.setattr(FakeEmbedder, "embed", lambda self, texts: (calls.append(len(texts)), real(self, texts))[1])
@@ -208,9 +278,9 @@ def test_reingest_reuses_unchanged_embeddings_and_questions(app, admin, tmp_path
     run_one(app)
     assert calls == []      # nothing changed: nothing re-embedded
     with transaction(app):
-        qs = app.execute("select count(*) filter (where questions = 'What is grace?'), count(*) filter (where q_embedding is not null), "
-                         "count(*) from chunks where source_id = %s", (new_id,)).fetchone()
-        assert qs[0] == qs[1] == qs[2] > 0
+        qs = app.execute("select count(*) filter (where questions = 'What is grace?'), count(*) from chunks where source_id = %s",
+                         (new_id,)).fetchone()
+        assert qs[0] == qs[1] > 0          # questions carried over with the embedding
         assert app.execute("select count(*) from ingest_progress").fetchone()[0] == 0   # cleared when done
 
 

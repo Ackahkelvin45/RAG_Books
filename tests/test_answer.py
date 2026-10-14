@@ -88,7 +88,8 @@ def test_citations_map_back_with_read_links(fake_llm):
     fake_llm(["Grace [2]. Hope [1][9]."])
     ps = [P("hope"), P("grace", chapter=4)]
     ev = list(answer.generate("q", ps))
-    c = ev[-1]["citations"]
+    c = next(e for e in ev if e["type"] == "citations")["citations"]
+    assert ev[-1]["type"] == "usage"                 # token counts follow the citations (kept for query_logs)
     assert [x["n"] for x in c] == [1, 2]
     assert c[1]["chunk_id"] == ps[1].chunk_id and c[1]["url"].endswith(ps[1].chunk_id)
     assert c[1]["location"] == {"chapter": 4}
@@ -119,7 +120,7 @@ def test_conversation_persists_and_feeds_follow_up(app, pastor, fake_llm, monkey
     assert seen_queries[-1] == "what about despair? and how do they escape?"
     # second generation call saw the first exchange
     msgs = f.calls[3]["messages"]
-    assert msgs[1]["content"] == "what about despair?" and msgs[2]["content"].startswith("First answer [1].")
+    assert msgs[1]["content"] == "what about despair?" and msgs[2]["content"].startswith("First answer.")   # marker stripped
     rows = app.execute("select role, content, citations from messages where conversation_id = %s order by created_at", (conv,)).fetchall()
     assert [r[0] for r in rows] == ["user", "assistant", "user", "assistant"]
     assert rows[1][2][0]["n"] == 1
@@ -185,7 +186,7 @@ def test_attribution_groups_chapters_and_never_invents():
 def test_member_role_is_passed_to_retrieval(app, admin, fake_llm, monkeypatch):
     uid = admin.execute("insert into users (email, role, name) values (%s, 'member', 'Ama') returning id", (f"m{uuid.uuid4().hex[:6]}@x.org",)).fetchone()[0]
     seen = {}
-    monkeypatch.setattr(answer, "retrieve", lambda conn, q, role="leader": (seen.setdefault("role", role), [P("t")])[1])
+    monkeypatch.setattr(answer, "retrieve", lambda conn, q, role="leader", **k: (seen.setdefault("role", role), [P("t")])[1])
     f = fake_llm(ANSWERABLE, ["Yes [1]."])
     try:
         list(answer.ask(app, "q", uid))
@@ -238,7 +239,7 @@ def test_follow_up_is_retrieved_with_the_classifiers_standalone_rewrite(app, pas
     list(answer.ask(app, "How can they come back?", pastor, conv))
     assert seen == ["What causes backsliding?", "How can backsliders come back to God?"]
     cls_input = f.calls[2]["messages"][-1]["content"]
-    assert "Start of the last answer:\nBacksliding starts small [1]." in cls_input   # resolves "they"
+    assert "Start of the last answer:\nBacksliding starts small." in cls_input   # resolves "they"
     assert app.execute("select retrieval_query from query_logs where user_id = %s order by created_at desc limit 1",
                        (pastor,)).fetchone()[0] == "How can backsliders come back to God?"
     app.commit()
@@ -248,6 +249,21 @@ def test_rewrite_is_ignored_for_a_first_question(fake_llm):
     fake_llm(json.dumps({"label": "answerable", "language": "en", "search": "something else"}))
     assert classify.classify("What is loyalty?").search is None
 
+
+
+def test_history_drops_markers_and_closing_lines():
+    # a copied [3] would cite whatever passage is third this turn; the closing lines are rebuilt every turn anyway
+    text = "Go and stand by them [1]. Pray [2][3].\n\nA talks about this in chapter 1 of *B*.\n\nScriptures referenced: John 3:16." + answer.SAFETY_NOTE
+    assert answer._plain(text) == "Go and stand by them. Pray."
+
+
+def test_sensitive_category_and_conversation_are_logged(app, pastor, fake_llm, monkeypatch):
+    monkeypatch.setattr(answer, "retrieve", lambda *a, **k: [P("care text")])
+    fake_llm(["The book says care [1]."])
+    conv = list(answer.ask(app, "a member says she wants to kill herself, what do the books say?", pastor))[0]["id"]
+    row = app.execute("select category, conversation_id::text from query_logs where user_id = %s", (pastor,)).fetchone()
+    assert row == ("self_harm", conv)
+    app.commit()
 
 
 def test_history_is_budgeted_by_length_and_starts_on_a_user_turn(app, pastor):
@@ -285,6 +301,30 @@ def test_small_talk_falls_back_when_the_model_fails(app, pastor, fake_llm, monke
     fake_llm(json.dumps({"label": "chat", "language": "en"}), RuntimeError("down"))
     ev = list(answer.ask(app, "thanks!", pastor))
     assert ev[2]["text"] == answer.CHAT_FALLBACK
+    app.commit()
+
+
+def test_a_second_search_waits_for_the_first(app, pastor, fake_llm, monkeypatch):
+    import threading
+    import time
+    from shepherd.retrieve import GATE
+    monkeypatch.setattr(answer, "retrieve", lambda *a, **k: [P("t")])
+    fake_llm(ANSWERABLE, ["Yes [1]."])
+    assert GATE.acquire(blocking=False)              # someone else's search is on the CPU
+    events, done = [], threading.Event()
+
+    def run():
+        events.extend(answer.ask(app, "q", pastor))
+        done.set()
+    t = threading.Thread(target=run)
+    t.start()
+    time.sleep(0.5)
+    try:
+        assert {"type": "status", "text": "Waiting for an earlier question"} in events and not done.is_set()
+    finally:
+        GATE.release()
+    t.join(10)
+    assert done.is_set() and any(e["type"] == "citations" for e in events)
     app.commit()
 
 

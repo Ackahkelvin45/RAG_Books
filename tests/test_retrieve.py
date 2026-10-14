@@ -8,6 +8,7 @@ import pytest
 os.environ["SHEPHERD_EMBEDDER"] = "fake"
 os.environ["SHEPHERD_RERANKER"] = "fake"
 
+from shepherd import config  # noqa: E402
 from shepherd.embed import get_embedder  # noqa: E402
 from shepherd.retrieve import (  # noqa: E402
     keyword_candidates, retrieve, rrf, scripture_candidates, vector_candidates, visibility_clause,
@@ -34,7 +35,7 @@ def corpus(admin):
     def add_chunk(sid, text, chapter=1):
         from shepherd.scripture import extract_verse_ids
         return admin.execute(
-            "insert into chunks (source_id, content, raw_content, embedding, location, scripture) "
+            f"insert into chunks (source_id, content, raw_content, {config.EMBED_COLUMN}, location, scripture) "
             "values (%s, %s, %s, %s, %s, %s) returning id::text",
             (sid, text, text, emb.embed([text])[0], json.dumps({"chapter": chapter}), extract_verse_ids(text)),
         ).fetchone()[0]
@@ -98,19 +99,27 @@ def test_keyword_path_finds_exact_words(app, corpus):
     assert corpus["leader_chunk"] not in ids_of(rows)
 
 
-def test_scripture_verse_query_prefilters(app, corpus):
+def test_scripture_verse_query_puts_citing_passages_first(app, corpus):
     got = retrieve(app, "What do we teach on John 3:16 about tribulation?", role="leader")
-    assert corpus["member_chunk"] in {p.chunk_id for p in got}
-    assert all(43003016 in p.scripture for p in got)     # every result cites the verse
+    assert got[0].chunk_id == corpus["member_chunk"]            # cites the verse: first, whatever the reranker said
+    cites = [43003016 in p.scripture for p in got]
+    assert cites == sorted(cites, reverse=True)                 # citing passages, then the top-up
+    assert corpus["member_chunk_2"] in {p.chunk_id for p in got}   # soft: a thin verse pool is topped up
+
+
+def test_hard_scripture_filter_keeps_only_citing_passages(app, corpus, monkeypatch):
+    import shepherd.retrieve as R
+    monkeypatch.setattr(R, "SCRIPTURE_FILTER", "hard")
+    got = retrieve(app, "What do we teach on John 3:16 about tribulation?", role="leader")
+    assert got and all(43003016 in p.scripture for p in got)
     assert corpus["member_chunk_2"] not in {p.chunk_id for p in got}
 
 
 def test_scripture_chapter_range_query(app, corpus):
     got = retrieve(app, "Romans 8 secret discipline", role="leader")
-    ids = {p.chunk_id for p in got}
-    assert corpus["leader_chunk"] in ids            # cites Romans 8:28
-    assert corpus["member_chunk"] not in ids        # cites Romans 12, not 8
-    assert all(any(45008001 <= v <= 45008999 for v in p.scripture) for p in got)
+    assert got[0].chunk_id == corpus["leader_chunk"]            # cites Romans 8:28
+    in_ch8 = [any(45008001 <= v <= 45008999 for v in p.scripture) for p in got]
+    assert in_ch8 == sorted(in_ch8, reverse=True)
 
 
 def test_scripture_filter_respects_visibility(app, corpus):
